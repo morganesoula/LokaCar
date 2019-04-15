@@ -14,7 +14,7 @@ import fr.eni.lokacar.model.Car;
 @Dao
 public interface CarDAO {
 
-    @Query("SELECT * FROM Car")
+    @Query("SELECT * FROM Car ")
     LiveData<List<Car>> getAll();
 
     @Insert
