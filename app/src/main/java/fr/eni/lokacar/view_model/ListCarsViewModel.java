@@ -26,7 +26,7 @@ public class ListCarsViewModel extends AndroidViewModel {
 
     private void init()
     {
-        cars = repository.get();
+        cars = repository.getAll();
     }
 
     public void insert(Car car)

@@ -1,10 +1,17 @@
 package fr.eni.lokacar.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class CarType {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String label;
 
+    @Ignore
     public CarType() {
     }
 
