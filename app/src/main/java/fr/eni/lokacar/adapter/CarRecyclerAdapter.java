@@ -14,9 +14,8 @@ import java.util.List;
 import fr.eni.lokacar.ListCarsActivity;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.model.Car;
-import fr.eni.lokacar.view_model.ListCarsViewModel;
 
-public class CarRecyclerAdapter {
+public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.ViewHolder>{
 
     List<Car> listCars;
     Context context;
@@ -41,7 +40,7 @@ public class CarRecyclerAdapter {
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
-                        //listener.onItemClick(getArticle(getAdapterPosition()));
+                        listener.onItemClick(getCar(getAdapterPosition()));
                     }
                 }
             });
@@ -53,7 +52,7 @@ public class CarRecyclerAdapter {
             Intent intent = new Intent(context, ListCarsActivity.class);
 
             Car car = listCars.get(getAdapterPosition());
-            intent.putExtra("car", car);
+            //intent.putExtra("car", car);
             context.startActivity(intent);
         }
     }
@@ -61,8 +60,8 @@ public class CarRecyclerAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View unArticleLigne = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_line, parent, false);
-        return new ViewHolder(unArticleLigne);
+        View carLine = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_line, parent, false);
+        return new ViewHolder(carLine);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class CarRecyclerAdapter {
     }
 
 
-    public void setArticles(List<Car> cars) {
+    public void setCars(List<Car> cars) {
         listCars = cars;
         notifyDataSetChanged();
     }
