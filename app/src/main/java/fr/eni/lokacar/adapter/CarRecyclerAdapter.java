@@ -3,14 +3,18 @@ package fr.eni.lokacar.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RatingBar;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.eni.lokacar.ListCarsActivity;
+import fr.eni.lokacar.R;
 import fr.eni.lokacar.model.Car;
+import fr.eni.lokacar.view_model.ListCarsViewModel;
 
 public class CarRecyclerAdapter {
 
@@ -25,23 +29,19 @@ public class CarRecyclerAdapter {
     }
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView carModel;
-        public TextView articlePrice;
-        public RatingBar articleNote;
-        public TextView articleDescription;
+        public TextView carPrice;
 
 
-        public ViewHolder(View unArticleLigne) {
-            super(unArticleLigne);
-            articleNom = unArticleLigne.findViewById(R.id.article_name);
-            articlePrice = unArticleLigne.findViewById(R.id.article_price);
-            articleNote = unArticleLigne.findViewById(R.id.article_rate);
-            articleDescription = unArticleLigne.findViewById(R.id.article_description);
+        public ViewHolder(View carLine) {
+            super(carLine);
+            carModel = carLine.findViewById(R.id.car_model);
+            carPrice = carLine.findViewById(R.id.car_price);
 
-            unArticleLigne.setOnClickListener(new View.OnClickListener() {
+            carLine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
-                        listener.onItemClick(getArticle(getAdapterPosition()));
+                        //listener.onItemClick(getArticle(getAdapterPosition()));
                     }
                 }
             });
@@ -50,11 +50,54 @@ public class CarRecyclerAdapter {
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, ListCarsActivity.class);
 
-            Article article = listArticles.get(getAdapterPosition());
-            intent.putExtra("article", article);
+            Car car = listCars.get(getAdapterPosition());
+            intent.putExtra("car", car);
             context.startActivity(intent);
         }
     }
+
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View unArticleLigne = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_line, parent, false);
+        return new ViewHolder(unArticleLigne);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Car car = listCars.get(position);
+        holder.carModel.setText(car.getModel());
+        holder.carPrice.setText(String.valueOf(car.getPrice()));
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return listCars.size();
+    }
+
+
+    public void setArticles(List<Car> cars) {
+        listCars = cars;
+        notifyDataSetChanged();
+    }
+
+
+    public Car getCar(int position) {
+
+        return listCars.get(position);
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(Car car);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
 }
