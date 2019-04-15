@@ -1,41 +1,45 @@
 package fr.eni.lokacar.model;
 
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.RoomWarnings;
 
-import fr.eni.lokacar.model.CarType;
-
-@Entity
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
+@Entity(tableName = "car")
 public class Car {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int idCar;
     private String immatriculation;
-    private float prix;
+    private float price;
     private boolean isRestore;
     private String imagePath;
+    private String model;
+    @Embedded
     private CarType type;
 
     @Ignore
     public Car() {
     }
 
-    public Car(int id, String immatriculation, float prix, boolean isRestore, String imagePath, CarType type) {
-        this.id = id;
+    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType type) {
+        this.idCar = idCar;
         this.immatriculation = immatriculation;
-        this.prix = prix;
+        this.price = price;
         this.isRestore = isRestore;
         this.imagePath = imagePath;
+        this.model = model;
         this.type = type;
     }
 
-    public int getId() {
-        return id;
+    public int getIdCar() {
+        return idCar;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdCar(int idCar) {
+        this.idCar = idCar;
     }
 
     public String getImmatriculation() {
@@ -46,12 +50,12 @@ public class Car {
         this.immatriculation = immatriculation;
     }
 
-    public float getPrix() {
-        return prix;
+    public float getPrice() {
+        return price;
     }
 
-    public void setPrix(float prix) {
-        this.prix = prix;
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public boolean isRestore() {
@@ -70,6 +74,14 @@ public class Car {
         this.imagePath = imagePath;
     }
 
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
     public CarType getType() {
         return type;
     }
@@ -81,11 +93,12 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-                "id=" + id +
+                "idCar=" + idCar +
                 ", immatriculation='" + immatriculation + '\'' +
-                ", prix=" + prix +
+                ", price=" + price +
                 ", isRestore=" + isRestore +
                 ", imagePath='" + imagePath + '\'' +
+                ", model='" + model + '\'' +
                 ", type=" + type +
                 '}';
     }

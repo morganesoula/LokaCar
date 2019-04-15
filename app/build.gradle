@@ -42,4 +42,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation 'android.arch.lifecycle:livedata:1.1.1'
 }
