@@ -1,9 +1,15 @@
 package fr.eni.lokacar.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import fr.eni.lokacar.model.CarType;
 
+@Entity
 public class Car {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String immatriculation;
     private float prix;
@@ -11,6 +17,7 @@ public class Car {
     private String imagePath;
     private CarType type;
 
+    @Ignore
     public Car() {
     }
 
