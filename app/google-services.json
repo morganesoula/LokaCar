@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "662773984000",
+    "firebase_url": "https://lokacar-eni.firebaseio.com",
+    "project_id": "lokacar-eni",
+    "storage_bucket": "lokacar-eni.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662773984000:android:87ebf43fd49644f5",
+        "android_client_info": {
+          "package_name": "fr.eni.lokacar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662773984000-hm0b74dqs6olts7q1ut906dfts9im0fp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fr.eni.lokacar",
+            "certificate_hash": "045c2ad2d2ecc3e104c113e6cbba21c023646304"
+          }
+        },
+        {
+          "client_id": "662773984000-apt8v7melt3ge9t6hb166mjki8n94m7q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0QdoUk7SvpqPGFfVszn5ZOf4pTfOftQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662773984000-apt8v7melt3ge9t6hb166mjki8n94m7q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
