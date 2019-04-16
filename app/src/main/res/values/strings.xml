@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">LokaCar</string>
-    <string name="title_activity_list_cars">Toutes les voitures</string>
+    <string name="title_activity_list_cars">LokaCar</string>
 </resources>
