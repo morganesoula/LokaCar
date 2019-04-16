@@ -84,7 +84,6 @@ public class CarFormActivity extends AppCompatActivity {
         ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner,voitureType);
         tvtype.setAdapter(ad);
 
-
         Intent intent = getIntent();
         intent.getParcelableExtra("car");
 
@@ -99,16 +98,16 @@ public class CarFormActivity extends AppCompatActivity {
             String type = intent.getStringExtra(EXTRA_TYPE);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
 
+
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
 
-            Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoVide.getAbsolutePath());
+            /* Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoVide.getAbsolutePath());
             tvphoto = findViewById(R.id.ivPhotoPrise);
-            tvphoto.setImageBitmap(imageBitmap);
-
-
-            tvtype.setSelection(Integer.parseInt(type.toString()));
+            tvphoto.setImageBitmap(imageBitmap); */
+            
+            tvtype.setSelection(ad.getPosition(type));
             tvisrestore.setText(String.valueOf(isrestore));
 
         } else {
