@@ -20,20 +20,20 @@ public class Car implements Parcelable{
     private String imagePath;
     private String model;
     @Embedded
-    private CarType type;
+    private CarType carType;
 
     @Ignore
     public Car() {
     }
 
-    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType type) {
+    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
         this.idCar = idCar;
         this.immatriculation = immatriculation;
         this.price = price;
         this.isRestore = isRestore;
         this.imagePath = imagePath;
         this.model = model;
-        this.type = type;
+        this.carType = carType;
     }
 
     public int getIdCar() {
@@ -84,12 +84,12 @@ public class Car implements Parcelable{
         this.model = model;
     }
 
-    public CarType getType() {
-        return type;
+    public CarType getCarType() {
+        return carType;
     }
 
-    public void setType(CarType type) {
-        this.type = type;
+    public void setCarType(CarType carType) {
+        this.carType = carType;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class Car implements Parcelable{
                 ", isRestore=" + isRestore +
                 ", imagePath='" + imagePath + '\'' +
                 ", model='" + model + '\'' +
-                ", type=" + type +
+                ", carType=" + carType +
                 '}';
     }
 
@@ -123,7 +123,7 @@ public class Car implements Parcelable{
         parcel.writeString(model);
 
         // Pour écrire un Objet
-        parcel.writeParcelable(type, i);
+        parcel.writeParcelable(carType, i);
 
     }
 
@@ -141,7 +141,7 @@ public class Car implements Parcelable{
 
         // Pour lire un Objet
         // Equivalent de CarType.class.getClassLoader()
-        type = parcel.readParcelable(getClass().getClassLoader());
+        carType = parcel.readParcelable(getClass().getClassLoader());
 
     }
 

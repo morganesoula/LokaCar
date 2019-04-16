@@ -1,13 +1,23 @@
 package fr.eni.lokacar;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.eni.lokacar.adapter.CarRecyclerAdapter;
+import fr.eni.lokacar.model.Car;
+import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.view_model.ListCarsViewModel;
 
 public class ListCarsActivity extends AppCompatActivity {
@@ -17,14 +27,38 @@ public class ListCarsActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_EDIT = 2;
 
     private ListCarsViewModel carsViewModel;
+    public List<Car> listCars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_cars);
 
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cars_recycler);
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        final CarRecyclerAdapter adapter = new CarRecyclerAdapter();
+        recyclerView.setAdapter(adapter);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        listCars = new ArrayList<>();
+        listCars.add(new Car(1, "CM245MJ", 1500f, true, "www.google.fr", "Citroen C3", new CarType("Citroen")));
+        listCars.add(new Car(2, "BZ123ZA", 10200f, false, "www.nevermind.fr", "Renault Twingo", new CarType("Renault")));
+
+        carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
+
+        carsViewModel.get().observe(this, new Observer<List<Car>>() {
+            @Override
+            public void onChanged(@Nullable List<Car> cars) {
+                adapter.setCars(listCars);
+            }
+        });
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
