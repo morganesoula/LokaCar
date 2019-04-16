@@ -22,34 +22,64 @@ import fr.eni.lokacar.model.Car;
 
 public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.ViewHolder>{
 
-    //TODO onBindViewHolder
 
-    List<Car> listCars;
+    List<Car> listCars = new ArrayList<>();
     Context context;
 
     private OnItemClickListener listener;
 
-    public CarRecyclerAdapter(ArrayList<Car> listCars, Context context) {
-        this.listCars = listCars;
-        this.context = context;
+    @Override
+    public CarRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View carLine = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_line, parent, false);
+        return new ViewHolder(carLine);
     }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Car car = listCars.get(position);
+
+        //holder.carImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(localFile)));
+        holder.carModel.setText(car.getModel());
+        holder.carPrice.setText(String.valueOf(car.getPrice()));
+        holder.carImmatriculation.setText(car.getImmatriculation());
+        holder.carType.setText(car.getCarType().getLabel());
+        holder.carIsRestore.setChecked(car.isRestore());
+    }
+
+    @Override
+    public int getItemCount() {
+        return listCars.size();
+    }
+
+    public void setCars(List<Car> cars) {
+        this.listCars = cars;
+        notifyDataSetChanged();
+    }
+
+
+    public Car getCar(int position) {
+
+        return listCars.get(position);
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView carImage;
-        public TextView carModel;
-        public TextView carPrice;
-        public TextView carImmatriculation;
-        public TextView carType;
-        public Switch carIsRestore;
+        private ImageView carImage;
+        private TextView carModel;
+        private TextView carPrice;
+        private TextView carImmatriculation;
+        private TextView carType;
+        private Switch carIsRestore;
 
 
         public ViewHolder(View carLine) {
             super(carLine);
-            carImage = carLine.findViewById(R.id.car_image_view);
-            carModel = carLine.findViewById(R.id.car_model_txt_view);
-            carPrice = carLine.findViewById(R.id.car_price_txt_view);
-            carImmatriculation = carLine.findViewById(R.id.car_immatriculation_txt_view);
-            carType = carLine.findViewById(R.id.car_type_txt_view);
-            carIsRestore = carLine.findViewById(R.id.car_is_restore_switch);
+            //carImage = (ImageView) carLine.findViewById(R.id.car_image_view);
+            carModel = (TextView) carLine.findViewById(R.id.car_model_txt_view);
+            carPrice = (TextView) carLine.findViewById(R.id.car_price_txt_view);
+            carImmatriculation = (TextView) carLine.findViewById(R.id.car_immatriculation_txt_view);
+            carType = (TextView) carLine.findViewById(R.id.car_type_txt_view);
+            carIsRestore = (Switch) carLine.findViewById(R.id.car_is_restore_switch);
 
             carLine.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,44 +100,6 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
             //intent.putExtra("car", car);
             context.startActivity(intent);
         }
-    }
-
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View carLine = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_line, parent, false);
-        return new ViewHolder(carLine);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Car car = listCars.get(position);
-
-
-        //holder.carImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(localFile)));
-        holder.carModel.setText(car.getModel());
-        holder.carPrice.setText(String.valueOf(car.getPrice()));
-        holder.carImmatriculation.setText(car.getImmatriculation());
-        holder.carType.setText(car.getType().toString());
-        holder.carIsRestore.setChecked(car.isRestore());
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return listCars.size();
-    }
-
-
-    public void setCars(List<Car> cars) {
-        listCars = cars;
-        notifyDataSetChanged();
-    }
-
-
-    public Car getCar(int position) {
-
-        return listCars.get(position);
     }
 
 
