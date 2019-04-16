@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,18 +120,22 @@ public class CarFormActivity extends AppCompatActivity {
     {
         //Utilisation de l'appareil photo
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Toast.makeText(this, "Coucou", Toast.LENGTH_LONG).show();
+
         //Vérification que le telephone a bien un appareil photo
-        if (intent.resolveActivity(getPackageManager()) != null) {
+      /*  if (intent.resolveActivity(getPackageManager()) != null) {
             //Création d'un fichier image vide
             this.photoVide = createImageFile();
+
 
             Uri uriPhotoVide = FileProvider.getUriForFile(CarFormActivity.this,
                     "EXTRA_PHOTO",
                     this.photoVide);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhotoVide);
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        }
+        }*/
     }
+
 
 
 
