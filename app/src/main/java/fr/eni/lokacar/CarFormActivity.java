@@ -97,8 +97,7 @@ public class CarFormActivity extends AppCompatActivity {
 
             String type = intent.getStringExtra(EXTRA_TYPE);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
-
-
+            
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
@@ -106,9 +105,9 @@ public class CarFormActivity extends AppCompatActivity {
             /* Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoVide.getAbsolutePath());
             tvphoto = findViewById(R.id.ivPhotoPrise);
             tvphoto.setImageBitmap(imageBitmap); */
-            
+
             tvtype.setSelection(ad.getPosition(type));
-            tvisrestore.setText(String.valueOf(isrestore));
+            tvisrestore.setChecked(isrestore);
 
         } else {
             setTitle("Ajouter une voiture");
