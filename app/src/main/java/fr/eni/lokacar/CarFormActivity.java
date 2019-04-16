@@ -106,9 +106,8 @@ public class CarFormActivity extends AppCompatActivity {
             Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoVide.getAbsolutePath());
             tvphoto = findViewById(R.id.ivPhotoPrise);
             tvphoto.setImageBitmap(imageBitmap);
-
-
-            tvtype.setSelection(Integer.parseInt(type.toString()));
+            
+            tvtype.setSelection(ad.getPosition(type));
             tvisrestore.setText(String.valueOf(isrestore));
 
         } else {
