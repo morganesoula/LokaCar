@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +35,6 @@ import fr.eni.lokacar.model.CarType;
 
 public class CarFormActivity extends AppCompatActivity {
 
-
     public static final String EXTRA_MODEL = "cle_car_model";
     public static final String EXTRA_IMMAT = "cle_car_immat";
     public static final String EXTRA_PRICE = "cle_car_price";
@@ -41,8 +43,7 @@ public class CarFormActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO = "cle_photo";
     public static final String EXTRA_ID = "string_car_id";
 
-    private static final int REQUEST_IMAGE_CAPTURE= 1;
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     EditText tvmodel;
     EditText tvimmat;
@@ -51,12 +52,13 @@ public class CarFormActivity extends AppCompatActivity {
     Switch tvisrestore;
     ImageView tvphoto;
 
+    private Bitmap bitmap;
+    private File photoFile;
+
     List voitureType = new ArrayList<>();
 
-    Car car;
-
+    Bitmap imageBitmap;
     String cheminLocalImage;
-    File photoVide = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,6 @@ public class CarFormActivity extends AppCompatActivity {
         tvimmat = findViewById(R.id.car_immatriculation);
         tvtype = findViewById(R.id.spinner_car_type);
         tvisrestore = findViewById(R.id.car_is_restore);
-        tvphoto = findViewById(R.id.ivPhotoPrise);
         tvprice = findViewById(R.id.car_price);
 
         List<CarType> liste_type = new ArrayList<>();
@@ -103,11 +104,7 @@ public class CarFormActivity extends AppCompatActivity {
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
-
-            /* Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoVide.getAbsolutePath());
-            tvphoto = findViewById(R.id.ivPhotoPrise);
-            tvphoto.setImageBitmap(imageBitmap); */
-
+            tvphoto.setImageBitmap(imageBitmap);
             tvtype.setSelection(ad.getPosition(type));
             tvisrestore.setChecked(isrestore);
 
@@ -116,49 +113,39 @@ public class CarFormActivity extends AppCompatActivity {
         }
     }
 
-    public void addPhoto(View view)
-    {
+    public void takePicture(View view) throws IOException {
         //Utilisation de l'appareil photo
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Toast.makeText(this, "Coucou", Toast.LENGTH_LONG).show();
-
-        //Vérification que le telephone a bien un appareil photo
-      /*  if (intent.resolveActivity(getPackageManager()) != null) {
-            //Création d'un fichier image vide
-            this.photoVide = createImageFile();
-
-
-            Uri uriPhotoVide = FileProvider.getUriForFile(CarFormActivity.this,
-                    "EXTRA_PHOTO",
-                    this.photoVide);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhotoVide);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            this.photoFile = createImageFile();
+            Uri photoURI = FileProvider.getUriForFile(CarFormActivity.this, "random", this.photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        }*/
+        }
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        {
+           imageBitmap = BitmapFactory.decodeFile(this.photoFile.getAbsolutePath());
+           tvphoto = findViewById(R.id.ivPhotoPrise);
+           tvphoto.setImageBitmap(imageBitmap);
+        }
+    }
 
     /**
      * Permet de créer un fichier image vide.
      * @return
      */
-    private File createImageFile()  {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStamp + "_";
+    private File createImageFile() throws IOException  {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = null;
-        try {
-            image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-            cheminLocalImage = image.getAbsolutePath();
-            return image;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        cheminLocalImage = image.getAbsolutePath();
+
+        return image;
     }
+
 }
