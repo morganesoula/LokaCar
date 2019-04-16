@@ -5,10 +5,12 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.RoomWarnings;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity(tableName = "car")
-public class Car {
+public class Car implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
     private int idCar;
@@ -102,4 +104,57 @@ public class Car {
                 ", type=" + type +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i)
+    {
+        parcel.writeInt(idCar);
+        parcel.writeString(immatriculation);
+        parcel.writeFloat(price);
+
+        // Pour écrire un boolean
+        parcel.writeValue(isRestore);
+        parcel.writeString(imagePath);
+        parcel.writeString(model);
+
+        // Pour écrire un Objet
+        parcel.writeParcelable(type, i);
+
+    }
+
+    @Ignore
+    public Car(Parcel parcel)
+    {
+        idCar = parcel.readInt();
+        immatriculation = parcel.readString();
+        price = parcel.readFloat();
+
+        // Pour lire un boolean - ne pas oublier de caster
+        isRestore = (Boolean) parcel.readValue(null);
+        imagePath = parcel.readString();
+        model = parcel.readString();
+
+        // Pour lire un Objet
+        // Equivalent de CarType.class.getClassLoader()
+        type = parcel.readParcelable(getClass().getClassLoader());
+
+    }
+
+    @Ignore
+    public static final Creator<Car> CREATOR = new Creator<Car>() {
+        @Override
+        public Car createFromParcel(Parcel parcel) {
+            return new Car(parcel);
+        }
+
+        @Override
+        public Car[] newArray(int i) {
+            return new Car[0];
+        }
+    };
 }
