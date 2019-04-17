@@ -9,7 +9,6 @@ import java.util.List;
 
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
-import fr.eni.lokacar.repository.CarRepository;
 import fr.eni.lokacar.repository.CarTypeRepository;
 
 public class ListCarTypesViewModel extends AndroidViewModel {

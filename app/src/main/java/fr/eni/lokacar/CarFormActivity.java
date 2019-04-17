@@ -1,10 +1,13 @@
 package fr.eni.lokacar;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,13 +22,19 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.model.CarType;
+import fr.eni.lokacar.repository.CarTypeRepository;
+import fr.eni.lokacar.view_model.ListCarTypesViewModel;
+import fr.eni.lokacar.view_model.ListCarsViewModel;
 
 
 public class CarFormActivity extends AppCompatActivity {
+
 
     public static final String EXTRA_MODEL = "cle_car_model";
     public static final String EXTRA_IMMAT = "cle_car_immat";
@@ -49,8 +58,6 @@ public class CarFormActivity extends AppCompatActivity {
     Bundle extras;
     Bitmap bitmap;
 
-    List voitureType = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +73,39 @@ public class CarFormActivity extends AppCompatActivity {
         btnAddPhoto = findViewById(R.id.btn_add_photo);
         tvphoto = findViewById(R.id.ivPhotoPrise);
 
-        List<CarType> liste_type = new ArrayList<>();
-        liste_type.add(new CarType(0,"Berline"));
+        ListCarTypesViewModel lvm = ViewModelProviders.of(this).get(ListCarTypesViewModel.class);
+        lvm.insert(new CarType(0,"Berline"));
+        lvm.insert(new CarType(0,"SUV"));
+        lvm.insert(new CarType(0,"Citadine"));
+        lvm.insert(new CarType(0,"Sportive"));
+
+
+
+       /* liste_type.add(new CarType(0,"Berline"));
         liste_type.add(new CarType(1,"SUV"));
         liste_type.add(new CarType(2,"Citadine"));
-        liste_type.add(new CarType(3,"Sportive"));
+        liste_type.add(new CarType(3,"Sportive"));*/
 
-
+        //voitureType = lvm.getAll();
+/*
         for (int i = 0; i < liste_type.size(); i++)
         {
-            voitureType.add(liste_type.get(i).getLabel());
+            voitureType.add(liste_type);
         }
+        voitureType.add(new CarType(0,"Berline"));*/
 
-        ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner, voitureType);
-        tvtype.setAdapter(ad);
+
+
+
+        List<CarType> liste_type = new ArrayList<>();
+        lvm = ViewModelProviders.of(this).get(ListCarTypesViewModel.class);
+        final ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner,liste_type);
+        lvm.getAll().observe(this, new Observer<List<CarType>>() {
+            @Override
+            public void onChanged(@Nullable List<CarType> liste_type) {
+                tvtype.setAdapter(ad);
+            }
+        });
 
         Intent intent = getIntent();
         intent.getParcelableExtra("car");
