@@ -81,7 +81,13 @@ public class CarFormActivity extends AppCompatActivity {
         carTypesViewModel.getAll().observe(this, new Observer<List<CarType>>() {
             @Override
             public void onChanged(@Nullable List<CarType> carTypes) {
-                ad = new ArrayAdapter<>(CarFormActivity.this, R.layout.type_spinner, carTypes);
+                ArrayList labels = new ArrayList();
+                for (CarType labelType : carTypes) {
+
+                    labels.add(labelType.getLabel());
+
+                }
+                ad = new ArrayAdapter<>(CarFormActivity.this, R.layout.type_spinner, labels);
                 tvtype.setAdapter(ad);
             }
         });
