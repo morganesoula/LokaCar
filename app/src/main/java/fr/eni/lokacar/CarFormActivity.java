@@ -1,32 +1,32 @@
 package fr.eni.lokacar;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
 
 
 public class CarFormActivity extends AppCompatActivity {
-
 
     public static final String EXTRA_MODEL = "cle_car_model";
     public static final String EXTRA_IMMAT = "cle_car_immat";
@@ -36,35 +36,35 @@ public class CarFormActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO = "cle_photo";
     public static final String EXTRA_ID = "string_car_id";
 
-    private static final int REQUEST_IMAGE_CAPTURE= 1;
+    static final int REQUEST_IMAGE_CAPTURE = 100;
 
+    private EditText tvmodel;
+    private EditText tvimmat;
+    private EditText tvprice;
+    private Spinner tvtype;
+    private Switch tvisrestore;
 
-    EditText tvmodel;
-    EditText tvimmat;
-    EditText tvprice;
-    Spinner tvtype;
-    Switch tvisrestore;
-    ImageView tvphoto;
+    private ImageView tvphoto;
+    private Button btnAddPhoto;
+
+    Bundle extras;
 
     List voitureType = new ArrayList<>();
 
-    Car car;
-
-    String cheminLocalImage;
-    File photoVide = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_form);
 
-
         tvmodel = findViewById(R.id.car_model);
         tvimmat = findViewById(R.id.car_immatriculation);
         tvtype = findViewById(R.id.spinner_car_type);
         tvisrestore = findViewById(R.id.car_is_restore);
-        tvphoto = findViewById(R.id.ivPhotoPrise);
         tvprice = findViewById(R.id.car_price);
+
+        btnAddPhoto = findViewById(R.id.btn_add_photo);
+        tvphoto = (ImageView) findViewById(R.id.ivPhotoPrise);
 
         List<CarType> liste_type = new ArrayList<>();
         liste_type.add(new CarType(0,"Berline"));
@@ -85,7 +85,7 @@ public class CarFormActivity extends AppCompatActivity {
         intent.getParcelableExtra("car");
 
         if (intent.hasExtra(EXTRA_ID)) {
-                       setTitle("Modifier");
+            setTitle("Modifier");
 
             //String id = intent.getStringExtra(EXTRA_ID);
             String model = intent.getStringExtra(EXTRA_MODEL);
@@ -94,67 +94,59 @@ public class CarFormActivity extends AppCompatActivity {
 
             String type = intent.getStringExtra(EXTRA_TYPE);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
-
-
+            
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
-
-            /* Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoVide.getAbsolutePath());
-            tvphoto = findViewById(R.id.ivPhotoPrise);
-            tvphoto.setImageBitmap(imageBitmap); */
-            
+            //tvphoto.setImageBitmap(imageBitmap);
             tvtype.setSelection(ad.getPosition(type));
-            tvisrestore.setText(String.valueOf(isrestore));
+            tvisrestore.setChecked(isrestore);
 
         } else {
             setTitle("Ajouter une voiture");
         }
+
+        btnAddPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
+            }
+        });
+
     }
 
-    public void addPhoto(View view)
+    private void takePhoto()
     {
-        //Utilisation de l'appareil photo
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Toast.makeText(this, "Coucou", Toast.LENGTH_LONG).show();
-
-        //Vérification que le telephone a bien un appareil photo
-      /*  if (intent.resolveActivity(getPackageManager()) != null) {
-            //Création d'un fichier image vide
-            this.photoVide = createImageFile();
-
-
-            Uri uriPhotoVide = FileProvider.getUriForFile(CarFormActivity.this,
-                    "EXTRA_PHOTO",
-                    this.photoVide);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhotoVide);
+        if (intent.resolveActivity(getPackageManager()) != null)
+        {
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        }*/
+        }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-
-
-    /**
-     * Permet de créer un fichier image vide.
-     * @return
-     */
-    private File createImageFile()  {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = null;
-        try {
-            image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-            cheminLocalImage = image.getAbsolutePath();
-            return image;
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            tvphoto.setImageBitmap(bitmap);
         }
-        return null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        outState.putBundle("extras", extras);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        extras = savedInstanceState.getBundle("extras");
     }
 }
