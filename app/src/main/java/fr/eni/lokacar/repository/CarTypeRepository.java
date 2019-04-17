@@ -15,7 +15,6 @@ public class CarTypeRepository {
     CarTypeDAO carTypeDAO;
     LiveData<List<CarType>> listCarTypes;
 
-
     public CarTypeRepository(Context context)
     {
         Database database = Database.getDatabase(context);
@@ -23,8 +22,6 @@ public class CarTypeRepository {
 
         listCarTypes = carTypeDAO.getAll();
     }
-
-
 
     public LiveData<List<CarType>> getAll() {
         return listCarTypes;
