@@ -42,7 +42,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         holder.carModel.setText(car.getModel());
         holder.carPrice.setText(String.valueOf(car.getPrice()));
         holder.carImmatriculation.setText(car.getImmatriculation());
-        holder.carType.setText(car.getCarType().getLabel());
+        holder.carType.setText(car.getCarTypeId());
         holder.carIsRestore.setChecked(car.isRestore());
     }
 

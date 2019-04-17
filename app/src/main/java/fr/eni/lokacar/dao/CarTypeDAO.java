@@ -17,7 +17,7 @@ import fr.eni.lokacar.model.CarType;
 @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
 public interface CarTypeDAO {
 
-    @Query("SELECT * FROM Car")
+    @Query("SELECT * FROM car_type")
     LiveData<List<CarType>> getAll();
 
     @Insert

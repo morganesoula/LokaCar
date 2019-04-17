@@ -2,11 +2,11 @@ package fr.eni.lokacar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class CarFormActivity extends AppCompatActivity {
     private Button btnAddPhoto;
 
     Bundle extras;
+    Bitmap bitmap;
 
     List voitureType = new ArrayList<>();
 
@@ -62,7 +64,7 @@ public class CarFormActivity extends AppCompatActivity {
         tvprice = findViewById(R.id.car_price);
 
         btnAddPhoto = findViewById(R.id.btn_add_photo);
-        tvphoto = (ImageView) findViewById(R.id.ivPhotoPrise);
+        tvphoto = findViewById(R.id.ivPhotoPrise);
 
         List<CarType> liste_type = new ArrayList<>();
         liste_type.add(new CarType(0,"Berline"));
@@ -76,7 +78,7 @@ public class CarFormActivity extends AppCompatActivity {
             voitureType.add(liste_type.get(i).getLabel());
         }
 
-        ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner,voitureType);
+        ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner, voitureType);
         tvtype.setAdapter(ad);
 
         Intent intent = getIntent();
@@ -96,7 +98,7 @@ public class CarFormActivity extends AppCompatActivity {
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
-            //tvphoto.setImageBitmap(imageBitmap);
+            tvphoto.setImageBitmap(bitmap);
             tvtype.setSelection(ad.getPosition(type));
             tvisrestore.setChecked(isrestore);
 
@@ -129,7 +131,7 @@ public class CarFormActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
         {
             Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
+            bitmap = (Bitmap) extras.get("data");
             tvphoto.setImageBitmap(bitmap);
         }
     }
@@ -159,10 +161,36 @@ public class CarFormActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_save:
-                //TODO METHOD
-                Log.i("XXX","Je rentre dans la methode save");
+                saveCar();
                 break;
         }
         return true;
+    }
+
+    private void saveCar()
+    {
+        String model = tvmodel.getText().toString();
+        String immatriculation = tvimmat.getText().toString();
+        Boolean isRestore = tvisrestore.isChecked();
+        Float price = Float.valueOf(tvprice.getText().toString());
+        CarType type = new CarType();
+
+        Intent intent = new Intent();
+
+        intent.putExtra(EXTRA_MODEL, model);
+        intent.putExtra(EXTRA_IMMAT, immatriculation);
+        intent.putExtra(EXTRA_ISRESTORE, isRestore);
+        intent.putExtra(EXTRA_PRICE, price);
+        intent.putExtra(EXTRA_TYPE, type);
+
+        int id = getIntent().getIntExtra(EXTRA_ID, 0);
+
+        if (id != 0)
+        {
+            intent.putExtra(EXTRA_ID, id);
+        }
+
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
