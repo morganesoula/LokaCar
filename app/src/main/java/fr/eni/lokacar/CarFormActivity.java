@@ -1,10 +1,12 @@
 package fr.eni.lokacar;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,12 +19,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.model.CarType;
+import fr.eni.lokacar.view_model.CarTypesViewModel;
+import fr.eni.lokacar.view_model.ListCarsViewModel;
 
 
 public class CarFormActivity extends AppCompatActivity {
@@ -36,6 +39,9 @@ public class CarFormActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "string_car_id";
 
     static final int REQUEST_IMAGE_CAPTURE = 100;
+    static final int REQUEST_CAR_TYPE_FORM = 200;
+
+    private CarTypesViewModel carTypesViewModel;
 
     private EditText tvmodel;
     private EditText tvimmat;
@@ -45,11 +51,13 @@ public class CarFormActivity extends AppCompatActivity {
 
     private ImageView tvphoto;
     private Button btnAddPhoto;
+    private Button btnAddCarType;
 
+    String type;
     Bundle extras;
     Bitmap bitmap;
 
-    List voitureType = new ArrayList<>();
+    ArrayAdapter ad;
 
 
     @Override
@@ -66,20 +74,18 @@ public class CarFormActivity extends AppCompatActivity {
         btnAddPhoto = findViewById(R.id.btn_add_photo);
         tvphoto = findViewById(R.id.ivPhotoPrise);
 
-        List<CarType> liste_type = new ArrayList<>();
-        liste_type.add(new CarType(0,"Berline"));
-        liste_type.add(new CarType(1,"SUV"));
-        liste_type.add(new CarType(2,"Citadine"));
-        liste_type.add(new CarType(3,"Sportive"));
+        btnAddCarType = findViewById(R.id.add_car_type_button);
 
+        carTypesViewModel = ViewModelProviders.of(this).get(CarTypesViewModel.class);
 
-        for (int i = 0; i < liste_type.size(); i++)
-        {
-            voitureType.add(liste_type.get(i).getLabel());
-        }
+        carTypesViewModel.getAll().observe(this, new Observer<List<CarType>>() {
+            @Override
+            public void onChanged(@Nullable List<CarType> carTypes) {
+                ad = new ArrayAdapter<>(CarFormActivity.this, R.layout.type_spinner, carTypes);
+                tvtype.setAdapter(ad);
+            }
+        });
 
-        ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner, voitureType);
-        tvtype.setAdapter(ad);
 
         Intent intent = getIntent();
         intent.getParcelableExtra("car");
@@ -113,6 +119,14 @@ public class CarFormActivity extends AppCompatActivity {
             }
         });
 
+        btnAddCarType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(CarFormActivity.this, CarTypeFormActivity.class);
+                startActivityForResult(intent1, REQUEST_CAR_TYPE_FORM);
+            }
+        });
+
     }
 
     private void takePhoto()
@@ -130,9 +144,17 @@ public class CarFormActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
         {
-            Bundle extras = data.getExtras();
+            extras = data.getExtras();
             bitmap = (Bitmap) extras.get("data");
             tvphoto.setImageBitmap(bitmap);
+        }
+
+        if (requestCode == REQUEST_CAR_TYPE_FORM && resultCode == RESULT_OK)
+        {
+            type = data.getStringExtra(CarTypeFormActivity.EXTRA_CAR_TYPE);
+
+            CarType carType = new CarType(0, type);
+            carTypesViewModel.insert(carType);
         }
     }
 
@@ -141,6 +163,7 @@ public class CarFormActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState, outPersistentState);
 
         outState.putBundle("extras", extras);
+        outState.putString("type", type);
     }
 
     @Override
@@ -148,6 +171,7 @@ public class CarFormActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         extras = savedInstanceState.getBundle("extras");
+        type = savedInstanceState.getString("type");
     }
 
     @Override

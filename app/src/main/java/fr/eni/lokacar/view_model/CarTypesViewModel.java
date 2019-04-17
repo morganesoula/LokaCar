@@ -12,14 +12,14 @@ import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.repository.CarRepository;
 import fr.eni.lokacar.repository.CarTypeRepository;
 
-public class ListCarTypesViewModel extends AndroidViewModel {
+public class CarTypesViewModel extends AndroidViewModel {
 
     private LiveData<List<CarType>> carTypes;
 
     CarTypeRepository repository;
 
 
-    public ListCarTypesViewModel(@NonNull Application application)
+    public CarTypesViewModel(@NonNull Application application)
     {
         super(application);
         repository = new CarTypeRepository(application);

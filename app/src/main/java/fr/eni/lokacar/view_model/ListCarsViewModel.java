@@ -16,7 +16,6 @@ public class ListCarsViewModel extends AndroidViewModel {
 
     CarRepository repository;
 
-
     public ListCarsViewModel(@NonNull Application application)
     {
         super(application);

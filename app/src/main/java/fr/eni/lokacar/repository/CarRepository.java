@@ -25,7 +25,6 @@ public class CarRepository {
     }
 
 
-
     public LiveData<List<Car>> getAll() {
         return listCars;
     }

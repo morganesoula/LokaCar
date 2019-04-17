@@ -17,14 +17,8 @@ public class CarType implements Parcelable {
     public CarType() {
     }
 
-    public CarType(String label)
-    {
-        this.label = label;
-    }
-
-    @Ignore
-    public CarType(int id, String label) {
-        this.idCarType = id;
+    public CarType(int idCarType, String label) {
+        this.idCarType = idCarType;
         this.label = label;
     }
 

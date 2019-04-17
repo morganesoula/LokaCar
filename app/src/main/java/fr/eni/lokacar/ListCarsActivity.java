@@ -16,12 +16,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.adapter.CarRecyclerAdapter;
 import fr.eni.lokacar.model.Car;
-import fr.eni.lokacar.model.CarType;
+import fr.eni.lokacar.view_model.CarTypesViewModel;
 import fr.eni.lokacar.view_model.ListCarsViewModel;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -32,7 +31,6 @@ public class ListCarsActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_EDIT = 2;
 
     private ListCarsViewModel carsViewModel;
-    public List<Car> listCars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +105,6 @@ public class ListCarsActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                //carsViewModel.insert(adapter.getCar(viewHolder.getAdapterPosition()));
                 Intent intent = new Intent(ListCarsActivity.this, LocationFormActivity.class);
                 startActivity(intent);
             }
