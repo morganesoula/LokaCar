@@ -2,14 +2,16 @@ package fr.eni.lokacar.model;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.RoomWarnings;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
-@Entity(tableName = "car")
+@Entity(tableName = "car", foreignKeys =
+        @ForeignKey(entity = CarType.class,
+                parentColumns = "typeId",
+                childColumns = "idCarType"))
 public class Car implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
@@ -19,22 +21,39 @@ public class Car implements Parcelable{
     private boolean isRestore;
     private String imagePath;
     private String model;
-    @Embedded
-    private CarType carType;
+    private int typeId;
 
-    @Ignore
-    public Car() {
-    }
-
-    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
+    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, int typeId) {
         this.idCar = idCar;
         this.immatriculation = immatriculation;
         this.price = price;
         this.isRestore = isRestore;
         this.imagePath = imagePath;
         this.model = model;
-        this.carType = carType;
+        this.typeId = typeId;
     }
+
+    protected Car(Parcel in) {
+        idCar = in.readInt();
+        immatriculation = in.readString();
+        price = in.readFloat();
+        isRestore = in.readByte() != 0;
+        imagePath = in.readString();
+        model = in.readString();
+        typeId = in.readInt();
+    }
+
+    public static final Creator<Car> CREATOR = new Creator<Car>() {
+        @Override
+        public Car createFromParcel(Parcel in) {
+            return new Car(in);
+        }
+
+        @Override
+        public Car[] newArray(int size) {
+            return new Car[size];
+        }
+    };
 
     public int getIdCar() {
         return idCar;
@@ -84,12 +103,12 @@ public class Car implements Parcelable{
         this.model = model;
     }
 
-    public CarType getCarType() {
-        return carType;
+    public int getTypeId() {
+        return typeId;
     }
 
-    public void setCarType(CarType carType) {
-        this.carType = carType;
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
 
     @Override
@@ -101,7 +120,7 @@ public class Car implements Parcelable{
                 ", isRestore=" + isRestore +
                 ", imagePath='" + imagePath + '\'' +
                 ", model='" + model + '\'' +
-                ", carType=" + carType +
+                ", typeId=" + typeId +
                 '}';
     }
 
@@ -111,50 +130,13 @@ public class Car implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i)
-    {
+    public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(idCar);
         parcel.writeString(immatriculation);
         parcel.writeFloat(price);
-
-        // Pour écrire un boolean
-        parcel.writeValue(isRestore);
+        parcel.writeByte((byte) (isRestore ? 1 : 0));
         parcel.writeString(imagePath);
         parcel.writeString(model);
-
-        // Pour écrire un Objet
-        parcel.writeParcelable(carType, i);
-
+        parcel.writeInt(typeId);
     }
-
-    @Ignore
-    public Car(Parcel parcel)
-    {
-        idCar = parcel.readInt();
-        immatriculation = parcel.readString();
-        price = parcel.readFloat();
-
-        // Pour lire un boolean - ne pas oublier de caster
-        isRestore = (Boolean) parcel.readValue(null);
-        imagePath = parcel.readString();
-        model = parcel.readString();
-
-        // Pour lire un Objet
-        // Equivalent de CarType.class.getClassLoader()
-        carType = parcel.readParcelable(getClass().getClassLoader());
-
-    }
-
-    @Ignore
-    public static final Creator<Car> CREATOR = new Creator<Car>() {
-        @Override
-        public Car createFromParcel(Parcel parcel) {
-            return new Car(parcel);
-        }
-
-        @Override
-        public Car[] newArray(int i) {
-            return new Car[0];
-        }
-    };
 }

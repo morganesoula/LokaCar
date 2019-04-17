@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CarFormActivity"></activity>
+        <activity android:name=".LocationFormActivity"></activity>
     </application>
 
 </manifest>

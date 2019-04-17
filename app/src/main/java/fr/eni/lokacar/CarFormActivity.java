@@ -6,6 +6,7 @@ import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -158,7 +159,8 @@ public class CarFormActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_save:
-                //saveArticle();
+                //TODO METHOD
+                Log.i("XXX","Je rentre dans la methode save");
                 break;
         }
         return true;
