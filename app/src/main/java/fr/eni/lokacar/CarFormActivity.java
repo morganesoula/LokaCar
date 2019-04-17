@@ -2,13 +2,13 @@ package fr.eni.lokacar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -64,17 +64,18 @@ public class CarFormActivity extends AppCompatActivity {
         tvphoto = (ImageView) findViewById(R.id.ivPhotoPrise);
 
         List<CarType> liste_type = new ArrayList<>();
-        liste_type.add(new CarType(0, "Berline"));
-        liste_type.add(new CarType(1, "SUV"));
-        liste_type.add(new CarType(2, "Citadine"));
-        liste_type.add(new CarType(3, "Sportive"));
+        liste_type.add(new CarType(0,"Berline"));
+        liste_type.add(new CarType(1,"SUV"));
+        liste_type.add(new CarType(2,"Citadine"));
+        liste_type.add(new CarType(3,"Sportive"));
 
 
-        for (int i = 0; i < liste_type.size(); i++) {
+        for (int i = 0; i < liste_type.size(); i++)
+        {
             voitureType.add(liste_type.get(i).getLabel());
         }
 
-        ArrayAdapter ad = new ArrayAdapter<CarType>(this, R.layout.type_spinner, voitureType);
+        ArrayAdapter ad = new ArrayAdapter<CarType>(this,R.layout.type_spinner,voitureType);
         tvtype.setAdapter(ad);
 
         Intent intent = getIntent();
@@ -85,12 +86,12 @@ public class CarFormActivity extends AppCompatActivity {
 
             //String id = intent.getStringExtra(EXTRA_ID);
             String model = intent.getStringExtra(EXTRA_MODEL);
-            String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0));
+            String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE,0));
             String immatriculation = intent.getStringExtra(EXTRA_IMMAT);
 
             String type = intent.getStringExtra(EXTRA_TYPE);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
-
+            
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
@@ -111,9 +112,11 @@ public class CarFormActivity extends AppCompatActivity {
 
     }
 
-    private void takePhoto() {
+    private void takePhoto()
+    {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getPackageManager()) != null)
+        {
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -122,7 +125,8 @@ public class CarFormActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        {
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             tvphoto.setImageBitmap(bitmap);
@@ -143,4 +147,20 @@ public class CarFormActivity extends AppCompatActivity {
         extras = savedInstanceState.getBundle("extras");
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.menu_save, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_save:
+                //saveArticle();
+                break;
+        }
+        return true;
+    }
 }
