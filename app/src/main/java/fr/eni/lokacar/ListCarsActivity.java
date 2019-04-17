@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,17 +53,12 @@ public class ListCarsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listCars = new ArrayList<>();
-        listCars.add(new Car(1, "CM245MJ", 1500f, true, "www.google.fr", "Citroen C3", new CarType("Berline")));
-        listCars.add(new Car(2, "BZ123ZA", 10200f, false, "www.nevermind.fr", "Renault Twingo", new CarType("SUV")));
-        listCars.add(new Car(3, "AA132ZZ", 60f, true, "www.nevermind.fr", "Citroen Evasion", new CarType("SUV")));
-
         carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
 
         carsViewModel.get().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
-                adapter.setCars(listCars);
+                adapter.setCars(cars);
             }
         });
 
@@ -74,7 +70,7 @@ public class ListCarsActivity extends AppCompatActivity {
                 intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
                 intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
-                intent.putExtra(CarFormActivity.EXTRA_TYPE, car.getCarType().getLabel());
+                intent.putExtra(CarFormActivity.EXTRA_TYPE, car.getCarTypeId());
                 intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
@@ -119,6 +115,40 @@ public class ListCarsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == REQUEST_CODE_ADD && resultCode == RESULT_OK)
+        {
+            String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
+            String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
+            Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
+            Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
+            int type = data.getIntExtra(CarFormActivity.EXTRA_TYPE, 0);
 
+            Car car = new Car(0, immatriculation, price, isRestore, null, model, type);
+            carsViewModel.insert(car);
+
+        } else if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK)
+        {
+            int id = data.getIntExtra(CarFormActivity.EXTRA_ID, 0);
+
+            if (id == 0)
+            {
+                Toast.makeText(this, "Problème dans la mise à jour", Toast.LENGTH_LONG).show();
+            } else {
+                String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
+                String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
+                Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
+                Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
+                int type = data.getIntExtra(CarFormActivity.EXTRA_TYPE, 0);
+
+                Car car = new Car(id, immatriculation, price, isRestore, null, model, type);
+                carsViewModel.update(car);
+            }
+        } else {
+            Toast.makeText(this, "La sauvegarde a échoué", Toast.LENGTH_LONG).show();
+        }
+    }
 }

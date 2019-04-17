@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
 
-@android.arch.persistence.room.Database(entities = {Car.class, CarType.class}, version = 2, exportSchema = false)
+@android.arch.persistence.room.Database(entities = {Car.class, CarType.class}, version = 3, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     public abstract CarDAO carDAO();
