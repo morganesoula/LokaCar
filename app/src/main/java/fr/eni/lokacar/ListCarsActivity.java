@@ -16,6 +16,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 
 import fr.eni.lokacar.adapter.CarRecyclerAdapter;
@@ -69,7 +70,7 @@ public class ListCarsActivity extends AppCompatActivity {
                 intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
                 intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
-                intent.putExtra(CarFormActivity.EXTRA_TYPE, car.getCarType());
+                intent.putExtra(CarFormActivity.EXTRA_TYPE, (Serializable) car.getCarType());
                 intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
@@ -123,7 +124,7 @@ public class ListCarsActivity extends AppCompatActivity {
             String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
             Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
             Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
-            CarType carType = data.getParcelableExtra(CarFormActivity.EXTRA_TYPE);
+            CarType carType = (CarType) data.getSerializableExtra(CarFormActivity.EXTRA_TYPE);
 
             Car car = new Car(0, immatriculation, price, isRestore, null, model, carType);
             carsViewModel.insert(car);
@@ -134,7 +135,7 @@ public class ListCarsActivity extends AppCompatActivity {
 
             if (id == 0)
             {
-                Toast.makeText(this, "Problème dans la mise à jour", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Updating problem", Toast.LENGTH_LONG).show();
             } else {
                 String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
                 String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
@@ -146,7 +147,7 @@ public class ListCarsActivity extends AppCompatActivity {
                 carsViewModel.update(car);
             }
         } else {
-            Toast.makeText(this, "La sauvegarde a échoué", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Saving failed", Toast.LENGTH_LONG).show();
         }
     }
 }
