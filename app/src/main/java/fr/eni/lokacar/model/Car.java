@@ -22,20 +22,20 @@ public class Car implements Parcelable{
     private boolean isRestore;
     private String imagePath;
     private String model;
-    private int carTypeId;
+    private CarType carType;
 
     @Ignore
     public Car() {
     }
 
-    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, int carTypeId) {
+    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
         this.idCar = idCar;
         this.immatriculation = immatriculation;
         this.price = price;
         this.isRestore = isRestore;
         this.imagePath = imagePath;
         this.model = model;
-        this.carTypeId = carTypeId;
+        this.carType = carType;
     }
 
     protected Car(Parcel in) {
@@ -45,7 +45,7 @@ public class Car implements Parcelable{
         isRestore = in.readByte() != 0;
         imagePath = in.readString();
         model = in.readString();
-        carTypeId = in.readInt();
+        carType = in.readParcelable();
     }
 
     public static final Creator<Car> CREATOR = new Creator<Car>() {
@@ -108,12 +108,12 @@ public class Car implements Parcelable{
         this.model = model;
     }
 
-    public int getCarTypeId() {
-        return carTypeId;
+    public CarType getCarType() {
+        return carType;
     }
 
-    public void setCarTypeId(int carTypeId) {
-        this.carTypeId = carTypeId;
+    public void setCarType(CarType carType) {
+        this.carType = carType;
     }
 
     @Override
@@ -125,7 +125,7 @@ public class Car implements Parcelable{
                 ", isRestore=" + isRestore +
                 ", imagePath='" + imagePath + '\'' +
                 ", model='" + model + '\'' +
-                ", carTypeId=" + carTypeId +
+                ", carType=" + carType +
                 '}';
     }
 
@@ -148,7 +148,7 @@ public class Car implements Parcelable{
         parcel.writeString(imagePath);
         parcel.writeString(model);
 
-        parcel.writeInt(carTypeId);
+        parcel.writeTypedObject(carType, 0);
 
     }
 

@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import fr.eni.lokacar.dao.CarDAO;
+import fr.eni.lokacar.dao.CarTypeDAO;
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.model.Car;
 
