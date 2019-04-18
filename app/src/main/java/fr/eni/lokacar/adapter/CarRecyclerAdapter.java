@@ -42,8 +42,10 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         holder.carModel.setText(car.getModel());
         holder.carPrice.setText(String.valueOf(car.getPrice()));
         holder.carImmatriculation.setText(car.getImmatriculation());
-        holder.carType.setText(car.getCarTypeId());
+        holder.carType.setText(String.valueOf(car.getCarTypeId()));
         holder.carIsRestore.setChecked(car.isRestore());
+
+        System.out.println("La voiture est " + car);
     }
 
     @Override
@@ -97,7 +99,6 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
             Intent intent = new Intent(context, ListCarsActivity.class);
 
             Car car = listCars.get(getAdapterPosition());
-            //intent.putExtra("car", car);
             context.startActivity(intent);
         }
     }

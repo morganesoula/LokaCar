@@ -169,7 +169,6 @@ public class CarFormActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState, outPersistentState);
 
         outState.putBundle("extras", extras);
-        outState.putString("type", type);
     }
 
     @Override
@@ -177,7 +176,6 @@ public class CarFormActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         extras = savedInstanceState.getBundle("extras");
-        type = savedInstanceState.getString("type");
     }
 
     @Override
@@ -203,7 +201,9 @@ public class CarFormActivity extends AppCompatActivity {
         String immatriculation = tvimmat.getText().toString();
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
-        CarType type = new CarType();
+        int type = tvtype.getSelectedItemId();
+
+
 
         Intent intent = new Intent();
 
