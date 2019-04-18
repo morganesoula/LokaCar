@@ -20,6 +20,7 @@ import java.util.List;
 
 import fr.eni.lokacar.adapter.CarRecyclerAdapter;
 import fr.eni.lokacar.model.Car;
+import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.view_model.CarTypesViewModel;
 import fr.eni.lokacar.view_model.ListCarsViewModel;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -68,7 +69,7 @@ public class ListCarsActivity extends AppCompatActivity {
                 intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
                 intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
-                intent.putExtra(CarFormActivity.EXTRA_TYPE, car.getCarTypeId());
+                intent.putExtra(CarFormActivity.EXTRA_TYPE, car.getCarType());
                 intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
@@ -122,9 +123,9 @@ public class ListCarsActivity extends AppCompatActivity {
             String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
             Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
             Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
-            int type = data.getIntExtra(CarFormActivity.EXTRA_TYPE, 0);
+            CarType carType = data.getParcelableExtra(CarFormActivity.EXTRA_TYPE);
 
-            Car car = new Car(0, immatriculation, price, isRestore, null, model, type);
+            Car car = new Car(0, immatriculation, price, isRestore, null, model, carType);
             carsViewModel.insert(car);
 
         } else if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK)
@@ -139,9 +140,9 @@ public class ListCarsActivity extends AppCompatActivity {
                 String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
                 Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
                 Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
-                int type = data.getIntExtra(CarFormActivity.EXTRA_TYPE, 0);
+                CarType carType = data.getParcelableExtra(CarFormActivity.EXTRA_TYPE);
 
-                Car car = new Car(id, immatriculation, price, isRestore, null, model, type);
+                Car car = new Car(id, immatriculation, price, isRestore, null, model, carType);
                 carsViewModel.update(car);
             }
         } else {
