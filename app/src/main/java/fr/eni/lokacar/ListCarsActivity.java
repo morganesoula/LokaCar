@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -38,12 +39,16 @@ public class ListCarsActivity extends AppCompatActivity {
 
     private ListCarsViewModel carsViewModel;
 
+    private TextView emptyList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTitle("Toutes les voitures");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_cars);
+
+        emptyList = findViewById(R.id.empty_list_txt_view);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cars_recycler);
         recyclerView.setHasFixedSize(true);
@@ -150,7 +155,7 @@ public class ListCarsActivity extends AppCompatActivity {
                 String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
                 Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
                 Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
-                CarType carType = data.getParcelableExtra(CarFormActivity.EXTRA_TYPE);
+                CarType carType = (CarType) data.getSerializableExtra(CarFormActivity.EXTRA_TYPE);
 
                 Car car = new Car(id, immatriculation, price, isRestore, null, model, carType);
                 carsViewModel.update(car);

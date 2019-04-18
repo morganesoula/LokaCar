@@ -20,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,6 +56,8 @@ public class CarFormActivity extends AppCompatActivity {
     private ImageView tvphoto;
     private Button btnAddPhoto;
     private ImageButton btnAddCarType;
+
+    private int typePosition;
 
     String type;
     Bundle extras;
@@ -99,20 +103,26 @@ public class CarFormActivity extends AppCompatActivity {
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle("Modifier");
 
-            //String id = intent.getStringExtra(EXTRA_ID);
             String model = intent.getStringExtra(EXTRA_MODEL);
             String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE,0));
             String immatriculation = intent.getStringExtra(EXTRA_IMMAT);
-
-            String type = intent.getStringExtra(EXTRA_TYPE);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
-            
+
+            CarType carType = (CarType) intent.getSerializableExtra(EXTRA_TYPE);
+            typePosition = carType.getIdCarType();
+
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
             tvphoto.setImageBitmap(bitmap);
-            tvtype.setSelection(ad.getPosition(type));
             tvisrestore.setChecked(isrestore);
+
+            tvtype.post(new Runnable() {
+                @Override
+                public void run() {
+                    tvtype.setSelection(typePosition);
+                }
+            });
 
         } else {
             setTitle("Ajouter une voiture");
@@ -134,6 +144,7 @@ public class CarFormActivity extends AppCompatActivity {
         });
 
     }
+
 
     private void takePhoto()
     {
@@ -203,22 +214,28 @@ public class CarFormActivity extends AppCompatActivity {
         Float price = Float.valueOf(tvprice.getText().toString());
         CarType carType = new CarType(tvtype.getSelectedItemPosition(), tvtype.getSelectedItem().toString());
 
-        Intent intent = new Intent();
-
-        intent.putExtra(EXTRA_MODEL, model);
-        intent.putExtra(EXTRA_IMMAT, immatriculation);
-        intent.putExtra(EXTRA_ISRESTORE, isRestore);
-        intent.putExtra(EXTRA_PRICE, price);
-        intent.putExtra(EXTRA_TYPE, (Serializable) carType);
-
-        int id = getIntent().getIntExtra(EXTRA_ID, 0);
-
-        if (id != 0)
+        if (tvtype.getSelectedItem() == null)
         {
-            intent.putExtra(EXTRA_ID, id);
+            Toast.makeText(this, "Please fill everything", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent();
+
+            intent.putExtra(EXTRA_MODEL, model);
+            intent.putExtra(EXTRA_IMMAT, immatriculation);
+            intent.putExtra(EXTRA_ISRESTORE, isRestore);
+            intent.putExtra(EXTRA_PRICE, price);
+            intent.putExtra(EXTRA_TYPE, (Serializable) carType);
+
+            int id = getIntent().getIntExtra(EXTRA_ID, 0);
+
+            if (id != 0)
+            {
+                intent.putExtra(EXTRA_ID, id);
+            }
+
+            setResult(RESULT_OK, intent);
+            finish();
         }
 
-        setResult(RESULT_OK, intent);
-        finish();
     }
 }
