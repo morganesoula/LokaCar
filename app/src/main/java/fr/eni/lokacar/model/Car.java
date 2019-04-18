@@ -1,15 +1,12 @@
 package fr.eni.lokacar.model;
 
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.RoomWarnings;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity(tableName = "car", foreignKeys =
         {
                 @ForeignKey(entity = CarType.class,
