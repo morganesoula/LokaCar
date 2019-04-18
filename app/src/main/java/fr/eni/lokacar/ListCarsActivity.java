@@ -1,5 +1,6 @@
 package fr.eni.lokacar;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -31,6 +33,8 @@ public class ListCarsActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_ADD = 1;
     public static final int REQUEST_CODE_EDIT = 2;
+
+    public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
 
     private ListCarsViewModel carsViewModel;
 
@@ -55,26 +59,14 @@ public class ListCarsActivity extends AppCompatActivity {
 
         carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
 
-        carsViewModel.get().observe(this, new Observer<List<Car>>() {
+        carsViewModel.getAll().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
                 adapter.setCars(cars);
             }
         });
 
-        adapter.setOnItemClickListener(new CarRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Car car) {
-                Intent intent = new Intent(ListCarsActivity.this, CarFormActivity.class);
-                intent.putExtra(CarFormActivity.EXTRA_ID, car.getIdCar());
-                intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
-                intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
-                intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
-                intent.putExtra(CarFormActivity.EXTRA_TYPE, (Serializable) car.getCarType());
-                intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
-                startActivityForResult(intent, REQUEST_CODE_EDIT);
-            }
-        });
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -108,9 +100,26 @@ public class ListCarsActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 Intent intent = new Intent(ListCarsActivity.this, LocationFormActivity.class);
+                int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+                Car car = carsViewModel.getCar(id);
+                //intent.putExtra(CarFormActivity.EXTRA_ID, car.);
                 startActivity(intent);
             }
         }).attachToRecyclerView(recyclerView);
+
+        adapter.setOnItemClickListener(new CarRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Car car) {
+                Intent intent = new Intent(ListCarsActivity.this, CarFormActivity.class);
+                intent.putExtra(CarFormActivity.EXTRA_ID, car.getIdCar());
+                intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
+                intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
+                intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
+                intent.putExtra(CarFormActivity.EXTRA_TYPE, (Serializable) car.getCarType());
+                intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
+                startActivityForResult(intent, REQUEST_CODE_EDIT);
+            }
+        });
 
     }
 

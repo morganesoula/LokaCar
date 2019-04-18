@@ -1,8 +1,11 @@
 package fr.eni.lokacar;
 
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,27 +13,41 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.archit.calendardaterangepicker.customviews.DateRangeCalendarView;
 import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import fr.eni.lokacar.model.CarType;
+import fr.eni.lokacar.model.Location;
 import fr.eni.lokacar.model.User;
+import fr.eni.lokacar.view_model.CarTypesViewModel;
+import fr.eni.lokacar.view_model.UsersViewModel;
 
 public class LocationFormActivity extends AppCompatActivity {
 
-    private TextView tvDateStart, tvDateEnd;
+    private TextView tvDateStart, tvDateEnd, tvCar;
     private ImageButton btnAddUser;
 
+    private Spinner tvusers;
+
     static final int REQUEST_ADD_USER_FORM = 200;
+
+
+    private UsersViewModel usersViewModel;
+
+    ArrayAdapter ad;
 
 
     @Override
@@ -40,10 +57,31 @@ public class LocationFormActivity extends AppCompatActivity {
 
         setTitle("Location");
 
+        Intent intent = getIntent();
+
+
+        tvCar = findViewById(R.id.welcome);
         tvDateStart = (TextView) findViewById(R.id.tv_date_debut);
         tvDateEnd = (TextView) findViewById(R.id.tv_date_fin);
-
         btnAddUser = findViewById(R.id.add_user_button);
+        tvusers = findViewById(R.id.spinner_user);
+
+        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
+        usersViewModel.getAll().observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(@Nullable List<User> users) {
+                ArrayList labels = new ArrayList();
+                for (User user : users) {
+
+                    labels.add(user.getName()+ " " + user.getFirstname());
+
+                }
+                Log.i("xxx", labels.toString());
+                ad = new ArrayAdapter<>(LocationFormActivity.this, R.layout.user_spinner, labels);
+                tvusers.setAdapter(ad);
+            }
+
+        });
 
         //tvDate = (TextView) findViewById(R.id.tv_date);
         Button btnDateRange = (Button) findViewById(R.id.btn_date_range_picker);
@@ -112,8 +150,9 @@ public class LocationFormActivity extends AppCompatActivity {
             String phone = data.getStringExtra(UserFormActivity.EXTRA_PHONE);
             String email = data.getStringExtra(UserFormActivity.EXTRA_EMAIL);
 
-            User user = new User(0,name, firstname,phone,email);
-            //.insert(article);
+            User user = new User(name, firstname,phone,email);
+            Log.i("SAVE", String.valueOf(user));
+            usersViewModel.insert(user);
             Toast.makeText(this, "Sauvegarde effectuée", Toast.LENGTH_SHORT).show();
         }
         else{

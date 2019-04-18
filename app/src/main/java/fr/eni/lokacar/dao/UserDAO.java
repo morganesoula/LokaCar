@@ -9,23 +9,21 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import fr.eni.lokacar.model.Car;
+import fr.eni.lokacar.model.User;
 
 @Dao
-public interface CarDAO {
+public interface UserDAO {
 
-    @Query("SELECT * FROM Car")
-    LiveData<List<Car>> getAll();
 
-    @Query("SELECT * FROM Car WHERE idCar = :id")
-    Car getCar(int id);
+    @Query("SELECT * FROM user ORDER BY userId DESC")
+    LiveData<List<User>> getAll();
 
     @Insert
-    void insert(Car car);
+    void insert(User user);
 
     @Update
-    void update(Car car);
+    void update(User user);
 
     @Delete
-    void delete(Car car);
+    void delete(User user);
 }

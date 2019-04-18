@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import fr.eni.lokacar.repository.CarRepository;
 public class ListCarsViewModel extends AndroidViewModel {
 
     private LiveData<List<Car>> cars;
+    private Car car;
 
     CarRepository repository;
 
@@ -33,7 +35,14 @@ public class ListCarsViewModel extends AndroidViewModel {
         repository.insert(car);
     }
 
-    public LiveData<List<Car>> get()
+    public Car getCar(int id)
+    {
+        repository.getCar(id);
+        Log.i("XXX", "ViewModel " + id);
+        return car;
+    }
+
+    public LiveData<List<Car>> getAll()
     {
         return cars;
     }
