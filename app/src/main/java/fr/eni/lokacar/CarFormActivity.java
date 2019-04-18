@@ -93,7 +93,6 @@ public class CarFormActivity extends AppCompatActivity {
             }
         });
 
-
         Intent intent = getIntent();
         intent.getParcelableExtra("car");
 
