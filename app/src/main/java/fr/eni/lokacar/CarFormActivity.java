@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,9 +202,7 @@ public class CarFormActivity extends AppCompatActivity {
         String immatriculation = tvimmat.getText().toString();
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
-        //CarType carType = tvtype;
-
-
+        CarType carType = new CarType(tvtype.getSelectedItemPosition(), tvtype.getSelectedItem().toString());
 
         Intent intent = new Intent();
 
@@ -211,7 +210,7 @@ public class CarFormActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_IMMAT, immatriculation);
         intent.putExtra(EXTRA_ISRESTORE, isRestore);
         intent.putExtra(EXTRA_PRICE, price);
-        intent.putExtra(EXTRA_TYPE, type);
+        intent.putExtra(EXTRA_TYPE, (Serializable) carType);
 
         int id = getIntent().getIntExtra(EXTRA_ID, 0);
 

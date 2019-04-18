@@ -6,8 +6,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 @Entity(tableName = "car_type")
-public class CarType implements Parcelable {
+public class CarType implements Parcelable, Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int idCarType;
@@ -21,6 +23,18 @@ public class CarType implements Parcelable {
         this.idCarType = idCarType;
         this.label = label;
     }
+
+    public static final Creator<CarType> CREATOR = new Creator<CarType>() {
+        @Override
+        public CarType createFromParcel(Parcel in) {
+            return new CarType(in);
+        }
+
+        @Override
+        public CarType[] newArray(int size) {
+            return new CarType[size];
+        }
+    };
 
     public int getIdCarType() {
         return idCarType;
@@ -65,16 +79,5 @@ public class CarType implements Parcelable {
         label = parcel.readString();
     }
 
-    @Ignore
-    public static final Creator<Car> CREATOR = new Creator<Car>() {
-        @Override
-        public Car createFromParcel(Parcel parcel) {
-            return new Car(parcel);
-        }
 
-        @Override
-        public Car[] newArray(int i) {
-            return new Car[0];
-        }
-    };
 }
