@@ -23,7 +23,6 @@ import java.util.List;
 import fr.eni.lokacar.adapter.CarRecyclerAdapter;
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
-import fr.eni.lokacar.view_model.CarTypesViewModel;
 import fr.eni.lokacar.view_model.ListCarsViewModel;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 

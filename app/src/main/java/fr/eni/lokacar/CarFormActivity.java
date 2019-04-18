@@ -2,13 +2,22 @@ package fr.eni.lokacar;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,16 +29,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.view_model.CarTypesViewModel;
-import fr.eni.lokacar.view_model.ListCarsViewModel;
 
 
 public class CarFormActivity extends AppCompatActivity {
@@ -64,7 +77,6 @@ public class CarFormActivity extends AppCompatActivity {
     Bitmap bitmap;
 
     ArrayAdapter ad;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +162,7 @@ public class CarFormActivity extends AppCompatActivity {
     private void takePhoto()
     {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         if (intent.resolveActivity(getPackageManager()) != null)
         {
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
@@ -189,6 +202,7 @@ public class CarFormActivity extends AppCompatActivity {
 
         extras = savedInstanceState.getBundle("extras");
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -239,4 +253,5 @@ public class CarFormActivity extends AppCompatActivity {
         }
 
     }
+
 }
