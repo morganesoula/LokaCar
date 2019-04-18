@@ -95,7 +95,6 @@ public class CarFormActivity extends AppCompatActivity {
         btnAddCarType = findViewById(R.id.add_car_type_button);
 
         carTypesViewModel = ViewModelProviders.of(this).get(CarTypesViewModel.class);
-
         carTypesViewModel.getAll().observe(this, new Observer<List<CarType>>() {
             @Override
             public void onChanged(@Nullable List<CarType> carTypes) {

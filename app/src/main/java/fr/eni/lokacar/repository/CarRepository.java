@@ -3,6 +3,7 @@ package fr.eni.lokacar.repository;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class CarRepository {
 
     CarDAO carDAO;
     LiveData<List<Car>> listCars;
+    Car car;
 
 
     public CarRepository(Context context)
@@ -28,6 +30,14 @@ public class CarRepository {
 
     public LiveData<List<Car>> getAll() {
         return listCars;
+    }
+
+    public Car getCar(int id) {
+        AsyncGet asyncGet = new AsyncGet();
+       asyncGet.execute(id);
+        Log.i("XXX", "repo " + id);
+        Log.i("XXX", "repo " + car);
+        return car;
     }
 
     public void insert(Car car)
@@ -52,6 +62,15 @@ public class CarRepository {
     /**
      * Asynchrone tasks
      */
+
+    public class AsyncGet extends AsyncTask<Integer, Void, Car>
+    {
+        @Override
+        protected Car doInBackground(Integer... id) {
+            return carDAO.getCar(id[0]);
+        }
+    }
+
     public class AsyncInsert extends AsyncTask<Car, Void, Void>
     {
         @Override

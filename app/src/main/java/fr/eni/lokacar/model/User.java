@@ -2,6 +2,7 @@ package fr.eni.lokacar.model;
 
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -18,10 +19,16 @@ public class User implements Parcelable {
     private String phoneNumber;
     private String email;
 
-
-
+    @Ignore
     public User(int userId, String name, String firstname, String phoneNumber, String email) {
         this.userId = userId;
+        this.name = name;
+        this.firstname = firstname;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public User(String name, String firstname, String phoneNumber, String email) {
         this.name = name;
         this.firstname = firstname;
         this.phoneNumber = phoneNumber;
