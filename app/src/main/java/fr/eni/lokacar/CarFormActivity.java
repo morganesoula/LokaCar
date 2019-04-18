@@ -200,7 +200,7 @@ public class CarFormActivity extends AppCompatActivity {
         String immatriculation = tvimmat.getText().toString();
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
-        int type = tvtype.getSelectedItemId();
+        //CarType carType = tvtype;
 
 
 

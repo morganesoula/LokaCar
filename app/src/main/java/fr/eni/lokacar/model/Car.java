@@ -2,11 +2,15 @@ package fr.eni.lokacar.model;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.RoomWarnings;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity(tableName = "car")
 public class Car implements Parcelable{
 
@@ -17,7 +21,6 @@ public class Car implements Parcelable{
     private boolean isRestore;
     private String imagePath;
     private String model;
-
 
     @Embedded
     private CarType carType;
@@ -43,7 +46,7 @@ public class Car implements Parcelable{
         isRestore = in.readByte() != 0;
         imagePath = in.readString();
         model = in.readString();
-
+        carType = in.readParcelable(CarType.class.getClassLoader());
     }
 
     public static final Creator<Car> CREATOR = new Creator<Car>() {
