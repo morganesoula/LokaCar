@@ -1,18 +1,13 @@
 package fr.eni.lokacar.model;
 
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-@Entity(tableName = "car", foreignKeys =
-        {
-                @ForeignKey(entity = CarType.class,
-                parentColumns = "idCarType",
-                childColumns = "carTypeId")
-        })
+@Entity(tableName = "car")
 public class Car implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
@@ -22,6 +17,9 @@ public class Car implements Parcelable{
     private boolean isRestore;
     private String imagePath;
     private String model;
+
+
+    @Embedded
     private CarType carType;
 
     @Ignore
@@ -45,7 +43,7 @@ public class Car implements Parcelable{
         isRestore = in.readByte() != 0;
         imagePath = in.readString();
         model = in.readString();
-        carType = in.readParcelable();
+
     }
 
     public static final Creator<Car> CREATOR = new Creator<Car>() {
