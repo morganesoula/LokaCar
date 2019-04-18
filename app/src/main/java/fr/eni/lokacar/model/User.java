@@ -3,12 +3,10 @@ package fr.eni.lokacar.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.RoomWarnings;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 
-@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity(tableName = "user")
 public class User implements Parcelable {
 
