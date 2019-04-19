@@ -38,7 +38,6 @@ public class ListCarsViewModel extends AndroidViewModel {
     public Car getCar(int id)
     {
         repository.getCar(id);
-        Log.i("XXX", "ViewModel " + id);
         return car;
     }
 

@@ -34,9 +34,7 @@ public class CarRepository {
 
     public Car getCar(int id) {
         AsyncGet asyncGet = new AsyncGet();
-       asyncGet.execute(id);
-        Log.i("XXX", "repo " + id);
-        Log.i("XXX", "repo " + car);
+        asyncGet.execute(id);
         return car;
     }
 
@@ -67,8 +65,10 @@ public class CarRepository {
     {
         @Override
         protected Car doInBackground(Integer... id) {
-            return carDAO.getCar(id[0]);
+            car = carDAO.getCar(id[0]);
+            return car;
         }
+
     }
 
     public class AsyncInsert extends AsyncTask<Car, Void, Void>
