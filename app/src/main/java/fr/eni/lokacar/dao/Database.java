@@ -6,16 +6,18 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import fr.eni.lokacar.model.AgencyAuthentification;
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.model.User;
 
-@android.arch.persistence.room.Database(entities = {Car.class, CarType.class, User.class}, version = 4, exportSchema = false)
+@android.arch.persistence.room.Database(entities = {Car.class, CarType.class, User.class, AgencyAuthentification.class}, version = 5, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     public abstract CarDAO carDAO();
     public abstract CarTypeDAO carTypeDAO();
     public abstract UserDAO userDAO();
+    public abstract AgencyAuthentificationDAO agencyAuthentificationDAO();
     private static Database database;
 
     public static synchronized Database getDatabase(Context context)
