@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,8 +25,12 @@ import android.widget.Toast;
 import com.archit.calendardaterangepicker.customviews.DateRangeCalendarView;
 import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
 
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,8 +49,18 @@ public class LocationFormActivity extends AppCompatActivity {
 
     static final int REQUEST_ADD_USER_FORM = 200;
 
+    public static final String EXTRA_DATE_START = "EXTRA_DATE_START";
+    public static final String EXTRA_DATE_END = "EXTRA_DATE_END";
+
+    public static final String EXTRA_ID_USER = "EXTRA_ID_USER";
+    public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
+
 
     private UsersViewModel usersViewModel;
+
+    String idCar;
+    String modelCar;
+    String immatCar;
 
     ArrayAdapter ad;
 
@@ -55,16 +70,22 @@ public class LocationFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_form);
 
-        setTitle("Location");
+
+        setTitle("Location de ");
 
         Intent intent = getIntent();
+        idCar = String.valueOf(intent.getIntExtra(CarFormActivity.EXTRA_ID, 0));
+        modelCar = String.valueOf(intent.getStringExtra(CarFormActivity.EXTRA_MODEL));
+        immatCar = String.valueOf(intent.getStringExtra(CarFormActivity.EXTRA_IMMAT));
 
 
-        tvCar = findViewById(R.id.welcome);
+        tvCar = findViewById(R.id.car);
         tvDateStart = (TextView) findViewById(R.id.tv_date_debut);
         tvDateEnd = (TextView) findViewById(R.id.tv_date_fin);
         btnAddUser = findViewById(R.id.add_user_button);
         tvusers = findViewById(R.id.spinner_user);
+
+        tvCar.setText(modelCar + " - " + immatCar);
 
         usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
         usersViewModel.getAll().observe(this, new Observer<List<User>>() {
@@ -73,7 +94,7 @@ public class LocationFormActivity extends AppCompatActivity {
                 ArrayList labels = new ArrayList();
                 for (User user : users) {
 
-                    labels.add(user.getName()+ " " + user.getFirstname());
+                    labels.add(user.getName() + " " + user.getFirstname());
 
                 }
                 Log.i("xxx", labels.toString());
@@ -132,7 +153,9 @@ public class LocationFormActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item_save:
                 //TODO METHOD
-                Log.i("XXX","Je rentre dans la methode save");
+                Log.i("XXX", "Je rentre dans la methode save");
+                saveLocation();
+
                 break;
         }
         return true;
@@ -143,21 +166,39 @@ public class LocationFormActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if (requestCode == REQUEST_ADD_USER_FORM && resultCode == RESULT_OK)
-        {
+        if (requestCode == REQUEST_ADD_USER_FORM && resultCode == RESULT_OK) {
             String name = data.getStringExtra(UserFormActivity.EXTRA_NAME);
             String firstname = data.getStringExtra(UserFormActivity.EXTRA_FIRSTNAME);
             String phone = data.getStringExtra(UserFormActivity.EXTRA_PHONE);
             String email = data.getStringExtra(UserFormActivity.EXTRA_EMAIL);
 
-            User user = new User(name, firstname,phone,email);
-            Log.i("SAVE", String.valueOf(user));
+            User user = new User(name, firstname, phone, email);
             usersViewModel.insert(user);
-            Toast.makeText(this, "Sauvegarde effectuée", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sauvegarde loueur effectuée", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Sauvegarde loueur non effectuée", Toast.LENGTH_SHORT).show();
         }
-        else{
-            Toast.makeText(this, "Sauvegarde non effectuée", Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveLocation() {
+        String dateStartString = tvDateStart.getText().toString();
+        String dateEndString = tvDateEnd.getText().toString();
+        int id = Integer.valueOf(idCar);
+        int idUser = tvusers.getSelectedItemPosition() + 1;
+        if (tvusers.getSelectedItem() == null) {
+            Toast.makeText(this, "Please fill everything", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_DATE_START, dateStartString);
+            intent.putExtra(EXTRA_DATE_END, dateEndString);
+            intent.putExtra(EXTRA_ID_CAR, id);
+            intent.putExtra(EXTRA_ID_USER, idUser);
+
+            setResult(RESULT_OK, intent);
+            finish();
         }
+
+
     }
 
 

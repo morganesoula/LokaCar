@@ -3,6 +3,7 @@ package fr.eni.lokacar.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -30,8 +31,15 @@ public class Location implements Parcelable{
     private int carId;
     private int statusReportId;
 
-    public Location(int id, Date dateStart, Date dateEnd, int userId, int carId, int statusReportId) {
-        this.id = id;
+    public Location(Date dateStart, Date dateEnd, int userId, int carId) {
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.userId = userId;
+        this.carId = carId;
+    }
+
+    @Ignore
+    public Location(Date dateStart, Date dateEnd, int userId, int carId, int statusReportId) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.userId = userId;

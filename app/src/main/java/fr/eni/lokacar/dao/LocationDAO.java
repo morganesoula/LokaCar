@@ -9,21 +9,21 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import fr.eni.lokacar.model.User;
+import fr.eni.lokacar.model.Location;
 
 @Dao
-public interface UserDAO {
+public interface LocationDAO {
 
+    @Query("SELECT * FROM location")
+    LiveData<List<Location>> getAll();
 
-    @Query("SELECT * FROM user")
-    LiveData<List<User>> getAll();
 
     @Insert
-    void insert(User user);
+    void insert(Location location);
 
     @Update
-    void update(User user);
+    void update(Location location);
 
     @Delete
-    void delete(User user);
+    void delete(Location location);
 }
