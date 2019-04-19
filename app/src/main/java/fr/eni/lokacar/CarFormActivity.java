@@ -139,6 +139,7 @@ public class CarFormActivity extends AppCompatActivity {
         } else {
             setTitle("Ajouter une voiture");
         }
+        btnAddPhoto.setVisibility(View.INVISIBLE);
 
         btnAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
