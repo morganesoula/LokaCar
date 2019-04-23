@@ -16,6 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -207,5 +210,31 @@ public class ListCarsActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Saving failed", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menu1 = getMenuInflater();
+        menu1.inflate(R.menu.menu_log_out, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_log_out:
+                launchLoginActivity();
+                break;
+        }
+
+        return true;
+    }
+
+    private void launchLoginActivity()
+    {
+        finish();
+        Intent intent = new Intent(ListCarsActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

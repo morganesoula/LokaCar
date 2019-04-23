@@ -81,22 +81,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
-
-        agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification("nouvel email");
-
-        /* agencyAuthentification.observe(this, new Observer<AgencyAuthentification>() {
-            @Override
-            public void onChanged(@Nullable AgencyAuthentification agencyAuthentification)
-            {
-                    if(agencyAuthentification != null)
-                    {
-                        Log.i("XXX","SAC CHANGE");
-                    }
-            }
-        }); */
-
-
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -340,29 +324,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
 
-
-            Log.i("XXX","doInBackground--------------");
-            agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification("nouvel email");
-
             try {
                 agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
+                agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification(mEmail);
 
-                if (agencyAuthentification.getAgencyId() > 0)
+                if (agencyAuthentification.username != null)
                 {
-                    if (agencyAuthentification.getPassword().equals(mPassword))
-                    {
-                        return true;
-                    } else {
-                        return false;
+                    if (agencyAuthentification.username.equals(mEmail)) {
+                        if (agencyAuthentification.password.equals(mPassword))
+                        {
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }
+
                 } else {
-                    agencyAuthentification.setPassword(mPassword);
+                    agencyAuthentification.username = mEmail;
+                    agencyAuthentification.password = mPassword;
                     return true;
                 }
 
             } catch (Exception e)
             {
-                e.getMessage();
+                e.printStackTrace();
+                System.out.println("L'erreur est "  + e);
             }
 
             return false;
@@ -380,6 +366,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
                     startActivity(intent);
                 } else {
+
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -400,8 +387,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     break;
 
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        mPasswordView.setError(getString(R.string.error_incorrect_password));
-                                        mPasswordView.requestFocus();
                                         break;
                             }
                         }
@@ -414,7 +399,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             } else {
                 mPasswordView.setError("Souci ici visiblement");
-                //mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
         }

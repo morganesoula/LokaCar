@@ -11,7 +11,6 @@ import fr.eni.lokacar.repository.AgencyAuthentificationRepository;
 public class AgencyAuthentificationViewModel extends AndroidViewModel {
 
     AgencyAuthentificationRepository agencyAuthentificationRepository;
-    private AgencyAuthentification agencyAuthentification;
 
     public AgencyAuthentificationViewModel(@NonNull Application application)
     {

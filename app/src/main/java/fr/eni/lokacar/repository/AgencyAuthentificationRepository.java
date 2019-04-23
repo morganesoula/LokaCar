@@ -25,7 +25,7 @@ public class AgencyAuthentificationRepository {
 
     public AgencyAuthentification getAgencyAuthentification(String username)
     {
-        AsyncGet asyncGet = new AsyncGet();
+        AsyncGet asyncGet = new AsyncGet(this);
         asyncGet.execute(username);
 
         return agencyAuthentification;
@@ -55,6 +55,12 @@ public class AgencyAuthentificationRepository {
 
     public class AsyncGet extends AsyncTask<String, Void, AgencyAuthentification>
     {
+        private AgencyAuthentificationRepository referrer;
+
+        public AsyncGet(AgencyAuthentificationRepository referrer) {
+            this.referrer = referrer;
+        }
+
         @Override
         protected AgencyAuthentification doInBackground(String... username)
         {
@@ -64,6 +70,7 @@ public class AgencyAuthentificationRepository {
         @Override
         protected void onPostExecute(AgencyAuthentification agencyAuthentification) {
             super.onPostExecute(agencyAuthentification);
+            referrer.agencyAuthentification = agencyAuthentification;
         }
     }
 

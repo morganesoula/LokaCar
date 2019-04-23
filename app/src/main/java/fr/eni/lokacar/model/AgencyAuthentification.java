@@ -7,11 +7,11 @@ import android.arch.persistence.room.PrimaryKey;
 public class AgencyAuthentification {
 
     @PrimaryKey(autoGenerate = true)
-    public long agencyId;
+    public int agencyId;
     public String username;
     public String password;
 
-    public AgencyAuthentification(long agencyId, String username, String password) {
+    public AgencyAuthentification(int agencyId, String username, String password) {
         this.agencyId = agencyId;
         this.username = username;
         this.password = password;
@@ -25,11 +25,28 @@ public class AgencyAuthentification {
         this.password = password;
     }
 
-    public long getAgencyId() {
+    public int getAgencyId() {
         return agencyId;
     }
 
-    public void setAgencyId(long agencyId) {
+    public void setAgencyId(int agencyId) {
         this.agencyId = agencyId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "AgencyAuthentification{" +
+                "agencyId=" + agencyId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

@@ -17,7 +17,6 @@ public interface LocationDAO {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAll();
 
-
     @Insert
     void insert(Location location);
 

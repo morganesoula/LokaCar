@@ -10,15 +10,15 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
-@Entity(tableName = "location",foreignKeys = {
+@Entity(tableName = "location", foreignKeys = {
         @ForeignKey(entity = User.class,
-                parentColumns = "id",
-                childColumns = "userId"),
+                parentColumns = "userId",
+                childColumns = "id"),
         @ForeignKey(entity = Car.class,
-                parentColumns = "id",
+                parentColumns = "idCar",
                 childColumns = "carId"),
         @ForeignKey(entity = StatusReport.class,
-                parentColumns = "id",
+                parentColumns = "statusId",
                 childColumns = "statusReportId")})
 
 public class Location implements Parcelable{
