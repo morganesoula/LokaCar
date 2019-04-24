@@ -12,7 +12,10 @@
         android:id="@+id/empty_list_cars_txt_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:paddingTop="270dp"
+        android:paddingLeft="130dp"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cars_recycler"
