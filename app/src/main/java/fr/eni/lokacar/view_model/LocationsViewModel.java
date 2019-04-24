@@ -43,7 +43,6 @@ public class LocationsViewModel extends AndroidViewModel {
 
     public LiveData<List<Location>> getAllByCar(int idCar)
     {
-        Log.i("xxx", "view : " + idCar);
         return locations;
     }
 

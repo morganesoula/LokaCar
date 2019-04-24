@@ -21,8 +21,7 @@ public class AgencyAuthentificationViewModel extends AndroidViewModel {
         agencyAuthentificationRepository = new AgencyAuthentificationRepository(application);
     }
 
-    public AgencyAuthentification getAgencyAuthentification(String username) throws ExecutionException, InterruptedException {
-        Log.i("XXX", "Hop, un petit tour par ici (ViewModel)");
+    public AgencyAuthentification getAgencyAuthentification(String username) {
         return agencyAuthentificationRepository.getAgencyAuthentification(username);
     }
 

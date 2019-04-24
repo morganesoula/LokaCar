@@ -1,6 +1,7 @@
 package fr.eni.lokacar.model;
 
 
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
@@ -11,10 +12,16 @@ import android.os.Parcelable;
 import java.util.Date;
 
 @Entity(tableName = "location", foreignKeys = {
-        @ForeignKey(entity = User.class,
+        @ForeignKey(
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE,
+                entity = User.class,
                 parentColumns = "userId",
                 childColumns = "id"),
-        @ForeignKey(entity = Car.class,
+        @ForeignKey(
+                onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE,
+                entity = Car.class,
                 parentColumns = "idCar",
                 childColumns = "carId")
 })

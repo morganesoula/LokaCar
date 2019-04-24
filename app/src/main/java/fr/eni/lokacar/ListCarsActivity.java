@@ -138,7 +138,6 @@ public class ListCarsActivity extends AppCompatActivity {
                     String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
-
                     intent.putExtra(CarFormActivity.EXTRA_ID, id);
                     intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
                     intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
@@ -149,17 +148,13 @@ public class ListCarsActivity extends AppCompatActivity {
                     Intent intent = new Intent(ListCarsActivity.this, ListLocationsActivity.class);
                     int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
                     intent.putExtra(ListCarsActivity.EXTRA_ID_CAR, id);
-                    Log.i("xxx", "intent " + id);
+
                     startActivity(intent);
                 }
                 adapter.notifyDataSetChanged();
 
-
-
             }
         }).attachToRecyclerView(recyclerView);
-
-
 
         adapter.setOnItemClickListener(new CarRecyclerAdapter.OnItemClickListener() {
             @Override

@@ -32,6 +32,7 @@ public class LocationRepository {
         return listLocations;
     }
 
+
         public void insert(Location location)
         {
             LocationRepository.AsyncInsert asyncInsert = new LocationRepository.AsyncInsert();

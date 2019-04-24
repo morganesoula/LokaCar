@@ -266,8 +266,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
         agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification(mEmail);
 
-        Log.i("XXX", "Je termine mon chemin ici! (4)");
-
         if (agencyAuthentification != null) {
             if (agencyAuthentification.getUsername().equals(mEmail)) {
                 if (agencyAuthentification.getPassword().equals(mPassword)) {
