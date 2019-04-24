@@ -35,6 +35,8 @@ public abstract class Database extends RoomDatabase {
             database = Room.databaseBuilder(context, Database.class, "random")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallBack)
+                    // ONLY if you do small requests (simple insert or get)
+                    .allowMainThreadQueries()
                     .build();
         }
 

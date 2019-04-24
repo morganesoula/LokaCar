@@ -84,7 +84,6 @@ public class ListCarsActivity extends AppCompatActivity {
                 {
                     emptyList.setVisibility(View.VISIBLE);
                     emptyList.setText("No cars recorded yet");
-                    //Toast.makeText(ListCarsActivity.this, "No cars recorded yet", Toast.LENGTH_LONG).show();
                 } else {
                     emptyList.setVisibility(View.GONE);
                     adapter.setCars(cars);

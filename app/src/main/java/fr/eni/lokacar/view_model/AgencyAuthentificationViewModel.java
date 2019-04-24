@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.concurrent.ExecutionException;
 
@@ -21,6 +22,7 @@ public class AgencyAuthentificationViewModel extends AndroidViewModel {
     }
 
     public AgencyAuthentification getAgencyAuthentification(String username) throws ExecutionException, InterruptedException {
+        Log.i("XXX", "Hop, un petit tour par ici (ViewModel)");
         return agencyAuthentificationRepository.getAgencyAuthentification(username);
     }
 
