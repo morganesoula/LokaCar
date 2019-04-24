@@ -5,6 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.ExecutionException;
+
 import fr.eni.lokacar.model.AgencyAuthentification;
 import fr.eni.lokacar.repository.AgencyAuthentificationRepository;
 
@@ -18,7 +20,7 @@ public class AgencyAuthentificationViewModel extends AndroidViewModel {
         agencyAuthentificationRepository = new AgencyAuthentificationRepository(application);
     }
 
-    public AgencyAuthentification getAgencyAuthentification(String username) {
+    public AgencyAuthentification getAgencyAuthentification(String username) throws ExecutionException, InterruptedException {
         return agencyAuthentificationRepository.getAgencyAuthentification(username);
     }
 

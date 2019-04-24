@@ -6,6 +6,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.nio.channels.InterruptedByTimeoutException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import fr.eni.lokacar.dao.AgencyAuthentificationDAO;
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.model.AgencyAuthentification;
@@ -23,12 +29,19 @@ public class AgencyAuthentificationRepository {
         agencyAuthentification = new AgencyAuthentification(0, null, null);
     }
 
-    public AgencyAuthentification getAgencyAuthentification(String username)
-    {
-        /* AsyncGet asyncGet = new AsyncGet(this);
-        asyncGet.execute(username); */
+    public AgencyAuthentification getAgencyAuthentification(final String username) throws ExecutionException, InterruptedException {
 
-        return agencyAuthentificationDAO.getOneAgencyAuthentification(username);
+        Callable<AgencyAuthentification> callable = new Callable<AgencyAuthentification>() {
+            @Override
+            public AgencyAuthentification call() throws Exception {
+                return agencyAuthentificationDAO.getOneAgencyAuthentification(username);
+            }
+        };
+
+        Future<AgencyAuthentification> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+
     }
 
     public void insert(AgencyAuthentification agencyAuthentification)
@@ -53,26 +66,7 @@ public class AgencyAuthentificationRepository {
      * Asynchrone tasks
      */
 
-    /* public class AsyncGet extends AsyncTask<String, Void, AgencyAuthentification>
-    {
-        private AgencyAuthentificationRepository referrer;
 
-        public AsyncGet(AgencyAuthentificationRepository referrer) {
-            this.referrer = referrer;
-        }
-
-        @Override
-        protected AgencyAuthentification doInBackground(String... username)
-        {
-            return agencyAuthentificationDAO.getOneAgencyAuthentification(username[0]);
-        }
-
-        @Override
-        protected void onPostExecute(AgencyAuthentification agencyAuthentification) {
-            super.onPostExecute(agencyAuthentification);
-            referrer.agencyAuthentification = agencyAuthentification;
-        }
-    } */
 
     public class AsyncInsert extends AsyncTask<AgencyAuthentification, Void, Void>
     {

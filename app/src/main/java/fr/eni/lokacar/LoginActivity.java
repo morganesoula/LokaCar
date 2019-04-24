@@ -42,6 +42,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.model.AgencyAuthentification;
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    // private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -88,7 +89,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    try {
+                        attemptLogin();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 }
                 return false;
@@ -99,7 +106,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                try {
+                    attemptLogin();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -158,10 +171,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+    private void attemptLogin() throws ExecutionException, InterruptedException {
 
         // Reset errors.
         mEmailView.setError(null);
@@ -197,11 +207,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // Show a progress spinner
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, this);
-            mAuthTask.execute((Void) null);
+            getLoginConnection();
         }
     }
 
@@ -303,11 +311,68 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+    public void getLoginConnection() throws ExecutionException, InterruptedException {
+
+        final String mEmail;
+        final String mPassword;
+
+        mEmail = mEmailView.getText().toString();
+        mPassword = mPasswordView.getText().toString();
+
+        agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
+        agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification(mEmail);
+
+        if (agencyAuthentification != null) {
+            if (agencyAuthentification.getUsername().equals(mEmail)) {
+                if (agencyAuthentification.getPassword().equals(mPassword)) {
+                    finish();
+                    Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
+                    startActivity(intent);
+                } else {
+                    showProgress(false);
+                    mPasswordView.setError("Wrong password");
+                    mPasswordView.requestFocus();
+                }
+            }
+        } else {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                                agencyAuthentification = new AgencyAuthentification(0, mEmail, mPassword);
+                                try {
+                                    agencyAuthentificationViewModel.insert(agencyAuthentification);
+
+                                    Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                e.getMessage();
+                                }
+                                break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
+                            startActivity(intent);
+                            break;
+                    }
+
+                }
+
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.confirm_registry).setPositiveButton(R.string.yes, dialogClickListener)
+                    .setNegativeButton(R.string.no, dialogClickListener).show();
+
+        }
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+     /* public class UserLoginTask {
 
         private final String mEmail;
         private final String mPassword;
@@ -350,9 +415,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             return false;
-        }
+        } */
 
-        @Override
+        /* @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
@@ -376,6 +441,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     try {
                                         finish();
                                         agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
+                                        agencyAuthentification.setUsername(mEmail);
+                                        agencyAuthentification.setPassword(mPassword);
                                         agencyAuthentificationViewModel.insert(agencyAuthentification);
 
                                         Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
@@ -408,6 +475,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
-    }
+    } */
 }
 
