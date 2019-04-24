@@ -10,6 +10,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -65,13 +66,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private AgencyAuthentificationViewModel agencyAuthentificationViewModel;
     private AgencyAuthentification agencyAuthentification;
 
+    private SharedPreferences sharedPreferences;
+    public static final String EXTRA_USERNAME_SAVED = "EXTRA_USERNAME_SAVED";
+    private String usernameSaved;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sharedPreferences = this.getSharedPreferences("nevermind", MODE_PRIVATE);
+
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
+
+        usernameSaved = sharedPreferences.getString(EXTRA_USERNAME_SAVED, null);
+
+        if (usernameSaved != null)
+        {
+            mEmailView.setText(usernameSaved);
+        }
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -273,6 +287,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 agencyAuthentification = new AgencyAuthentification(0, mEmail, mPassword);
                                 try {
                                     agencyAuthentificationViewModel.insert(agencyAuthentification);
+
+                                    sharedPreferences.edit().putString(EXTRA_USERNAME_SAVED, mEmail).apply();
 
                                     Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
                                     startActivity(intent);
