@@ -17,6 +17,9 @@ public interface LocationDAO {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAll();
 
+    @Query("SELECT * FROM location INNER JOIN car ON car.idCar = location.carId WHERE idCar = :id")
+    LiveData<List<Location>> getAllByCar(int id);
+
     @Insert
     void insert(Location location);
 

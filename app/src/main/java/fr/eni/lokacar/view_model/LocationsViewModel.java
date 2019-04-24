@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
@@ -30,17 +31,21 @@ public class LocationsViewModel extends AndroidViewModel {
         locations = repository.getAll();
     }
 
-    public void insert(Location car)
+    public void insert(Location location)
     {
-        repository.insert(location);
+       repository.insert(location);
     }
-
 
     public LiveData<List<Location>> getAll()
     {
         return locations;
     }
 
+    public LiveData<List<Location>> getAllByCar(int idCar)
+    {
+        Log.i("xxx", "view : " + idCar);
+        return locations;
+    }
 
     public void update(Location location)
     {

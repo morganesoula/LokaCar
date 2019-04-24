@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,6 +54,7 @@ public class ListCarsActivity extends AppCompatActivity {
 
     private TextView emptyList;
 
+    final CarRecyclerAdapter adapter = new CarRecyclerAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,26 +71,18 @@ public class ListCarsActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        final CarRecyclerAdapter adapter = new CarRecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
-
         carsViewModel.getAll().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
                 adapter.setCars(cars);
             }
         });
-        adapter.notifyItemChanged(0);
-
-
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -100,19 +94,20 @@ public class ListCarsActivity extends AppCompatActivity {
 
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT ) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
 
             public void onChildDraw (Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
 
                 new RecyclerViewSwipeDecorator.Builder(ListCarsActivity.this, c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
                         .addSwipeLeftBackgroundColor(ContextCompat.getColor(ListCarsActivity.this, R.color.gray))
                         .addSwipeLeftActionIcon(R.drawable.ic_group_add_white_24dp)
-                     /*   .addSwipeRightBackgroundColor(ContextCompat.getColor(ListCarsActivity.this, R.color.colorAccent))
-                        .addSwipeRightActionIcon(R.drawable.ic_directions_car_black_24dp)
-                        .addSwipeRightLabel("Location ")
-                        .setSwipeRightLabelColor(Color.WHITE)*/
-                        .addSwipeLeftLabel("Location")
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(ListCarsActivity.this, R.color.colorAccent))
+                        .addSwipeRightActionIcon(R.drawable.ic_list_white_24dp)
+                        .addSwipeRightLabel("Toutes les locations")
+                        .setSwipeRightLabelColor(Color.WHITE)
+                        .addSwipeLeftLabel("Ajouter une location")
                         .setSwipeLeftLabelColor(Color.WHITE)
                         .create()
                         .decorate();
@@ -127,21 +122,35 @@ public class ListCarsActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.notifyItemChanged(0);
-                Intent intent = new Intent(ListCarsActivity.this, LocationFormActivity.class);
 
-                int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
-                String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
-                String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
+                if (direction == ItemTouchHelper.LEFT){
+                    Intent intent = new Intent(ListCarsActivity.this, LocationFormActivity.class);
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+                    String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
+                    String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
 
-                intent.putExtra(CarFormActivity.EXTRA_ID, id);
-                intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
-                intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
-                startActivityForResult(intent, REQUEST_ADD_LOCATION);
+                    intent.putExtra(CarFormActivity.EXTRA_ID, id);
+                    intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
+                    intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
+                    startActivityForResult(intent, REQUEST_ADD_LOCATION);
+                }
+
+                if (direction == ItemTouchHelper.RIGHT){
+                    Intent intent = new Intent(ListCarsActivity.this, ListLocationsActivity.class);
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+                    intent.putExtra(ListCarsActivity.EXTRA_ID_CAR, id);
+                    Log.i("xxx", "intent " + id);
+                    startActivity(intent);
+                }
+                adapter.notifyDataSetChanged();
+
+
 
             }
         }).attachToRecyclerView(recyclerView);
+
+
 
         adapter.setOnItemClickListener(new CarRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -192,16 +201,16 @@ public class ListCarsActivity extends AppCompatActivity {
                 carsViewModel.update(car);
             }
         }else if (requestCode == REQUEST_ADD_LOCATION && resultCode == RESULT_OK)
-        { Log.i("xxx","coucou" );
+        {
             try {
             Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
             Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
             int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
             int idUser = data.getIntExtra(LocationFormActivity.EXTRA_ID_USER,0);
             Location location = new Location(dateStart,dateEnd,idCar,idUser);
-            Log.i("xxx","location à sauvegarder" + location);
 
-            //locationsViewModel.insert(location);
+            locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+            locationsViewModel.insert(location);
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -222,6 +231,7 @@ public class ListCarsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        adapter.notifyDataSetChanged();
         switch (item.getItemId()) {
             case R.id.item_log_out:
                 launchLoginActivity();

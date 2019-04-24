@@ -3,6 +3,7 @@ package fr.eni.lokacar.repository;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class LocationRepository {
         public LiveData<List<Location>> getAll() {
             return listLocations;
         }
+
+        public LiveData<List<Location>> getAllByCar(int idCar) {
+        return listLocations;
+    }
 
         public void insert(Location location)
         {

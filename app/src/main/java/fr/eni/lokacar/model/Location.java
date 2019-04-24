@@ -16,10 +16,8 @@ import java.util.Date;
                 childColumns = "id"),
         @ForeignKey(entity = Car.class,
                 parentColumns = "idCar",
-                childColumns = "carId"),
-        @ForeignKey(entity = StatusReport.class,
-                parentColumns = "statusId",
-                childColumns = "statusReportId")})
+                childColumns = "carId")
+})
 
 public class Location implements Parcelable{
 
@@ -29,7 +27,7 @@ public class Location implements Parcelable{
     private Date dateEnd;
     private int userId;
     private int carId;
-    private int statusReportId;
+
 
     public Location(Date dateStart, Date dateEnd, int userId, int carId) {
         this.dateStart = dateStart;
@@ -38,20 +36,12 @@ public class Location implements Parcelable{
         this.carId = carId;
     }
 
-    @Ignore
-    public Location(Date dateStart, Date dateEnd, int userId, int carId, int statusReportId) {
-        this.dateStart = dateStart;
-        this.dateEnd = dateEnd;
-        this.userId = userId;
-        this.carId = carId;
-        this.statusReportId = statusReportId;
-    }
 
     protected Location(Parcel in) {
         id = in.readInt();
         userId = in.readInt();
         carId = in.readInt();
-        statusReportId = in.readInt();
+
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -106,13 +96,6 @@ public class Location implements Parcelable{
         this.carId = carId;
     }
 
-    public int getStatusReportId() {
-        return statusReportId;
-    }
-
-    public void setStatusReportId(int statusReportId) {
-        this.statusReportId = statusReportId;
-    }
 
     @Override
     public String toString() {
@@ -122,9 +105,9 @@ public class Location implements Parcelable{
                 ", dateEnd=" + dateEnd +
                 ", userId=" + userId +
                 ", carId=" + carId +
-                ", statusReportId=" + statusReportId +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
