@@ -71,10 +71,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-
-    //ANTHONY
-    AgencyAuthentification agencyAuthentification = null;
-    AgencyAuthentificationViewModel agencyAuthentificationViewModel = null;
+    private AgencyAuthentificationViewModel agencyAuthentificationViewModel;
+    private AgencyAuthentification agencyAuthentification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,10 +322,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            try {
-                agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
-                agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification(mEmail);
+            agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
+            agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification(mEmail);
 
+            try {
                 if (agencyAuthentification.username != null)
                 {
                     if (agencyAuthentification.username.equals(mEmail)) {
@@ -359,6 +357,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
+            agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);
+            agencyAuthentification = agencyAuthentificationViewModel.getAgencyAuthentification(mEmail);
+
             if (success) {
                 if (agencyAuthentification.agencyId > 0)
                 {
@@ -372,7 +373,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         public void onClick(DialogInterface dialogInterface, int i) {
                             switch (i) {
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    AgencyAuthentificationViewModel agencyAuthentificationViewModel = null;
                                     try {
                                         finish();
                                         agencyAuthentificationViewModel = ViewModelProviders.of(LoginActivity.this).get(AgencyAuthentificationViewModel.class);

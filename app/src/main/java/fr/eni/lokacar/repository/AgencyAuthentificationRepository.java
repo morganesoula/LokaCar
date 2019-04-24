@@ -25,10 +25,10 @@ public class AgencyAuthentificationRepository {
 
     public AgencyAuthentification getAgencyAuthentification(String username)
     {
-        AsyncGet asyncGet = new AsyncGet(this);
-        asyncGet.execute(username);
+        /* AsyncGet asyncGet = new AsyncGet(this);
+        asyncGet.execute(username); */
 
-        return agencyAuthentification;
+        return agencyAuthentificationDAO.getOneAgencyAuthentification(username);
     }
 
     public void insert(AgencyAuthentification agencyAuthentification)
@@ -53,7 +53,7 @@ public class AgencyAuthentificationRepository {
      * Asynchrone tasks
      */
 
-    public class AsyncGet extends AsyncTask<String, Void, AgencyAuthentification>
+    /* public class AsyncGet extends AsyncTask<String, Void, AgencyAuthentification>
     {
         private AgencyAuthentificationRepository referrer;
 
@@ -72,7 +72,7 @@ public class AgencyAuthentificationRepository {
             super.onPostExecute(agencyAuthentification);
             referrer.agencyAuthentification = agencyAuthentification;
         }
-    }
+    } */
 
     public class AsyncInsert extends AsyncTask<AgencyAuthentification, Void, Void>
     {
