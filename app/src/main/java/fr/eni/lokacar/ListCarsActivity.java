@@ -64,7 +64,7 @@ public class ListCarsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_cars);
 
-        emptyList = findViewById(R.id.empty_list_txt_view);
+        emptyList = findViewById(R.id.empty_list_cars_txt_view);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cars_recycler);
         recyclerView.setHasFixedSize(true);
@@ -80,7 +80,17 @@ public class ListCarsActivity extends AppCompatActivity {
         carsViewModel.getAll().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
-                adapter.setCars(cars);
+                if (cars.isEmpty())
+                {
+                    emptyList.setVisibility(View.VISIBLE);
+                    emptyList.setText("No cars recorded yet");
+                    //Toast.makeText(ListCarsActivity.this, "No cars recorded yet", Toast.LENGTH_LONG).show();
+                } else {
+                    emptyList.setVisibility(View.GONE);
+                    adapter.setCars(cars);
+                }
+
+
             }
         });
 

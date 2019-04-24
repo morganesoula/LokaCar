@@ -26,11 +26,6 @@
             android:name=".ListCarsActivity"
             android:label="@string/title_activity_list_cars"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".CarFormActivity" />
         <activity android:name=".LocationFormActivity" />
@@ -38,8 +33,16 @@
         <activity android:name=".UserFormActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
-        <activity android:name=".ListLocationsActivity"></activity>
+            android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ListLocationsActivity">
+
+        </activity>
     </application>
 
 </manifest>
