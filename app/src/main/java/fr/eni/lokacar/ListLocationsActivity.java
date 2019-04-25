@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -23,11 +25,15 @@ public class ListLocationsActivity extends AppCompatActivity {
     private LocationsViewModel locationsViewModel;
     final LocationRecyclerAdapter locationAdapter = new LocationRecyclerAdapter();
 
+    private TextView emptyList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_locations);
         setTitle("Toutes les locations");
+
+        emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.locations_recycler);
         recyclerView.setHasFixedSize(true);
@@ -43,7 +49,17 @@ public class ListLocationsActivity extends AppCompatActivity {
         locationsViewModel.getAllByCar(idCar).observe(this, new Observer<List<Location>>() {
             @Override
             public void onChanged(@Nullable List<Location> locations) {
-                locationAdapter.setLocations(locations);
+
+                if (locations.isEmpty())
+                {
+                    emptyList.setVisibility(View.VISIBLE);
+                    emptyList.setText("No location recorded/planned for this car yet");
+
+                } else {
+                    emptyList.setVisibility(View.GONE);
+                    locationAdapter.setLocations(locations);
+                }
+
             }
         });
 

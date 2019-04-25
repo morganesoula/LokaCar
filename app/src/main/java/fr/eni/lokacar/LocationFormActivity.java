@@ -70,8 +70,7 @@ public class LocationFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_form);
 
-
-        setTitle("Location de ");
+        setTitle("Location");
 
         Intent intent = getIntent();
         idCar = String.valueOf(intent.getIntExtra(CarFormActivity.EXTRA_ID, 0));
@@ -97,7 +96,7 @@ public class LocationFormActivity extends AppCompatActivity {
                     labels.add(user.getName() + " " + user.getFirstname());
 
                 }
-                Log.i("xxx", labels.toString());
+
                 ad = new ArrayAdapter<>(LocationFormActivity.this, R.layout.user_spinner, labels);
                 tvusers.setAdapter(ad);
             }
@@ -152,10 +151,7 @@ public class LocationFormActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_save:
-                //TODO METHOD
-                Log.i("XXX", "Je rentre dans la methode save");
                 saveLocation();
-
                 break;
         }
         return true;
@@ -185,6 +181,7 @@ public class LocationFormActivity extends AppCompatActivity {
         String dateEndString = tvDateEnd.getText().toString();
         int id = Integer.valueOf(idCar);
         int idUser = tvusers.getSelectedItemPosition() + 1;
+
         if (tvusers.getSelectedItem() == null) {
             Toast.makeText(this, "Please fill everything", Toast.LENGTH_LONG).show();
         } else {

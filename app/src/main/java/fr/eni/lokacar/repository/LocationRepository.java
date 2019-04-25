@@ -7,12 +7,18 @@ import android.util.Log;
 
 import java.util.List;
 
+import fr.eni.lokacar.dao.CarDAO;
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.dao.LocationDAO;
+import fr.eni.lokacar.dao.UserDAO;
+import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.Location;
+import fr.eni.lokacar.model.User;
 
 public class LocationRepository {
         LocationDAO locationDAO;
+        CarDAO carDAO;
+        UserDAO userDAO;
         LiveData<List<Location>> listLocations;
 
 
@@ -20,17 +26,19 @@ public class LocationRepository {
         {
             Database database = Database.getDatabase(context);
             locationDAO = database.locationDAO();
+            carDAO = database.carDAO();
+            userDAO = database.userDAO();
             listLocations = locationDAO.getAll();
         }
-
 
         public LiveData<List<Location>> getAll() {
             return listLocations;
         }
 
         public LiveData<List<Location>> getAllByCar(int idCar) {
-        return listLocations;
+        return locationDAO.getAllByCar(idCar);
     }
+
 
         public void insert(Location location)
         {
@@ -58,6 +66,7 @@ public class LocationRepository {
         {
             @Override
             protected Void doInBackground(Location... locations) {
+
                 locationDAO.insert(locations[0]);
                 return null;
             }

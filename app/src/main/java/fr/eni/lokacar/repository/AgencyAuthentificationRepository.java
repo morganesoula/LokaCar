@@ -29,19 +29,22 @@ public class AgencyAuthentificationRepository {
         agencyAuthentification = new AgencyAuthentification(0, null, null);
     }
 
-    public AgencyAuthentification getAgencyAuthentification(final String username) throws ExecutionException, InterruptedException {
+    public AgencyAuthentification getAgencyAuthentification(final String username) {
 
-        Callable<AgencyAuthentification> callable = new Callable<AgencyAuthentification>() {
-            @Override
-            public AgencyAuthentification call() throws Exception {
-                return agencyAuthentificationDAO.getOneAgencyAuthentification(username);
-            }
-        };
+//        Callable<AgencyAuthentification> callable = new Callable<AgencyAuthentification>() {
+//            @Override
+//            public AgencyAuthentification call() throws Exception {
+//                return agencyAuthentificationDAO.getOneAgencyAuthentification(username);
+//            }
+//        };
+//
+//        Future<AgencyAuthentification> future = Executors.newSingleThreadExecutor().submit(callable);
+//
+//        return future.get();
 
-        Future<AgencyAuthentification> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-
+        // Faster way to do what's above this
+        // Don't forget to add .allowMainThreadQueries into Database
+        return agencyAuthentificationDAO.getOneAgencyAuthentification(username);
     }
 
     public void insert(AgencyAuthentification agencyAuthentification)

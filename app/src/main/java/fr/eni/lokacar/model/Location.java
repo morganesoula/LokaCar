@@ -1,6 +1,7 @@
 package fr.eni.lokacar.model;
 
 
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
@@ -11,17 +12,21 @@ import android.os.Parcelable;
 import java.util.Date;
 
 @Entity(tableName = "location", foreignKeys = {
-        @ForeignKey(entity = User.class,
-                parentColumns = "userId",
-                childColumns = "id"),
-        @ForeignKey(entity = Car.class,
-                parentColumns = "idCar",
+        @ForeignKey(
+                onDelete = ForeignKey.CASCADE,
+                entity = User.class,
+                parentColumns = "id",
+                childColumns = "userId"),
+        @ForeignKey(
+                onDelete = ForeignKey.CASCADE,
+                entity = Car.class,
+                parentColumns = "id",
                 childColumns = "carId")
 })
 
 public class Location implements Parcelable{
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey (autoGenerate = true)
     private int id;
     private Date dateStart;
     private Date dateEnd;
