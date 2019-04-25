@@ -1,23 +1,25 @@
 package fr.eni.lokacar;
 
+import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.PersistableBundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,9 +31,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -39,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.view_model.CarTypesViewModel;
@@ -66,15 +67,19 @@ public class CarFormActivity extends AppCompatActivity {
     private Spinner tvtype;
     private Switch tvisrestore;
 
-    private ImageView tvphoto;
+
     private Button btnAddPhoto;
     private ImageButton btnAddCarType;
+
+    private String photoPath;
+    private File photoFile = null;
+    private ImageView tvphoto;
+    private ImageView tvphotocours;
+    private TextView tvphotopath;
 
     private int typePosition;
 
     String type;
-    Bundle extras;
-    Bitmap bitmap;
 
     ArrayAdapter ad;
 
@@ -88,8 +93,9 @@ public class CarFormActivity extends AppCompatActivity {
         tvtype = findViewById(R.id.spinner_car_type);
         tvisrestore = findViewById(R.id.car_is_restore);
         tvprice = findViewById(R.id.car_price);
-
+        tvphotocours = findViewById(R.id.ivPhoto);
         btnAddPhoto = findViewById(R.id.btn_add_photo);
+        tvphotopath = findViewById(R.id.car_photo_path);
         tvphoto = findViewById(R.id.ivPhotoPrise);
 
         btnAddCarType = findViewById(R.id.add_car_type_button);
@@ -100,9 +106,7 @@ public class CarFormActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<CarType> carTypes) {
                 ArrayList labels = new ArrayList();
                 for (CarType labelType : carTypes) {
-
                     labels.add(labelType.getLabel());
-
                 }
                 ad = new ArrayAdapter<>(CarFormActivity.this, R.layout.type_spinner, labels);
                 tvtype.setAdapter(ad);
@@ -116,9 +120,10 @@ public class CarFormActivity extends AppCompatActivity {
             setTitle("Modifier");
 
             String model = intent.getStringExtra(EXTRA_MODEL);
-            String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE,0));
+            String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0));
             String immatriculation = intent.getStringExtra(EXTRA_IMMAT);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
+            String photopath = intent.getStringExtra(EXTRA_PHOTO);
 
             CarType carType = (CarType) intent.getSerializableExtra(EXTRA_TYPE);
             typePosition = carType.getIdCarType();
@@ -126,9 +131,24 @@ public class CarFormActivity extends AppCompatActivity {
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
-            tvphoto.setImageBitmap(bitmap);
-            tvisrestore.setChecked(isrestore);
+            tvphotopath.setText(photopath);
 
+            File imgFile = new  File(photopath);
+
+            if(imgFile.exists()){
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                tvphotocours.setImageBitmap(myBitmap);
+
+            }
+
+
+           /* Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+            Log.i("xxx","bitmap: " + bitmap);
+            tvphotocours.setImageBitmap(bitmap);*/
+
+
+            tvisrestore.setChecked(isrestore);
             tvtype.post(new Runnable() {
                 @Override
                 public void run() {
@@ -139,7 +159,7 @@ public class CarFormActivity extends AppCompatActivity {
         } else {
             setTitle("Ajouter une voiture");
         }
-        btnAddPhoto.setVisibility(View.INVISIBLE);
+        btnAddPhoto.setVisibility(View.VISIBLE);
 
         btnAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,54 +175,50 @@ public class CarFormActivity extends AppCompatActivity {
                 startActivityForResult(intent1, REQUEST_CAR_TYPE_FORM);
             }
         });
-
     }
 
 
-    private void takePhoto()
-    {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private void takePhoto() {
 
-        if (intent.resolveActivity(getPackageManager()) != null)
-        {
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        if (isStoragePermissionGranted()) {
+            //Utilisation de l'appareil photo
+            Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            //Vérification que le telephone a bien un appareil photo
+            if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+                try {
+                    photoFile = createImageFile();
+
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    Log.i("xxx", "IOException");
+                    ex.printStackTrace();
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this, "fr.eni.lokacar.provider", photoFile);
+                    pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-        {
-            extras = data.getExtras();
-            bitmap = (Bitmap) extras.get("data");
-            tvphoto.setImageBitmap(bitmap);
+            Bitmap imageBitmap = BitmapFactory.decodeFile(this.photoFile.getAbsolutePath());
+            tvphoto.setImageBitmap(imageBitmap);
         }
 
-        if (requestCode == REQUEST_CAR_TYPE_FORM && resultCode == RESULT_OK)
-        {
+        if (requestCode == REQUEST_CAR_TYPE_FORM && resultCode == RESULT_OK) {
             type = data.getStringExtra(CarTypeFormActivity.EXTRA_CAR_TYPE);
 
             CarType carType = new CarType(0, type);
             carTypesViewModel.insert(carType);
         }
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-
-        outState.putBundle("extras", extras);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        extras = savedInstanceState.getBundle("extras");
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -221,16 +237,16 @@ public class CarFormActivity extends AppCompatActivity {
         return true;
     }
 
-    private void saveCar()
-    {
+    private void saveCar() {
         String model = tvmodel.getText().toString();
         String immatriculation = tvimmat.getText().toString();
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
         CarType carType = new CarType(tvtype.getSelectedItemPosition(), tvtype.getSelectedItem().toString());
+        String photoPath = tvphotopath.getText().toString();
 
-        if (tvtype.getSelectedItem() == null)
-        {
+
+        if (tvtype.getSelectedItem() == null) {
             Toast.makeText(this, "Please fill everything", Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent();
@@ -240,11 +256,11 @@ public class CarFormActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_ISRESTORE, isRestore);
             intent.putExtra(EXTRA_PRICE, price);
             intent.putExtra(EXTRA_TYPE, (Serializable) carType);
+            intent.putExtra(EXTRA_PHOTO, photoPath);
 
             int id = getIntent().getIntExtra(EXTRA_ID, 0);
 
-            if (id != 0)
-            {
+            if (id != 0) {
                 intent.putExtra(EXTRA_ID, id);
             }
 
@@ -252,6 +268,44 @@ public class CarFormActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+
+    private File createImageFile() throws IOException {
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        photoPath = "file:" + image.getAbsolutePath();
+        tvphotopath.setText(photoPath);
+        return image;
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v("xxx", "Permission is granted");
+                return true;
+            } else {
+
+                Log.v("xxx", "Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("xxx", "Permission is granted");
+            return true;
+        }
     }
 
 }

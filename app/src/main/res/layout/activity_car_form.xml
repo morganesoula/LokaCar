@@ -71,14 +71,6 @@
         app:layout_constraintTop_toBottomOf="@id/layout_car_price"
      />
 
-    <!--<Button-->
-        <!--android:text="Add car's type"-->
-        <!--android:id="@+id/add_car_type_button"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/layout_car_price" />-->
-
-
     <Switch
         android:id="@+id/car_is_restore"
         android:layout_width="wrap_content"
@@ -88,13 +80,19 @@
         app:layout_constraintTop_toBottomOf="@id/spinner_car_type"
     />
 
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/car_is_restore"
+        />
 
     <Button
         android:id="@+id/btn_add_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Prendre une photo"
-        app:layout_constraintTop_toBottomOf="@id/car_is_restore" />
+        app:layout_constraintTop_toBottomOf="@id/ivPhoto" />
 
     <ImageView
         android:id="@+id/ivPhotoPrise"
@@ -102,6 +100,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/btn_add_photo"
         />
+
+    <TextView
+        android:id="@+id/car_photo_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/ivPhotoPrise"
+        />
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -172,6 +173,7 @@ public class ListCarsActivity extends AppCompatActivity {
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
                 intent.putExtra(CarFormActivity.EXTRA_TYPE, (Serializable) car.getCarType());
                 intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
+                intent.putExtra(CarFormActivity.EXTRA_PHOTO, car.getImagePath());
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });
@@ -189,8 +191,9 @@ public class ListCarsActivity extends AppCompatActivity {
             Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
             Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
             CarType carType = (CarType) data.getSerializableExtra(CarFormActivity.EXTRA_TYPE);
+            String photoPath = data.getStringExtra(CarFormActivity.EXTRA_PHOTO);
 
-            Car car = new Car(0, immatriculation, price, isRestore, null, model, carType);
+            Car car = new Car(0, immatriculation, price, isRestore, photoPath, model, carType);
             carsViewModel.insert(car);
 
         } else if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK)
@@ -206,11 +209,12 @@ public class ListCarsActivity extends AppCompatActivity {
                 Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
                 Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
                 CarType carType = (CarType) data.getSerializableExtra(CarFormActivity.EXTRA_TYPE);
+                String photoPath = data.getStringExtra(CarFormActivity.EXTRA_PHOTO);
 
-                Car car = new Car(id, immatriculation, price, isRestore, null, model, carType);
+                Car car = new Car(id, immatriculation, price, isRestore, photoPath, model, carType);
                 carsViewModel.update(car);
             }
-        }else if (requestCode == REQUEST_ADD_LOCATION && resultCode == RESULT_OK)
+        } else if (requestCode == REQUEST_ADD_LOCATION && resultCode == RESULT_OK)
         {
             try {
             Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));

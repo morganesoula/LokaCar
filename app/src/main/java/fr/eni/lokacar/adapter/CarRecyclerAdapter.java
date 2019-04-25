@@ -2,6 +2,7 @@ package fr.eni.lokacar.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     List<Car> listCars = new ArrayList<>();
     Context context;
 
+    Bitmap bitmap;
+
     private OnItemClickListener listener;
 
     @Override
@@ -39,7 +42,9 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         Car car = listCars.get(position);
 
-        //holder.carImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(localFile)));
+        //bitmap = (Bitmap) car.getImagePath();
+        holder.carImage.setImageBitmap(bitmap);
+
         holder.carModel.setText(car.getModel());
         holder.carPrice.setText(String.valueOf(car.getPrice()));
         holder.carImmatriculation.setText(car.getImmatriculation());
@@ -75,7 +80,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
 
         public ViewHolder(View carLine) {
             super(carLine);
-            //carImage = (ImageView) carLine.findViewById(R.id.car_image_view);
+            carImage = (ImageView) carLine.findViewById(R.id.car_image_view);
             carModel = (TextView) carLine.findViewById(R.id.car_model_txt_view);
             carPrice = (TextView) carLine.findViewById(R.id.car_price_txt_view);
             carImmatriculation = (TextView) carLine.findViewById(R.id.car_immatriculation_txt_view);
