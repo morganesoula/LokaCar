@@ -13,7 +13,7 @@ import android.os.Parcelable;
 public class Car implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
-    private int idCar;
+    private int id;
     private String immatriculation;
     private float price;
     private boolean isRestore;
@@ -27,8 +27,8 @@ public class Car implements Parcelable{
     public Car() {
     }
 
-    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
-        this.idCar = idCar;
+    public Car(int id, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
+        this.id = id;
         this.immatriculation = immatriculation;
         this.price = price;
         this.isRestore = isRestore;
@@ -38,7 +38,7 @@ public class Car implements Parcelable{
     }
 
     protected Car(Parcel in) {
-        idCar = in.readInt();
+        id = in.readInt();
         immatriculation = in.readString();
         price = in.readFloat();
         isRestore = in.readByte() != 0;
@@ -59,12 +59,12 @@ public class Car implements Parcelable{
         }
     };
 
-    public int getIdCar() {
-        return idCar;
+    public int getId() {
+        return id;
     }
 
-    public void setIdCar(int idCar) {
-        this.idCar = idCar;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getImmatriculation() {
@@ -118,7 +118,7 @@ public class Car implements Parcelable{
     @Override
     public String toString() {
         return "Car{" +
-                "idCar=" + idCar +
+                "id=" + id +
                 ", immatriculation='" + immatriculation + '\'' +
                 ", price=" + price +
                 ", isRestore=" + isRestore +
@@ -138,7 +138,7 @@ public class Car implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i)
     {
-        parcel.writeInt(idCar);
+        parcel.writeInt(id);
         parcel.writeString(immatriculation);
         parcel.writeFloat(price);
 

@@ -134,7 +134,7 @@ public class ListCarsActivity extends AppCompatActivity {
 
                 if (direction == ItemTouchHelper.LEFT){
                     Intent intent = new Intent(ListCarsActivity.this, LocationFormActivity.class);
-                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
                     String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
@@ -146,7 +146,7 @@ public class ListCarsActivity extends AppCompatActivity {
 
                 if (direction == ItemTouchHelper.RIGHT){
                     Intent intent = new Intent(ListCarsActivity.this, ListLocationsActivity.class);
-                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
                     intent.putExtra(ListCarsActivity.EXTRA_ID_CAR, id);
 
                     startActivity(intent);
@@ -160,7 +160,7 @@ public class ListCarsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Car car) {
                 Intent intent = new Intent(ListCarsActivity.this, CarFormActivity.class);
-                intent.putExtra(CarFormActivity.EXTRA_ID, car.getIdCar());
+                intent.putExtra(CarFormActivity.EXTRA_ID, car.getId());
                 intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
                 intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
@@ -211,7 +211,8 @@ public class ListCarsActivity extends AppCompatActivity {
             Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
             int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
             int idUser = data.getIntExtra(LocationFormActivity.EXTRA_ID_USER,0);
-            Location location = new Location(dateStart,dateEnd,idCar,idUser);
+
+            Location location = new Location(dateStart, dateEnd, idUser, idCar);
 
             locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
             locationsViewModel.insert(location);

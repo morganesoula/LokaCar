@@ -14,21 +14,19 @@ import java.util.Date;
 @Entity(tableName = "location", foreignKeys = {
         @ForeignKey(
                 onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE,
                 entity = User.class,
-                parentColumns = "userId",
-                childColumns = "id"),
+                parentColumns = "id",
+                childColumns = "userId"),
         @ForeignKey(
                 onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE,
                 entity = Car.class,
-                parentColumns = "idCar",
+                parentColumns = "id",
                 childColumns = "carId")
 })
 
 public class Location implements Parcelable{
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey (autoGenerate = true)
     private int id;
     private Date dateStart;
     private Date dateEnd;

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,10 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     public void onBindViewHolder(ViewHolder holder, int position) {
         Location location = listLocations.get(position);
 
-
-        holder.locationStart.setText(String.valueOf(location.getDateStart()));
+        holder.locationStart.setText("Start date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateStart()));
+        holder.locationEnd.setText("End date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateEnd()));
+        holder.locationUserId.setText(String.valueOf("User ID: " + location.getUserId()));
+        holder.locationCarId.setText(String.valueOf("Car ID: " + location.getCarId()));
 
     }
 
@@ -58,6 +61,9 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView locationStart;
+        private TextView locationEnd;
+        private TextView locationUserId;
+        private TextView locationCarId;
 
 
 
@@ -65,6 +71,9 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
             super(locationLine);
 
             locationStart = (TextView) locationLine.findViewById(R.id.tv_date_start);
+            locationEnd = (TextView) locationLine.findViewById(R.id.tv_date_end);
+            locationUserId = (TextView) locationLine.findViewById(R.id.tv_location_user_id);
+            locationCarId = (TextView) locationLine.findViewById(R.id.tv_location_car_id);
 
 
             locationLine.setOnClickListener(new View.OnClickListener() {

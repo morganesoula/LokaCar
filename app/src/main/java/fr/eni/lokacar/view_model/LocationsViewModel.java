@@ -23,12 +23,6 @@ public class LocationsViewModel extends AndroidViewModel {
     {
         super(application);
         repository = new LocationRepository(application);
-        init();
-    }
-
-    private void init()
-    {
-        locations = repository.getAll();
     }
 
     public void insert(Location location)
@@ -43,7 +37,7 @@ public class LocationsViewModel extends AndroidViewModel {
 
     public LiveData<List<Location>> getAllByCar(int idCar)
     {
-        return locations;
+        return repository.getAllByCar(idCar);
     }
 
     public void update(Location location)
