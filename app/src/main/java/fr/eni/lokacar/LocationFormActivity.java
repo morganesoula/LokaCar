@@ -3,7 +3,9 @@ package fr.eni.lokacar;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -55,6 +57,8 @@ public class LocationFormActivity extends AppCompatActivity {
     public static final String EXTRA_ID_USER = "EXTRA_ID_USER";
     public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
 
+    public static final String KEY_FULL_USER_NAME = "KEY_FULL_USER_NAME";
+
 
     private UsersViewModel usersViewModel;
 
@@ -63,6 +67,7 @@ public class LocationFormActivity extends AppCompatActivity {
     String immatCar;
 
     ArrayAdapter ad;
+
 
 
     @Override

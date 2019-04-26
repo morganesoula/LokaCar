@@ -42,10 +42,11 @@ public class ListLocationsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(locationAdapter);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         int idCar = intent.getIntExtra(ListCarsActivity.EXTRA_ID_CAR,0);
 
         locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+
         locationsViewModel.getAllByCar(idCar).observe(this, new Observer<List<Location>>() {
             @Override
             public void onChanged(@Nullable List<Location> locations) {
@@ -57,11 +58,14 @@ public class ListLocationsActivity extends AppCompatActivity {
 
                 } else {
                     emptyList.setVisibility(View.GONE);
+
                     locationAdapter.setLocations(locations);
                 }
 
             }
         });
+
+
 
     }
 
