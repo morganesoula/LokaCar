@@ -42,8 +42,13 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         Car car = listCars.get(position);
 
-        //bitmap = (Bitmap) car.getImagePath();
-        holder.carImage.setImageBitmap(bitmap);
+        File imgFile = new  File(car.getImagePath());
+        if(imgFile.exists()){
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            holder.carImage.setImageBitmap(myBitmap);
+
+        }
 
         holder.carModel.setText(car.getModel());
         holder.carPrice.setText(String.valueOf(car.getPrice()));

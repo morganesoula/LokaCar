@@ -3,8 +3,6 @@ package fr.eni.lokacar;
 import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -243,7 +240,7 @@ public class CarFormActivity extends AppCompatActivity {
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
         CarType carType = new CarType(tvtype.getSelectedItemPosition(), tvtype.getSelectedItem().toString());
-        String photoPath = tvphotopath.getText().toString();
+        String photoPath = photoFile.getAbsolutePath();
 
 
         if (tvtype.getSelectedItem() == null) {
