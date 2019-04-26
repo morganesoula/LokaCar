@@ -283,7 +283,7 @@ public class CarFormActivity extends AppCompatActivity {
 
         // Save a file: path for use with ACTION_VIEW intents
         photoPath = "file:" + image.getAbsolutePath();
-        tvphotopath.setText(photoPath);
+        //tvphotopath.setText(photoPath);
         return image;
     }
 
