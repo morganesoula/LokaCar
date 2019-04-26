@@ -2,17 +2,21 @@ package fr.eni.lokacar.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.ListLocationsActivity;
+import fr.eni.lokacar.LocationFormActivity;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.model.Location;
 
@@ -36,8 +40,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
         holder.locationStart.setText("Start date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateStart()));
         holder.locationEnd.setText("End date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateEnd()));
-        holder.locationUserId.setText(String.valueOf("User ID: " + location.getUserId()));
-        holder.locationCarId.setText(String.valueOf("Car ID: " + location.getCarId()));
+        // holder.locationUserFullName.setText(String.valueOf(location.getUserId()));
 
     }
 
@@ -62,9 +65,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
         private TextView locationStart;
         private TextView locationEnd;
-        private TextView locationUserId;
-        private TextView locationCarId;
-
+        //private TextView locationUserFullName;
 
 
         public ViewHolder(View locationLine) {
@@ -72,8 +73,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
             locationStart = (TextView) locationLine.findViewById(R.id.tv_date_start);
             locationEnd = (TextView) locationLine.findViewById(R.id.tv_date_end);
-            locationUserId = (TextView) locationLine.findViewById(R.id.tv_location_user_id);
-            locationCarId = (TextView) locationLine.findViewById(R.id.tv_location_car_id);
+            //locationUserFullName = (TextView) locationLine.findViewById(R.id.tv_location_user_full_name);
 
 
             locationLine.setOnClickListener(new View.OnClickListener() {
