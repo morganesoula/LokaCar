@@ -128,7 +128,6 @@ public class CarFormActivity extends AppCompatActivity {
             tvmodel.setText(model);
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
-            tvphotopath.setText(photopath);
 
             File imgFile = new  File(photopath);
 
@@ -136,13 +135,9 @@ public class CarFormActivity extends AppCompatActivity {
 
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 tvphotocours.setImageBitmap(myBitmap);
+                Toast.makeText(this, "La photo est prise", Toast.LENGTH_SHORT).show();
 
             }
-
-
-           /* Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-            Log.i("xxx","bitmap: " + bitmap);
-            tvphotocours.setImageBitmap(bitmap);*/
 
 
             tvisrestore.setChecked(isrestore);
@@ -283,7 +278,6 @@ public class CarFormActivity extends AppCompatActivity {
 
         // Save a file: path for use with ACTION_VIEW intents
         photoPath = "file:" + image.getAbsolutePath();
-        //tvphotopath.setText(photoPath);
         return image;
     }
 

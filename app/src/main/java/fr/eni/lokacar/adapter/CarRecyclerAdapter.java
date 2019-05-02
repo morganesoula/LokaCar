@@ -31,6 +31,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     Bitmap bitmap;
 
     private OnItemClickListener listener;
+    private OnItemLongClickListener listenerLongClick;
 
     @Override
     public CarRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -101,6 +102,19 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
                 }
             });
 
+            carLine.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (listener != null)
+                    {
+                        listenerLongClick.onItemLongClicked(getAdapterPosition());
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+
         }
 
         @Override
@@ -117,8 +131,17 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         void onItemClick(Car car);
     }
 
+    public interface OnItemLongClickListener {
+        boolean onItemLongClicked(int position);
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listenerLongClick)
+    {
+        this.listenerLongClick = listenerLongClick;
     }
 
 

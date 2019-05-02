@@ -3,6 +3,7 @@ package fr.eni.lokacar;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +71,7 @@ public class ListCarsActivity extends AppCompatActivity {
 
         emptyList = findViewById(R.id.empty_list_cars_txt_view);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cars_recycler);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cars_recycler);
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -89,10 +93,10 @@ public class ListCarsActivity extends AppCompatActivity {
                     emptyList.setVisibility(View.GONE);
                     adapter.setCars(cars);
                 }
-
-
             }
         });
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +175,25 @@ public class ListCarsActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });
+
+        adapter.setOnItemLongClickListener(new CarRecyclerAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(final int position) {
+                new AlertDialog.Builder(ListCarsActivity.this)
+                        .setMessage("Do you want to delete this car?")
+                        .setNegativeButton("no", null)
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                carsViewModel.delete(adapter.getCar(position));
+                                adapter.notifyDataSetChanged();
+                            }
+                        }).show();
+                return true;
+            }
+        });
+
+
 
     }
 
