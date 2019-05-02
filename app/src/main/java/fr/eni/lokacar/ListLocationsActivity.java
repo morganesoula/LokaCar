@@ -31,7 +31,7 @@ public class ListLocationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_locations);
-        setTitle("Toutes les locations");
+        setTitle(R.string.locations);
 
         emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
 
@@ -54,7 +54,7 @@ public class ListLocationsActivity extends AppCompatActivity {
                 if (locations.isEmpty())
                 {
                     emptyList.setVisibility(View.VISIBLE);
-                    emptyList.setText("No location recorded/planned for this car yet");
+                    emptyList.setText(R.string.empty_location_list);
 
                 } else {
                     emptyList.setVisibility(View.GONE);

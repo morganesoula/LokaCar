@@ -114,7 +114,7 @@ public class CarFormActivity extends AppCompatActivity {
         intent.getParcelableExtra("car");
 
         if (intent.hasExtra(EXTRA_ID)) {
-            setTitle("Modifier");
+            setTitle(R.string.update);
 
             String model = intent.getStringExtra(EXTRA_MODEL);
             String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0));
@@ -135,7 +135,7 @@ public class CarFormActivity extends AppCompatActivity {
 
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 tvphotocours.setImageBitmap(myBitmap);
-                Toast.makeText(this, "La photo est prise", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.photo_success, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -149,7 +149,7 @@ public class CarFormActivity extends AppCompatActivity {
             });
 
         } else {
-            setTitle("Ajouter une voiture");
+            setTitle(R.string.add_car);
         }
         btnAddPhoto.setVisibility(View.VISIBLE);
 
@@ -239,7 +239,7 @@ public class CarFormActivity extends AppCompatActivity {
 
 
         if (tvtype.getSelectedItem() == null) {
-            Toast.makeText(this, "Please fill everything", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.field_missing, Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent();
 
@@ -285,16 +285,12 @@ public class CarFormActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                Log.v("xxx", "Permission is granted");
                 return true;
             } else {
-
-                Log.v("xxx", "Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            Log.v("xxx", "Permission is granted");
             return true;
         }
     }

@@ -75,7 +75,7 @@ public class LocationFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_form);
 
-        setTitle("Location");
+        setTitle(R.string.location);
 
         Intent intent = getIntent();
         idCar = String.valueOf(intent.getIntExtra(CarFormActivity.EXTRA_ID, 0));
@@ -175,9 +175,9 @@ public class LocationFormActivity extends AppCompatActivity {
 
             User user = new User(name, firstname, phone, email);
             usersViewModel.insert(user);
-            Toast.makeText(this, "Sauvegarde loueur effectuée", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.renter_success, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Sauvegarde loueur non effectuée", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.renter_failure, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -188,7 +188,7 @@ public class LocationFormActivity extends AppCompatActivity {
         int idUser = tvusers.getSelectedItemPosition() + 1;
 
         if (tvusers.getSelectedItem() == null) {
-            Toast.makeText(this, "Please fill everything", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.field_missing, Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent();
             intent.putExtra(EXTRA_DATE_START, dateStartString);

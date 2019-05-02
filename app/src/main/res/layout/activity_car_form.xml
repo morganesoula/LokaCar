@@ -25,7 +25,7 @@
             android:id="@+id/car_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nom"
+            android:hint="Name"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -53,7 +53,7 @@
             android:id="@+id/car_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Prix journalier"
+            android:hint="Daily price"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -83,7 +83,7 @@
         android:id="@+id/car_is_restore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rendu "
+        android:text="Returned "
         android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@id/spinner_car_type"
     />
@@ -99,7 +99,7 @@
         android:id="@+id/btn_add_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Prendre une photo"
+        android:text="Take a picture"
         app:layout_constraintTop_toBottomOf="@id/ivPhoto" />
 
     <ImageView

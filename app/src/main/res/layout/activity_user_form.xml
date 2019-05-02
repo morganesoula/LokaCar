@@ -18,7 +18,7 @@
             android:id="@+id/user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nom"
+            android:hint="Lastname"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -33,7 +33,7 @@
             android:id="@+id/user_firstname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Prénom"
+            android:hint="Firstname"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -47,7 +47,7 @@
             android:id="@+id/user_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Téléphone"
+            android:hint="Phone number"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 

@@ -1,8 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">LokaCar</string>
     <string name="title_activity_list_cars">LokaCar</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- Related to LoginActivity -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>
 
@@ -21,4 +21,47 @@
     <string name="confirm_registry">Email not found. You want to create a new user with that email and password?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+
+    <!-- Related to ListCarsActivity -->
+    <string name="title_home_page">Cars</string>
+    <string name="empty_cars_list">No cars recorded yet</string>
+
+    <string name="locations" tools:ignore="ExtraTranslation">Locations</string>
+    <string name="add_location">Add a location</string>
+
+    <string name="delete_car">Do you want to delete this car?</string>
+
+    <string name="update_problem">Updating problem encountered</string>
+    <string name="save_failure">Saving failed</string>
+
+
+    <!-- Related to CarFormActivity -->
+    <string name="update">Update</string>
+    <string name="field_missing">Please, fill everything</string>
+
+    <string name="photo_success">Photo taken</string>
+
+    <string name="add_car">Add a car</string>
+
+    <!-- Related to LocationRecyclerAdapter -->
+    <string name="start_date">Start date: </string>
+    <string name="end_date">End date: </string>
+
+    <!-- Related to CarTypeFormActivity -->
+    <string name="update_type_value">Update type</string>
+    <string name="add_car_type">Add car's type</string>
+
+    <!-- ListLocationsActivity -->
+    <string name="empty_location_list">No location recorded/planned for this car yet</string>
+
+    <!-- Related to LocationFormActivity -->
+    <string name="location">Location</string>
+
+    <string name="renter_success">Saving renter: success</string>
+    <string name="renter_failure">Saving renter: failure</string>
+
+    <!-- Related to UserFormActivity -->
+    <string name="add_renter">Add a renter</string>
+
 </resources>

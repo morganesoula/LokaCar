@@ -38,8 +38,8 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     public void onBindViewHolder(ViewHolder holder, int position) {
         Location location = listLocations.get(position);
 
-        holder.locationStart.setText("Start date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateStart()));
-        holder.locationEnd.setText("End date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateEnd()));
+        holder.locationStart.setText(R.string.start_date + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateStart()));
+        holder.locationEnd.setText(R.string.end_date + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateEnd()));
         // holder.locationUserFullName.setText(String.valueOf(location.getUserId()));
 
     }

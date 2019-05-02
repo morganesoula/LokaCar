@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 public class UserFormActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ID = "string_user_id";
+    //public static final String EXTRA_ID = "string_user_id";
 
     public static final String EXTRA_NAME = "string_user_name";
     public static final String EXTRA_FIRSTNAME = "string_user_firstname";
@@ -24,7 +24,7 @@ public class UserFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_form);
-        setTitle("Ajouter un loueur");
+        setTitle(R.string.add_renter);
 
         tvname = findViewById(R.id.user_name);
         tvfirstname = findViewById(R.id.user_firstname);

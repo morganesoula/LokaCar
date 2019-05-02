@@ -26,13 +26,13 @@ public class CarTypeFormActivity extends AppCompatActivity {
 
         if (intent.hasExtra(EXTRA_ID))
         {
-            setTitle("Modifier le type");
+            setTitle(R.string.update_type_value);
 
             String type = intent.getStringExtra(EXTRA_CAR_TYPE);
 
             carTypeEditText.setText(type);
         } else {
-            setTitle("Ajouter un type de voiture");
+            setTitle(R.string.add_car_type);
         }
     }
 

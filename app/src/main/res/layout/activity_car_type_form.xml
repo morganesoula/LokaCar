@@ -17,7 +17,7 @@
             android:id="@+id/car_type_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type de voiture"
+            android:hint="Car's type"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
