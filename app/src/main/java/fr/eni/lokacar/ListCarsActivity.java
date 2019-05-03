@@ -51,6 +51,7 @@ public class ListCarsActivity extends AppCompatActivity {
     private LocationsViewModel locationsViewModel;
 
     private TextView emptyList;
+    private String photoPath;
 
     final CarRecyclerAdapter adapter = new CarRecyclerAdapter();
 
@@ -199,6 +200,7 @@ public class ListCarsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode == REQUEST_CODE_ADD && resultCode == RESULT_OK)
         {
             String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
@@ -206,7 +208,14 @@ public class ListCarsActivity extends AppCompatActivity {
             Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
             Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
             CarType carType = (CarType) data.getSerializableExtra(CarFormActivity.EXTRA_TYPE);
-            String photoPath = data.getStringExtra(CarFormActivity.EXTRA_PHOTO);
+
+            if (CarFormActivity.EXTRA_PHOTO != null)
+            {
+                photoPath = data.getStringExtra(CarFormActivity.EXTRA_PHOTO);
+            } else {
+                photoPath = null;
+            }
+
 
             Car car = new Car(0, immatriculation, price, isRestore, photoPath, model, carType);
             carsViewModel.insert(car);
@@ -224,7 +233,13 @@ public class ListCarsActivity extends AppCompatActivity {
                 Float price = data.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0);
                 Boolean isRestore = data.getBooleanExtra(CarFormActivity.EXTRA_ISRESTORE, true);
                 CarType carType = (CarType) data.getSerializableExtra(CarFormActivity.EXTRA_TYPE);
-                String photoPath = data.getStringExtra(CarFormActivity.EXTRA_PHOTO);
+
+                if (CarFormActivity.EXTRA_PHOTO != null)
+                {
+                    photoPath = data.getStringExtra(CarFormActivity.EXTRA_PHOTO);
+                } else {
+                    photoPath = null;
+                }
 
                 Car car = new Car(id, immatriculation, price, isRestore, photoPath, model, carType);
                 carsViewModel.update(car);

@@ -29,6 +29,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     Context context;
 
     Bitmap bitmap;
+    File imgFile;
 
     private OnItemClickListener listener;
     private OnItemLongClickListener listenerLongClick;
@@ -43,8 +44,13 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         Car car = listCars.get(position);
 
-        File imgFile = new  File(car.getImagePath());
-        if(imgFile.exists()){
+        if (car.getImagePath() != null) {
+            imgFile = new  File(car.getImagePath());
+        } else {
+            imgFile = null;
+        }
+
+        if(imgFile != null){
 
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             holder.carImage.setImageBitmap(myBitmap);

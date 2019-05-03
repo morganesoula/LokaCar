@@ -64,6 +64,9 @@ public class CarFormActivity extends AppCompatActivity {
     private Spinner tvtype;
     private Switch tvisrestore;
 
+    private String photopath;
+    private File imgFile;
+
 
     private Button btnAddPhoto;
     private ImageButton btnAddCarType;
@@ -116,11 +119,20 @@ public class CarFormActivity extends AppCompatActivity {
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle(R.string.update);
 
+            btnAddPhoto.setText("Update photo");
+
             String model = intent.getStringExtra(EXTRA_MODEL);
             String price = String.valueOf(intent.getFloatExtra(CarFormActivity.EXTRA_PRICE, 0));
             String immatriculation = intent.getStringExtra(EXTRA_IMMAT);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
-            String photopath = intent.getStringExtra(EXTRA_PHOTO);
+
+            if (intent.getStringExtra(EXTRA_PHOTO) != null)
+            {
+                photopath = intent.getStringExtra(EXTRA_PHOTO);
+            } else {
+                photopath = null;
+            }
+
 
             CarType carType = (CarType) intent.getSerializableExtra(EXTRA_TYPE);
             typePosition = carType.getIdCarType();
@@ -129,14 +141,18 @@ public class CarFormActivity extends AppCompatActivity {
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
 
-            File imgFile = new  File(photopath);
+            if (photopath != null)
+            {
+                imgFile = new  File(photopath);
+            } else {
+                imgFile = null;
+            }
 
-            if(imgFile.exists()){
+
+            if(imgFile != null){
 
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 tvphotocours.setImageBitmap(myBitmap);
-                Toast.makeText(this, R.string.photo_success, Toast.LENGTH_SHORT).show();
-
             }
 
 
@@ -150,6 +166,7 @@ public class CarFormActivity extends AppCompatActivity {
 
         } else {
             setTitle(R.string.add_car);
+            btnAddPhoto.setText("Add a photo");
         }
         btnAddPhoto.setVisibility(View.VISIBLE);
 
@@ -235,7 +252,13 @@ public class CarFormActivity extends AppCompatActivity {
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
         CarType carType = new CarType(tvtype.getSelectedItemPosition(), tvtype.getSelectedItem().toString());
-        String photoPath = photoFile.getAbsolutePath();
+        if (photoFile != null)
+        {
+            photoPath = photoFile.getAbsolutePath();
+        } else {
+            photoPath = null;
+        }
+
 
 
         if (tvtype.getSelectedItem() == null) {
