@@ -38,6 +38,11 @@ public class UsersViewModel extends AndroidViewModel {
         return users;
     }
 
+    public User getUser(int id)
+    {
+        return repository.getUser(id);
+    }
+
 
     public void update(User user)
     {

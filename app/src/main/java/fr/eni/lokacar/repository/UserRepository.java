@@ -28,6 +28,11 @@ public class UserRepository {
         return listUsers;
     }
 
+    public User getUser(final int id)
+    {
+        return userDAO.getUser(id);
+    }
+
     public void insert(User user)
     {
         UserRepository.AsyncInsert asyncInsert = new UserRepository.AsyncInsert();

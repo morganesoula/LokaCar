@@ -23,7 +23,7 @@ import fr.eni.lokacar.view_model.LocationsViewModel;
 public class ListLocationsActivity extends AppCompatActivity {
 
     private LocationsViewModel locationsViewModel;
-    final LocationRecyclerAdapter locationAdapter = new LocationRecyclerAdapter();
+    private LocationRecyclerAdapter locationAdapter;
 
     private TextView emptyList;
 
@@ -37,6 +37,8 @@ public class ListLocationsActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.locations_recycler);
         recyclerView.setHasFixedSize(true);
+
+        locationAdapter = new LocationRecyclerAdapter(this, null);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
