@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -30,11 +32,15 @@ import fr.eni.lokacar.view_model.UsersViewModel;
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecyclerAdapter.ViewHolder>{
 
 
-    private List<Location> listLocations = new ArrayList<>();
+    private List<Location> listLocations;
     private Context context;
     private UsersViewModel userViewModel;
 
+    User user;
+
     private OnItemClickListener listener;
+    private OnItemLongClickListener listenerLongClick;
+
 
     public LocationRecyclerAdapter(Context context, List<Location> locations)
     {
@@ -56,7 +62,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Location location = listLocations.get(position);
-        User user = userViewModel.getUser(location.getUserId());
+        user = userViewModel.getUser(location.getUserId());
 
         holder.locationStart.setText("Start date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateStart()));
         holder.locationEnd.setText("End date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateEnd()));
@@ -65,8 +71,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         {
             holder.locationUserFullName.setText("Renter: " + user.getName() + " " + user.getFirstname());
         }
-
-
 
     }
 
@@ -117,6 +121,20 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
                 }
             });
 
+            locationLine.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (listener != null)
+                    {
+                        listenerLongClick.onItemLongClicked(getAdapterPosition());
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                }
+            });
+
         }
 
         @Override
@@ -133,9 +151,17 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         void onItemClick(Location location);
     }
 
+    public interface OnItemLongClickListener {
+        boolean onItemLongClicked(int position);
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    public void setOnItemLongClickListener(OnItemLongClickListener listenerLongClick)
+    {
+        this.listenerLongClick = listenerLongClick;
+    }
 
 }

@@ -28,6 +28,7 @@ public class LocationRepository {
             locationDAO = database.locationDAO();
             carDAO = database.carDAO();
             userDAO = database.userDAO();
+
             listLocations = locationDAO.getAll();
         }
 
@@ -54,7 +55,7 @@ public class LocationRepository {
 
         public void delete(Location location)
         {
-            LocationRepository.AsyncDelete asyncDelete = new LocationRepository.AsyncDelete();
+            AsyncDelete asyncDelete = new AsyncDelete();
             asyncDelete.execute(location);
         }
 

@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ public class ListCarsActivity extends AppCompatActivity {
     private TextView emptyList;
     private String photoPath;
 
-    final CarRecyclerAdapter adapter = new CarRecyclerAdapter();
+    private CarRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,8 @@ public class ListCarsActivity extends AppCompatActivity {
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cars_recycler);
         recyclerView.setHasFixedSize(true);
+
+        adapter = new CarRecyclerAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);

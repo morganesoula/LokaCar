@@ -54,6 +54,7 @@
 
     <!-- ListLocationsActivity -->
     <string name="empty_location_list">No location recorded/planned for this car yet</string>
+    <string name="delete_location">Do you want to delete this location?</string>
 
     <!-- Related to LocationFormActivity -->
     <string name="location">Location</string>

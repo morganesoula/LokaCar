@@ -15,7 +15,6 @@ import fr.eni.lokacar.repository.LocationRepository;
 public class LocationsViewModel extends AndroidViewModel {
 
     private LiveData<List<Location>> locations;
-    private Location location;
 
     LocationRepository repository;
 

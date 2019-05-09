@@ -28,7 +28,6 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
     List<Car> listCars = new ArrayList<>();
     Context context;
 
-    Bitmap bitmap;
     File imgFile;
 
     private OnItemClickListener listener;
@@ -61,7 +60,13 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         holder.carPrice.setText(String.valueOf(car.getPrice()));
         holder.carImmatriculation.setText(car.getImmatriculation());
         holder.carType.setText(car.getCarType().getLabel());
-        holder.carIsRestore.setChecked(car.isRestore());
+        if (car.isRestore() == true)
+        {
+            holder.carIsRestore.setText("Restored: Yes");
+        } else {
+            holder.carIsRestore.setText("Restored: No");
+        }
+
     }
 
     @Override
@@ -87,7 +92,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         private TextView carPrice;
         private TextView carImmatriculation;
         private TextView carType;
-        private Switch carIsRestore;
+        private TextView carIsRestore;
 
 
         public ViewHolder(View carLine) {
@@ -97,7 +102,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
             carPrice = (TextView) carLine.findViewById(R.id.car_price_txt_view);
             carImmatriculation = (TextView) carLine.findViewById(R.id.car_immatriculation_txt_view);
             carType = (TextView) carLine.findViewById(R.id.car_type_txt_view);
-            carIsRestore = (Switch) carLine.findViewById(R.id.car_is_restore_switch);
+            carIsRestore = (TextView) carLine.findViewById(R.id.car_is_restore_txt_view);
 
             carLine.setOnClickListener(new View.OnClickListener() {
                 @Override
