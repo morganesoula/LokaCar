@@ -157,7 +157,7 @@ public class CarsAvailableFragment extends Fragment {
         emptyList = view.findViewById(R.id.empty_list_cars_available_txt_view);
 
         carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
-        carsViewModel.getAll().observe(this, new Observer<List<Car>>() {
+        carsViewModel.getAllCarsAvailable().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
                 if (cars.isEmpty())

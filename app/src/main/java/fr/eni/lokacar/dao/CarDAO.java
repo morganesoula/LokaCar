@@ -14,8 +14,11 @@ import fr.eni.lokacar.model.Car;
 @Dao
 public interface CarDAO {
 
-    @Query("SELECT * FROM Car")
-    LiveData<List<Car>> getAll();
+    @Query("SELECT * FROM Car WHERE isRestore = 0")
+    LiveData<List<Car>> getAllCarsAvailable();
+
+    @Query("SELECT * FROM Car WHERE isRestore = 1")
+    LiveData<List<Car>> getAllCarsRented();
 
     @Query("SELECT * FROM Car WHERE id = :id")
     Car getCar(int id);

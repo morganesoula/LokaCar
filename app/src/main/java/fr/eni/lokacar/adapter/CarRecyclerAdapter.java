@@ -50,11 +50,10 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
 
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             holder.carImage.setImageBitmap(myBitmap);
-
         }
 
         holder.carModel.setText(car.getModel());
-        holder.carPrice.setText(String.valueOf(car.getPrice()));
+        holder.carPrice.setText(String.valueOf(car.getPrice()) + "€");
         holder.carImmatriculation.setText(car.getImmatriculation());
         holder.carType.setText(car.getCarType().getLabel());
         if (car.isRestore() == true)
