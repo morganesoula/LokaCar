@@ -40,6 +40,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.mozilla.javascript.tools.jsc.Main;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -268,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (agencyAuthentification.getUsername().equals(mEmail)) {
                 if (agencyAuthentification.getPassword().equals(mPassword)) {
                     finish();
-                    Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
                     showProgress(false);
@@ -288,7 +290,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                                     sharedPreferences.edit().putString(EXTRA_USERNAME_SAVED, mEmail).apply();
 
-                                    Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 } catch (Exception e) {
                                 e.getMessage();
@@ -296,7 +298,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
-                            Intent intent = new Intent(LoginActivity.this, ListCarsActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             break;
                     }

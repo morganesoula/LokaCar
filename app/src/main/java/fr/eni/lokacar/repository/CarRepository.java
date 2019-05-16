@@ -3,19 +3,18 @@ package fr.eni.lokacar.repository;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
 import fr.eni.lokacar.dao.CarDAO;
-import fr.eni.lokacar.dao.CarTypeDAO;
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.model.Car;
 
 public class CarRepository {
 
     CarDAO carDAO;
-    LiveData<List<Car>> listCars;
+    LiveData<List<Car>> listCarsAvailable;
+    LiveData<List<Car>> listCarsRented;
     Car car;
 
 
@@ -24,12 +23,18 @@ public class CarRepository {
         Database database = Database.getDatabase(context);
         carDAO = database.carDAO();
 
-        listCars = carDAO.getAll();
+        listCarsAvailable = carDAO.getAllCarsAvailable();
+        listCarsRented = carDAO.getAllCarsRented();
     }
 
 
-    public LiveData<List<Car>> getAll() {
-        return listCars;
+
+    public LiveData<List<Car>> getAllCarsAvailable() {
+        return listCarsAvailable;
+    }
+
+    public LiveData<List<Car>> getAllCarsRented() {
+        return  listCarsRented;
     }
 
     public Car getCar(int id) {

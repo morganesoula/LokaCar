@@ -53,7 +53,7 @@ public class ListLocationsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         final Intent intent = getIntent();
-        int idCar = intent.getIntExtra(ListCarsActivity.EXTRA_ID_CAR,0);
+        int idCar = intent.getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR,0);
 
         locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
 
