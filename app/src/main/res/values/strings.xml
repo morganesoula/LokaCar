@@ -23,9 +23,9 @@
     <string name="no">No</string>
 
 
-    <!-- Related to ListCarsActivity -->
+    <!-- Related to CarsAvailableFragment -->
     <string name="title_home_page">Cars</string>
-    <string name="empty_cars_list">No cars recorded yet</string>
+    <string name="empty_cars_available_list">No cars available yet</string>
 
     <string name="locations" tools:ignore="ExtraTranslation">Locations</string>
     <string name="add_location">Add a location</string>
@@ -34,6 +34,9 @@
 
     <string name="update_problem">Updating problem encountered</string>
     <string name="save_failure">Saving failed</string>
+
+    <!-- Related to CarsRentedFragment -->
+    <string name="empty_cars_rented_list">No cars rented yet</string>
 
 
     <!-- Related to CarFormActivity -->
@@ -50,7 +53,7 @@
 
     <!-- Related to CarTypeFormActivity -->
     <string name="update_type_value">Update type</string>
-    <string name="add_car_type">Add car's type</string>
+    <string name="add_car_type">Add car type</string>
 
     <!-- ListLocationsActivity -->
     <string name="empty_location_list">No location recorded/planned for this car yet</string>

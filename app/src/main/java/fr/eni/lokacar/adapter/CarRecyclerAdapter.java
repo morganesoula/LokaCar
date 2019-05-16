@@ -9,18 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.eni.lokacar.ListCarsActivity;
+import fr.eni.lokacar.CarsAvailableFragment;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.model.Car;
-import fr.eni.lokacar.model.CarType;
 
 public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.ViewHolder>{
 
@@ -130,7 +127,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(context, ListCarsActivity.class);
+            Intent intent = new Intent(context, CarsAvailableFragment.class);
 
             Car car = listCars.get(getAdapterPosition());
             context.startActivity(intent);
