@@ -67,7 +67,6 @@ public class CarsAvailableFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
     }
 
     @Nullable
@@ -84,6 +83,8 @@ public class CarsAvailableFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+
+        // Method to add swipe on items
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
 
@@ -138,6 +139,7 @@ public class CarsAvailableFragment extends Fragment {
         }).attachToRecyclerView(recyclerView);
 
 
+        // Creation of the floating button "Add a car"
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.add_car_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,12 +153,17 @@ public class CarsAvailableFragment extends Fragment {
         return view;
     }
 
+    // This method NEED to be called AFTER onCreate and onCreateView
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        // If no cars registered
         emptyList = view.findViewById(R.id.empty_list_cars_available_txt_view);
 
         carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
+
+        // Observer on view model to update list cars
+        // Method ONLY calls cars that are available (!= rented)
         carsViewModel.getAllCarsAvailable().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
@@ -193,6 +200,7 @@ public class CarsAvailableFragment extends Fragment {
             }
         });
 
+        // Method to delete a car - on long click
         adapter.setOnItemLongClickListener(new CarRecyclerAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(final int position) {
@@ -213,11 +221,13 @@ public class CarsAvailableFragment extends Fragment {
     }
 
 
+    // Got data from CarFormActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
 
+        // If new car
         if (requestCode == REQUEST_CODE_ADD && resultCode == Activity.RESULT_OK)
         {
             String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
@@ -239,6 +249,7 @@ public class CarsAvailableFragment extends Fragment {
 
         } else if (requestCode == REQUEST_CODE_EDIT && resultCode == Activity.RESULT_OK)
         {
+            // If car already exists
             int id = data.getIntExtra(CarFormActivity.EXTRA_ID, 0);
 
             if (id == 0)
@@ -263,6 +274,7 @@ public class CarsAvailableFragment extends Fragment {
             }
         } else if (requestCode == REQUEST_ADD_LOCATION && resultCode == Activity.RESULT_OK)
         {
+            // Add new location to the car
             try {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
@@ -289,6 +301,8 @@ public class CarsAvailableFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+    // Add option to menu to log out
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         adapter.notifyDataSetChanged();

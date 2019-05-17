@@ -77,6 +77,7 @@ public class LocationFormActivity extends AppCompatActivity {
 
         setTitle(R.string.location);
 
+        // Get data from EXTRA
         Intent intent = getIntent();
         idCar = String.valueOf(intent.getIntExtra(CarFormActivity.EXTRA_ID, 0));
         modelCar = String.valueOf(intent.getStringExtra(CarFormActivity.EXTRA_MODEL));
@@ -87,11 +88,14 @@ public class LocationFormActivity extends AppCompatActivity {
         tvDateStart = (TextView) findViewById(R.id.tv_date_debut);
         tvDateEnd = (TextView) findViewById(R.id.tv_date_fin);
         btnAddUser = findViewById(R.id.add_user_button);
+        // Creation of spinner of potential renters
         tvusers = findViewById(R.id.spinner_user);
 
         tvCar.setText(modelCar + " - " + immatCar);
 
         usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
+        // Observer on list of renters
+        // Set new renters into array
         usersViewModel.getAll().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(@Nullable List<User> users) {
@@ -102,13 +106,14 @@ public class LocationFormActivity extends AppCompatActivity {
 
                 }
 
+                // Add array into spinner
                 ad = new ArrayAdapter<>(LocationFormActivity.this, R.layout.user_spinner, labels);
                 tvusers.setAdapter(ad);
             }
 
         });
 
-        //tvDate = (TextView) findViewById(R.id.tv_date);
+        // Method to select dateStart and dateEnd of location
         Button btnDateRange = (Button) findViewById(R.id.btn_date_range_picker);
         btnDateRange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +149,7 @@ public class LocationFormActivity extends AppCompatActivity {
         });
     }
 
-
+    // Creation of the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater mi = getMenuInflater();
@@ -152,6 +157,7 @@ public class LocationFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Initialization of the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -162,10 +168,10 @@ public class LocationFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Get data from UserFormActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         if (requestCode == REQUEST_ADD_USER_FORM && resultCode == RESULT_OK) {
             String name = data.getStringExtra(UserFormActivity.EXTRA_NAME);
@@ -181,6 +187,7 @@ public class LocationFormActivity extends AppCompatActivity {
         }
     }
 
+    // Method to save location
     private void saveLocation() {
         String dateStartString = tvDateStart.getText().toString();
         String dateEndString = tvDateEnd.getText().toString();

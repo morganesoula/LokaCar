@@ -41,6 +41,7 @@ public class ListLocationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_locations);
         setTitle(R.string.locations);
 
+        // Locations' list is empty
         emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
         adapter = new LocationRecyclerAdapter(this, null);
 
@@ -53,10 +54,14 @@ public class ListLocationsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         final Intent intent = getIntent();
+
+        // Get id of the locations' car
         int idCar = intent.getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR,0);
 
         locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
 
+        // Observer on viewModel to update list of locations
+        // Request to select locations of the car's id
         locationsViewModel.getAllByCar(idCar).observe(this, new Observer<List<Location>>() {
             @Override
             public void onChanged(@Nullable List<Location> locations) {
@@ -83,6 +88,7 @@ public class ListLocationsActivity extends AppCompatActivity {
         });
 
         // TEST - Method delete() is not working
+        // Honestly can't figure out why...
         adapter.setOnItemLongClickListener(new LocationRecyclerAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(final int position) {

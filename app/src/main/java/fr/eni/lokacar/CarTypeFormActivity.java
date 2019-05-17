@@ -24,6 +24,7 @@ public class CarTypeFormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         intent.getParcelableExtra("carType");
 
+        // If car already exists
         if (intent.hasExtra(EXTRA_ID))
         {
             setTitle(R.string.update_type_value);
@@ -36,6 +37,7 @@ public class CarTypeFormActivity extends AppCompatActivity {
         }
     }
 
+    // Creation of the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -44,6 +46,7 @@ public class CarTypeFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Initialization of the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -54,6 +57,7 @@ public class CarTypeFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Method to save car's type
     private void saveCarType()
     {
         String type = carTypeEditText.getText().toString();

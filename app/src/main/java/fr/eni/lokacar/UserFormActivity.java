@@ -11,8 +11,6 @@ import android.widget.EditText;
 
 public class UserFormActivity extends AppCompatActivity {
 
-    //public static final String EXTRA_ID = "string_user_id";
-
     public static final String EXTRA_NAME = "string_user_name";
     public static final String EXTRA_FIRSTNAME = "string_user_firstname";
     public static final String EXTRA_EMAIL = "string_user_email";
@@ -35,6 +33,7 @@ public class UserFormActivity extends AppCompatActivity {
         intent.getParcelableExtra("user");
     }
 
+    // Creation of the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -43,6 +42,7 @@ public class UserFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Initialization of the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -53,6 +53,8 @@ public class UserFormActivity extends AppCompatActivity {
         return true;
     }
 
+
+    // Method to save renter
     private void saveUser()
     {
         String name  = tvname.getText().toString();

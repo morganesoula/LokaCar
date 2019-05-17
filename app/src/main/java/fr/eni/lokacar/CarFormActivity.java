@@ -101,6 +101,8 @@ public class CarFormActivity extends AppCompatActivity {
         btnAddCarType = findViewById(R.id.add_car_type_button);
 
         carTypesViewModel = ViewModelProviders.of(this).get(CarTypesViewModel.class);
+
+        // Observer on ViewModel to update list of cars
         carTypesViewModel.getAll().observe(this, new Observer<List<CarType>>() {
             @Override
             public void onChanged(@Nullable List<CarType> carTypes) {
@@ -116,6 +118,7 @@ public class CarFormActivity extends AppCompatActivity {
         Intent intent = getIntent();
         intent.getParcelableExtra("car");
 
+        // If car has already been registered
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle(R.string.update);
 
@@ -168,6 +171,7 @@ public class CarFormActivity extends AppCompatActivity {
             setTitle(R.string.add_car);
             btnAddPhoto.setText("Add a photo");
         }
+
         btnAddPhoto.setVisibility(View.VISIBLE);
 
         btnAddPhoto.setOnClickListener(new View.OnClickListener() {
@@ -187,13 +191,14 @@ public class CarFormActivity extends AppCompatActivity {
     }
 
 
+    // Method to take a picture with the camera
     private void takePhoto() {
 
         if (isStoragePermissionGranted()) {
-            //Utilisation de l'appareil photo
+            //Use of camera
             Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            //Vérification que le telephone a bien un appareil photo
+            //Check if device has a camera
             if (pictureIntent.resolveActivity(getPackageManager()) != null) {
                 try {
                     photoFile = createImageFile();
@@ -212,6 +217,8 @@ public class CarFormActivity extends AppCompatActivity {
         }
     }
 
+    // When updating the car, retrieve the saved picture
+    // Set spinner on the saved car's type
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -229,6 +236,7 @@ public class CarFormActivity extends AppCompatActivity {
         }
     }
 
+    // Creation of the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater mi = getMenuInflater();
@@ -236,6 +244,7 @@ public class CarFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Initialization of the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -246,12 +255,16 @@ public class CarFormActivity extends AppCompatActivity {
         return true;
     }
 
+    // Method to save a car
     private void saveCar() {
         String model = tvmodel.getText().toString();
         String immatriculation = tvimmat.getText().toString();
         Boolean isRestore = tvisrestore.isChecked();
         Float price = Float.valueOf(tvprice.getText().toString());
         CarType carType = new CarType(tvtype.getSelectedItemPosition(), tvtype.getSelectedItem().toString());
+
+
+        // To avoid NullPointerException error
         if (photoFile != null)
         {
             photoPath = photoFile.getAbsolutePath();
@@ -259,11 +272,11 @@ public class CarFormActivity extends AppCompatActivity {
             photoPath = null;
         }
 
-
-
         if (tvtype.getSelectedItem() == null) {
             Toast.makeText(this, R.string.field_missing, Toast.LENGTH_LONG).show();
         } else {
+
+            // Save data into EXTRA to send to the Fragment
             Intent intent = new Intent();
 
             intent.putExtra(EXTRA_MODEL, model);
@@ -286,6 +299,7 @@ public class CarFormActivity extends AppCompatActivity {
     }
 
 
+    // Method to create a file where you save pictures from the camera
     private File createImageFile() throws IOException {
 
         // Create an image file name
@@ -304,6 +318,7 @@ public class CarFormActivity extends AppCompatActivity {
         return image;
     }
 
+    // Method to ask for permission to use camera
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
