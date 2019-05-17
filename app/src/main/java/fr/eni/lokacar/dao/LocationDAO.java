@@ -17,7 +17,6 @@ public interface LocationDAO {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAll();
 
-    //TODO Ecrire la requete, pas une étoile
     @Query("SELECT * FROM location INNER JOIN car ON car.id = location.carId WHERE car.id = :id")
     /* @Query("SELECT l.id, l.dateStart, l.dateEnd, l.userId, l.carId, u.id, u.firstname, u.name, c.id " +
             "FROM location l, user u, car c " +

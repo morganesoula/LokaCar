@@ -39,4 +39,13 @@
         <item name="android:textColor">@color/mdtp_white</item>
     </style>
 
+
+    <!-- Style to empty list message -->
+    <style name="EmptyListMessageTheme">
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">200dp</item>
+        <item name="android:paddingLeft">110dp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>

@@ -59,6 +59,8 @@ public class CarsAvailableFragment extends Fragment {
 
     private CarRecyclerAdapter adapter;
 
+    private RecyclerView recyclerView;
+
     public CarsAvailableFragment() {
     }
 
@@ -74,7 +76,7 @@ public class CarsAvailableFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cars_available, container, false);
 
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cars_available_recycler);
+        recyclerView = (RecyclerView) view.findViewById(R.id.cars_available_recycler);
         recyclerView.setHasFixedSize(true);
 
         adapter = new CarRecyclerAdapter();
@@ -160,6 +162,7 @@ public class CarsAvailableFragment extends Fragment {
         // If no cars registered
         emptyList = view.findViewById(R.id.empty_list_cars_available_txt_view);
 
+
         carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
 
         // Observer on view model to update list cars
@@ -171,9 +174,13 @@ public class CarsAvailableFragment extends Fragment {
                 {
                     emptyList.setVisibility(View.VISIBLE);
                     emptyList.setText(R.string.empty_cars_available_list);
+                    // TODO Not really clean AND failing when car is added
+                    recyclerView.setVisibility(View.GONE);
                 } else {
-                    emptyList.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                     adapter.setCars(cars);
+                    emptyList.setVisibility(View.GONE);
+
                 }
             }
         });

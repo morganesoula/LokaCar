@@ -83,7 +83,7 @@
         android:id="@+id/car_is_restore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Returned "
+        android:text="Available? "
         android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@id/spinner_car_type"
     />

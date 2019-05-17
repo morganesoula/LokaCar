@@ -9,9 +9,7 @@
         android:id="@+id/empty_list_cars_rented_txt_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:paddingTop="270dp"
-        android:paddingLeft="130dp"
+        android:theme="@style/EmptyListMessageTheme"
         />
 
     <android.support.v7.widget.RecyclerView
