@@ -93,7 +93,7 @@ public class CarsAvailableFragment extends Fragment {
 
                         .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.gray))
                         .addSwipeLeftActionIcon(R.drawable.ic_group_add_white_24dp)
-                        .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent))
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark))
                         .addSwipeRightActionIcon(R.drawable.ic_list_white_24dp)
                         .addSwipeRightLabel("Locations")
                         .setSwipeRightLabelColor(Color.WHITE)

@@ -37,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private ImageView mImageView;
 
     private AgencyAuthentificationViewModel agencyAuthentificationViewModel;
     private AgencyAuthentification agencyAuthentification;
@@ -76,6 +78,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mImageView = findViewById(R.id.image_login);
+        mImageView.setImageResource(R.drawable.logo_car);
 
         sharedPreferences = this.getSharedPreferences("nevermind", MODE_PRIVATE);
 
@@ -123,7 +128,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
 
     }
 

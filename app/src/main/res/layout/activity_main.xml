@@ -14,7 +14,7 @@
         android:background="@color/done_disabled_dark"
         app:tabMode="fixed"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/colorPrimary" />
+        app:tabIndicatorColor="@color/colorPrimaryDark" />
     
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_id"
