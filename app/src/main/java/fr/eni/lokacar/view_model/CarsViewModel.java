@@ -10,7 +10,7 @@ import java.util.List;
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.repository.CarRepository;
 
-public class ListCarsViewModel extends AndroidViewModel {
+public class CarsViewModel extends AndroidViewModel {
 
     private LiveData<List<Car>> carsAvailable;
     private LiveData<List<Car>> carsRented;
@@ -18,17 +18,10 @@ public class ListCarsViewModel extends AndroidViewModel {
 
     CarRepository repository;
 
-    public ListCarsViewModel(@NonNull Application application)
+    public CarsViewModel(@NonNull Application application)
     {
         super(application);
         repository = new CarRepository(application);
-        init();
-    }
-
-    private void init()
-    {
-        carsAvailable = repository.getAllCarsAvailable();
-        carsRented = repository.getAllCarsRented();
     }
 
     public void insert(Car car)
@@ -38,18 +31,18 @@ public class ListCarsViewModel extends AndroidViewModel {
 
     public Car getCar(int id)
     {
-        repository.getCar(id);
+        car = repository.getCar(id);
         return car;
     }
 
     public LiveData<List<Car>> getAllCarsAvailable()
     {
-        return carsAvailable;
+        return repository.getAllCarsAvailable();
     }
 
     public LiveData<List<Car>> getAllCarsRented()
     {
-        return carsRented;
+        return repository.getAllCarsRented();
     }
 
     public void update(Car car)

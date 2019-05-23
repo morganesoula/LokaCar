@@ -3,7 +3,6 @@ package fr.eni.lokacar.repository;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
 
@@ -11,9 +10,7 @@ import fr.eni.lokacar.dao.CarDAO;
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.dao.LocationDAO;
 import fr.eni.lokacar.dao.UserDAO;
-import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.Location;
-import fr.eni.lokacar.model.User;
 
 public class LocationRepository {
         LocationDAO locationDAO;

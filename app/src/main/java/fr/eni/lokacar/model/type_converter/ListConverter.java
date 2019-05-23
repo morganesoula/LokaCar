@@ -2,7 +2,6 @@ package fr.eni.lokacar.model.type_converter;
 
 import android.arch.persistence.room.TypeConverter;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

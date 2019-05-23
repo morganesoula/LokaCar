@@ -18,7 +18,7 @@ import fr.eni.lokacar.model.User;
 import fr.eni.lokacar.model.type_converter.DateConverter;
 import fr.eni.lokacar.model.type_converter.ListConverter;
 
-@android.arch.persistence.room.Database(entities = {Car.class, CarType.class, User.class, AgencyAuthentification.class, Location.class, StatusReport.class}, version = 15, exportSchema = false)
+@android.arch.persistence.room.Database(entities = {Car.class, CarType.class, User.class, AgencyAuthentification.class, Location.class, StatusReport.class}, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class, ListConverter.class})
 public abstract class Database extends RoomDatabase {
 
@@ -33,7 +33,7 @@ public abstract class Database extends RoomDatabase {
     {
         if (database == null)
         {
-            database = Room.databaseBuilder(context, Database.class, "random")
+            database = Room.databaseBuilder(context, Database.class, "database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallBack)
                     // ONLY if you do small requests (simple insert or get)
@@ -43,9 +43,6 @@ public abstract class Database extends RoomDatabase {
 
         return database;
     }
-
-
-
 
 
     private static Callback roomCallBack = new Callback() {

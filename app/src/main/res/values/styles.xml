@@ -39,12 +39,28 @@
         <item name="android:textColor">@color/mdtp_white</item>
     </style>
 
+    <!-- Style to date picker button -->
+    <style name="ButtonDatePickerTheme">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/mdtp_white</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
 
     <!-- Style to empty list message -->
     <style name="EmptyListMessageTheme">
         <item name="android:textStyle">bold</item>
         <item name="android:paddingTop">200dp</item>
         <item name="android:paddingLeft">110dp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <!-- Style to empty list location message -->
+    <style name="EmptyListLocationMessageTheme">
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">200dp</item>
+        <item name="android:paddingLeft">43dp</item>
         <item name="android:visibility">gone</item>
     </style>
 
