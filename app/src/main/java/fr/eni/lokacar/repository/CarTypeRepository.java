@@ -1,6 +1,7 @@
 package fr.eni.lokacar.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
 

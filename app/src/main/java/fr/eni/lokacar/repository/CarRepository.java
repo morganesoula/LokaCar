@@ -38,9 +38,7 @@ public class CarRepository {
     }
 
     public Car getCar(int id) {
-        AsyncGet asyncGet = new AsyncGet();
-        asyncGet.execute(id);
-        return car;
+        return carDAO.getCar(id);
     }
 
     public void insert(Car car)

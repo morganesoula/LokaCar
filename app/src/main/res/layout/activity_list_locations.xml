@@ -10,9 +10,7 @@
         android:id="@+id/empty_list_locations_txt_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="270dp"
-        android:paddingLeft="60dp"
-        android:visibility="gone" />
+        android:theme="@style/EmptyListLocationMessageTheme"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/locations_recycler"

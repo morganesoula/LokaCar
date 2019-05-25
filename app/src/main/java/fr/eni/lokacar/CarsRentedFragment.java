@@ -35,7 +35,7 @@ import fr.eni.lokacar.adapter.CarRecyclerAdapter;
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.model.Location;
-import fr.eni.lokacar.view_model.ListCarsViewModel;
+import fr.eni.lokacar.view_model.CarsViewModel;
 import fr.eni.lokacar.view_model.LocationsViewModel;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -48,12 +48,11 @@ public class CarsRentedFragment extends Fragment {
 
     public static final int REQUEST_CODE_ADD = 1;
     public static final int REQUEST_CODE_EDIT = 2;
-
     public static final int REQUEST_ADD_LOCATION = 3;
 
     public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
 
-    private ListCarsViewModel carsViewModel;
+    private CarsViewModel carsViewModel;
     private LocationsViewModel locationsViewModel;
 
     private String photoPath;
@@ -117,20 +116,24 @@ public class CarsRentedFragment extends Fragment {
 
                 if (direction == ItemTouchHelper.LEFT){
                     Intent intent = new Intent(getActivity(), LocationFormActivity.class);
-                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
+                    int idRentedCar = adapter.getCar(viewHolder.getAdapterPosition()).getId();
                     String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
-                    intent.putExtra(CarFormActivity.EXTRA_ID, id);
+                    intent.putExtra(CarFormActivity.EXTRA_ID, idRentedCar);
+                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR, idRentedCar);
                     intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
+                    intent.putExtra(LocationFormActivity.EXTRA_CAR_MODEL, carmodel);
                     intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
+                    intent.putExtra(LocationFormActivity.EXTRA_CAR_IMMAT, immat);
+
                     startActivityForResult(intent, REQUEST_ADD_LOCATION);
                 }
 
                 if (direction == ItemTouchHelper.RIGHT){
                     Intent intent = new Intent(getActivity(), ListLocationsActivity.class);
                     int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
-                    intent.putExtra(CarsAvailableFragment.EXTRA_ID_CAR, id);
+                    intent.putExtra(CarsRentedFragment.EXTRA_ID_CAR, id);
 
                     startActivity(intent);
                 }
@@ -150,10 +153,10 @@ public class CarsRentedFragment extends Fragment {
         // If no cars registered
         emptyListCarsRented = view.findViewById(R.id.empty_list_cars_rented_txt_view);
 
-        carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
+        carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
 
         // Observer on view model to update list cars
-        // Method ONLY calls cars that are rented
+        // Method calls cars that are ONLY rented
         carsViewModel.getAllCarsRented().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
@@ -265,9 +268,9 @@ public class CarsRentedFragment extends Fragment {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
                 int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
-                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_ID_USER,0);
+                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
-                Location location = new Location(dateStart, dateEnd, idUser, idCar);
+                Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
 
                 locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
                 locationsViewModel.insert(location);

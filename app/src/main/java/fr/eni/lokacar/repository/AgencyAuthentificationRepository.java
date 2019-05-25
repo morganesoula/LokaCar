@@ -1,16 +1,7 @@
 package fr.eni.lokacar.repository;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import java.nio.channels.InterruptedByTimeoutException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import fr.eni.lokacar.dao.AgencyAuthentificationDAO;
 import fr.eni.lokacar.dao.Database;

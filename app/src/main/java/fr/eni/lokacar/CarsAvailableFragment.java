@@ -36,7 +36,7 @@ import fr.eni.lokacar.adapter.CarRecyclerAdapter;
 import fr.eni.lokacar.model.Car;
 import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.model.Location;
-import fr.eni.lokacar.view_model.ListCarsViewModel;
+import fr.eni.lokacar.view_model.CarsViewModel;
 import fr.eni.lokacar.view_model.LocationsViewModel;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -46,12 +46,11 @@ public class CarsAvailableFragment extends Fragment {
 
     public static final int REQUEST_CODE_ADD = 1;
     public static final int REQUEST_CODE_EDIT = 2;
-
     public static final int REQUEST_ADD_LOCATION = 3;
 
     public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
 
-    private ListCarsViewModel carsViewModel;
+    private CarsViewModel carsViewModel;
     private LocationsViewModel locationsViewModel;
 
     private TextView emptyList;
@@ -123,8 +122,12 @@ public class CarsAvailableFragment extends Fragment {
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
                     intent.putExtra(CarFormActivity.EXTRA_ID, id);
+                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR, id);
                     intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
+                    intent.putExtra(LocationFormActivity.EXTRA_CAR_MODEL, carmodel);
                     intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
+                    intent.putExtra(LocationFormActivity.EXTRA_CAR_IMMAT, immat);
+
                     startActivityForResult(intent, REQUEST_ADD_LOCATION);
                 }
 
@@ -163,10 +166,10 @@ public class CarsAvailableFragment extends Fragment {
         emptyList = view.findViewById(R.id.empty_list_cars_available_txt_view);
 
 
-        carsViewModel = ViewModelProviders.of(this).get(ListCarsViewModel.class);
+        carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
 
         // Observer on view model to update list cars
-        // Method ONLY calls cars that are available (!= rented)
+        // Method calls cars that are ONLY available (!= rented)
         carsViewModel.getAllCarsAvailable().observe(this, new Observer<List<Car>>() {
             @Override
             public void onChanged(@Nullable List<Car> cars) {
@@ -174,9 +177,11 @@ public class CarsAvailableFragment extends Fragment {
                 {
                     emptyList.setVisibility(View.VISIBLE);
                     emptyList.setText(R.string.empty_cars_available_list);
-                    // TODO Not really clean AND failing when car is added
+
+                    // Not really clean but it works
                     recyclerView.setVisibility(View.GONE);
                 } else {
+                    // Don't forget to change visibility or you'll never see it show up
                     recyclerView.setVisibility(View.VISIBLE);
                     adapter.setCars(cars);
                     emptyList.setVisibility(View.GONE);
@@ -184,8 +189,6 @@ public class CarsAvailableFragment extends Fragment {
                 }
             }
         });
-
-
 
         adapter.setOnItemClickListener(new CarRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -233,7 +236,6 @@ public class CarsAvailableFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         // If new car
         if (requestCode == REQUEST_CODE_ADD && resultCode == Activity.RESULT_OK)
         {
@@ -249,7 +251,6 @@ public class CarsAvailableFragment extends Fragment {
             } else {
                 photoPath = null;
             }
-
 
             Car car = new Car(0, immatriculation, price, isRestore, photoPath, model, carType);
             carsViewModel.insert(car);
@@ -286,9 +287,9 @@ public class CarsAvailableFragment extends Fragment {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
                 int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
-                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_ID_USER,0);
+                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
-                Location location = new Location(dateStart, dateEnd, idUser, idCar);
+                Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
 
                 locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
                 locationsViewModel.insert(location);
