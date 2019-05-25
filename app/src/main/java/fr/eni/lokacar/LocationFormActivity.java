@@ -46,6 +46,7 @@ public class LocationFormActivity extends AppCompatActivity {
     public static final String EXTRA_USER = "EXTRA_USER";
     public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
     public static final String EXTRA_FULL_USER_NAME = "KEY_FULL_USER_NAME";
+    public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
     public static final String EXTRA_ID_LOCATION = "EXTRA_ID_LOCATION";
     public static final String EXTRA_CAR_MODEL = "EXTRA_CAR_MODEL";
     public static final String EXTRA_CAR_IMMAT = "EXTRA_CAR_IMMAT";
@@ -203,9 +204,6 @@ public class LocationFormActivity extends AppCompatActivity {
             });
         }
 
-
-
-
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,6 +270,7 @@ public class LocationFormActivity extends AppCompatActivity {
 
             intent.putExtra(EXTRA_DATE_START, dateStartString);
             intent.putExtra(EXTRA_DATE_END, dateEndString);
+            intent.putExtra(EXTRA_USER_ID, userId);
             intent.putExtra(EXTRA_FULL_USER_NAME, (Serializable) user);
 
             if (idCar != 0)

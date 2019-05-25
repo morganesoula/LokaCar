@@ -133,7 +133,7 @@ public class CarsRentedFragment extends Fragment {
                 if (direction == ItemTouchHelper.RIGHT){
                     Intent intent = new Intent(getActivity(), ListLocationsActivity.class);
                     int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
-                    intent.putExtra(CarsAvailableFragment.EXTRA_ID_CAR, id);
+                    intent.putExtra(CarsRentedFragment.EXTRA_ID_CAR, id);
 
                     startActivity(intent);
                 }
@@ -268,7 +268,7 @@ public class CarsRentedFragment extends Fragment {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
                 int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
-                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER,0);
+                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
                 Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
 

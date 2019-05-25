@@ -287,7 +287,7 @@ public class CarsAvailableFragment extends Fragment {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
                 int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
-                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER,0);
+                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
                 Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
 

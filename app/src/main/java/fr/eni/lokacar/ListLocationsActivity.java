@@ -15,10 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import fr.eni.lokacar.adapter.LocationRecyclerAdapter;
 import fr.eni.lokacar.model.Location;
@@ -37,8 +37,6 @@ public class ListLocationsActivity extends AppCompatActivity {
     private TextView emptyList;
 
     public User user;
-
-    private int idLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +74,8 @@ public class ListLocationsActivity extends AppCompatActivity {
                     emptyList.setVisibility(View.VISIBLE);
                     emptyList.setText(R.string.empty_location_list);
                 } else {
-                    adapter.setLocations(locations);
                     emptyList.setVisibility(View.GONE);
+                    adapter.setLocations(locations);
                 }
 
             }
@@ -127,35 +125,28 @@ public class ListLocationsActivity extends AppCompatActivity {
         if (requestCode == REQUEST_EDIT_LOCATION && resultCode == RESULT_OK)
         {
             // If location already exists
-            idLocation = data.getIntExtra(LocationFormActivity.EXTRA_ID_LOCATION, 0);
+            int idLocation = data.getIntExtra(LocationFormActivity.EXTRA_ID_LOCATION, 0);
 
         if (idLocation == 0)
         {
             Toast.makeText(this, R.string.update_problem, Toast.LENGTH_LONG).show();
         } else {
-
-            Date dateStart = null;
-
+            // In order to use method "parse", you need to Try/Catch
             try {
-                dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
-            } catch (ParseException e) {
+
+                Date dateStart = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
+                Date dateEnd = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
+
+                User user = (User) data.getSerializableExtra(LocationFormActivity.EXTRA_FULL_USER_NAME);
+                int userId = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID, 0);
+                int carId = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR, 0);
+
+                Location location = new Location(idLocation, dateStart, dateEnd, userId, carId);
+                locationsViewModel.update(location);
+            } catch (java.text.ParseException e )
+            {
                 e.printStackTrace();
             }
-
-            Date dateEnd = null;
-            try {
-                dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            User user = (User) data.getSerializableExtra(LocationFormActivity.EXTRA_FULL_USER_NAME);
-            int userId = user.getId();
-            int carId = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR, 0);
-
-            Location location = new Location(idLocation, dateStart, dateEnd, userId, carId);
-            locationsViewModel.update(location);
-            adapter.notifyDataSetChanged();
         }
         }
     }
