@@ -50,7 +50,7 @@ public class CarsRentedFragment extends Fragment {
     public static final int REQUEST_CODE_EDIT = 2;
     public static final int REQUEST_ADD_LOCATION = 3;
 
-    public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
+    public static final String EXTRA_ID_CAR_RENTED = "EXTRA_ID_CAR_RENTED";
 
     private CarsViewModel carsViewModel;
     private LocationsViewModel locationsViewModel;
@@ -121,7 +121,7 @@ public class CarsRentedFragment extends Fragment {
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
                     intent.putExtra(CarFormActivity.EXTRA_ID, idRentedCar);
-                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR, idRentedCar);
+                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, idRentedCar);
                     intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
                     intent.putExtra(LocationFormActivity.EXTRA_CAR_MODEL, carmodel);
                     intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
@@ -133,7 +133,8 @@ public class CarsRentedFragment extends Fragment {
                 if (direction == ItemTouchHelper.RIGHT){
                     Intent intent = new Intent(getActivity(), ListLocationsActivity.class);
                     int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
-                    intent.putExtra(CarsRentedFragment.EXTRA_ID_CAR, id);
+
+                    intent.putExtra(EXTRA_ID_CAR_RENTED, id); // id 3
 
                     startActivity(intent);
                 }
@@ -267,7 +268,7 @@ public class CarsRentedFragment extends Fragment {
             try {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
-                int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
+                int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED,0);
                 int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
                 Location location = new Location(0, dateStart, dateEnd, idUser, idCar);

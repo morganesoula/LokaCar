@@ -23,6 +23,7 @@ import java.util.Locale;
 import fr.eni.lokacar.adapter.LocationRecyclerAdapter;
 import fr.eni.lokacar.model.Location;
 import fr.eni.lokacar.model.User;
+import fr.eni.lokacar.view_model.CarsViewModel;
 import fr.eni.lokacar.view_model.LocationsViewModel;
 import fr.eni.lokacar.view_model.UsersViewModel;
 
@@ -32,9 +33,15 @@ public class ListLocationsActivity extends AppCompatActivity {
 
     private LocationsViewModel locationsViewModel;
     private UsersViewModel usersViewModel;
+    private CarsViewModel carsViewModel;
     private LocationRecyclerAdapter adapter;
 
     private TextView emptyList;
+
+    public int idCarAvailable;
+    public int idCarRented;
+
+    public int carId;
 
     public User user;
 
@@ -43,6 +50,10 @@ public class ListLocationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_locations);
         setTitle(R.string.locations);
+
+        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
+        locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+        carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
 
         // Locations' list is empty
         emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
@@ -58,35 +69,62 @@ public class ListLocationsActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         // Get id of the locations' car
-        final int idCar = intent.getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR,0);
-
-        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
-        locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+        // Get id from the good Fragment
+        idCarAvailable = intent.getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR_AVAILABLE,0);
+        idCarRented = intent.getIntExtra(CarsRentedFragment.EXTRA_ID_CAR_RENTED, 0);
 
         // Observer on viewModel to update list of locations
         // Request to select locations of the car's id
-        locationsViewModel.getAllByCar(idCar).observe(this, new Observer<List<Location>>() {
-            @Override
-            public void onChanged(@Nullable List<Location> locations) {
+        if (idCarAvailable == 0) // Then, coming from the RentedFragment
+        {
+            locationsViewModel.getAllByCar(idCarRented).observe(this, new Observer<List<Location>>() {
+                @Override
+                public void onChanged(@Nullable List<Location> locations) {
 
-                if (locations.isEmpty())
-                {
-                    emptyList.setVisibility(View.VISIBLE);
-                    emptyList.setText(R.string.empty_location_list);
-                } else {
-                    emptyList.setVisibility(View.GONE);
-                    adapter.setLocations(locations);
+                    if (locations.isEmpty())
+                    {
+                        emptyList.setVisibility(View.VISIBLE);
+                        emptyList.setText(R.string.empty_location_list);
+                    } else {
+                        emptyList.setVisibility(View.GONE);
+                        adapter.setLocations(locations);
+                    }
+
                 }
+            });
+        } else {
+            // Then, coming from the AvailableFragment
+            locationsViewModel.getAllByCar(idCarAvailable).observe(this, new Observer<List<Location>>() {
+                @Override
+                public void onChanged(@Nullable List<Location> locations) {
 
-            }
-        });
+                    if (locations.isEmpty())
+                    {
+                        emptyList.setVisibility(View.VISIBLE);
+                        emptyList.setText(R.string.empty_location_list);
+                    } else {
+                        emptyList.setVisibility(View.GONE);
+                        adapter.setLocations(locations);
+                    }
+
+                }
+            });
+        }
+
 
         adapter.setOnItemClickListener(new LocationRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final Location location) {
                 Intent intent1 = new Intent(ListLocationsActivity.this, LocationFormActivity.class);
                 intent1.putExtra(LocationFormActivity.EXTRA_ID_LOCATION, location.getId());
-                intent1.putExtra(LocationFormActivity.EXTRA_ID_CAR, idCar);
+
+                if (idCarAvailable == 0)
+                {
+                    intent1.putExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, location.getCarId());
+                } else {
+                    intent1.putExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE, location.getCarId());
+                }
+
                 intent1.putExtra(LocationFormActivity.EXTRA_DATE_START, (Serializable) location.getDateStart());
                 intent1.putExtra(LocationFormActivity.EXTRA_DATE_END, (Serializable) location.getDateEnd());
 
@@ -139,15 +177,26 @@ public class ListLocationsActivity extends AppCompatActivity {
 
                 User user = (User) data.getSerializableExtra(LocationFormActivity.EXTRA_FULL_USER_NAME);
                 int userId = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID, 0);
-                int carId = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR, 0);
+
+                int idCarAvailableUpdated = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE, 0);
+                int idCarRentedUpdated = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, 0);
+
+                if (idCarAvailableUpdated == 0)
+                {
+                    carId = idCarRentedUpdated;
+                } else {
+                    carId = idCarAvailableUpdated;
+                }
 
                 Location location = new Location(idLocation, dateStart, dateEnd, userId, carId);
                 locationsViewModel.update(location);
-            } catch (java.text.ParseException e )
+            } catch (java.text.ParseException e)
             {
                 e.printStackTrace();
             }
         }
+        } else {
+            Toast.makeText(this, R.string.save_failure, Toast.LENGTH_LONG).show();
         }
     }
 }
