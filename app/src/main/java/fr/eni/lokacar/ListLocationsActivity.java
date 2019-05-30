@@ -23,7 +23,6 @@ import java.util.Locale;
 import fr.eni.lokacar.adapter.LocationRecyclerAdapter;
 import fr.eni.lokacar.model.Location;
 import fr.eni.lokacar.model.User;
-import fr.eni.lokacar.view_model.CarsViewModel;
 import fr.eni.lokacar.view_model.LocationsViewModel;
 import fr.eni.lokacar.view_model.UsersViewModel;
 
@@ -33,7 +32,6 @@ public class ListLocationsActivity extends AppCompatActivity {
 
     private LocationsViewModel locationsViewModel;
     private UsersViewModel usersViewModel;
-    private CarsViewModel carsViewModel;
     private LocationRecyclerAdapter adapter;
 
     private TextView emptyList;
@@ -42,8 +40,8 @@ public class ListLocationsActivity extends AppCompatActivity {
     public int idCarRented;
 
     public int carId;
-
     public User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class ListLocationsActivity extends AppCompatActivity {
 
         usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
         locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
-        carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
 
         // Locations' list is empty
         emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
@@ -89,7 +86,6 @@ public class ListLocationsActivity extends AppCompatActivity {
                         emptyList.setVisibility(View.GONE);
                         adapter.setLocations(locations);
                     }
-
                 }
             });
         } else {
@@ -110,7 +106,6 @@ public class ListLocationsActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         adapter.setOnItemClickListener(new LocationRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -145,13 +140,16 @@ public class ListLocationsActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                locationsViewModel.delete(adapter.getLocation(position));
+                                Location location = adapter.getLocation(position);
+                                locationsViewModel.delete(location);
                                 adapter.notifyDataSetChanged();
+                                Toast.makeText(ListLocationsActivity.this, "Location deleted", Toast.LENGTH_LONG).show();
                             }
                         }).show();
                 return true;
             }
         });
+
 
     }
 

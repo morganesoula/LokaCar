@@ -39,13 +39,24 @@ public class LocationsViewModel extends AndroidViewModel {
         return repository.getAllByCar(idCar);
     }
 
+    public Location getOne(int id)
+    {
+        return repository.getOne(id);
+    }
+
     public void update(Location location)
     {
+        Log.i("XXX", "Etape ViewModel");
         repository.update(location);
     }
 
     public void delete(Location location)
     {
         repository.delete(location);
+    }
+
+    public void deleteById(int id)
+    {
+        repository.deleteById(id);
     }
 }

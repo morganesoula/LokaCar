@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -166,7 +167,6 @@ public class CarsAvailableFragment extends Fragment {
         // If no cars registered
         emptyList = view.findViewById(R.id.empty_list_cars_available_txt_view);
 
-
         carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
 
         // Observer on view model to update list cars
@@ -279,6 +279,7 @@ public class CarsAvailableFragment extends Fragment {
                 }
 
                 Car car = new Car(id, immatriculation, price, isRestore, photoPath, model, carType);
+                Log.i("XXX", "Etape Car Activity");
                 carsViewModel.update(car);
             }
         } else if (requestCode == REQUEST_ADD_LOCATION && resultCode == Activity.RESULT_OK)

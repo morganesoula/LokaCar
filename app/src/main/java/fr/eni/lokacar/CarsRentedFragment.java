@@ -58,6 +58,7 @@ public class CarsRentedFragment extends Fragment {
     private String photoPath;
 
     private CarRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
 
     public CarsRentedFragment() {
     }
@@ -75,7 +76,7 @@ public class CarsRentedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cars_rented, container, false);
 
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cars_rented_recycler);
+        recyclerView = (RecyclerView) view.findViewById(R.id.cars_rented_recycler);
         recyclerView.setHasFixedSize(true);
 
         adapter = new CarRecyclerAdapter();
@@ -165,9 +166,12 @@ public class CarsRentedFragment extends Fragment {
                 {
                     emptyListCarsRented.setVisibility(View.VISIBLE);
                     emptyListCarsRented.setText(R.string.empty_cars_rented_list);
+
+                    recyclerView.setVisibility(View.GONE);
                 } else {
-                    emptyListCarsRented.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                     adapter.setCars(cars);
+                    emptyListCarsRented.setVisibility(View.GONE);
                 }
             }
         });
