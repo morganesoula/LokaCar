@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.ListLocationsActivity;
@@ -22,9 +23,9 @@ import fr.eni.lokacar.view_model.UsersViewModel;
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecyclerAdapter.ViewHolder>{
 
 
-    private List<Location> listLocations;
-    private Context context;
-    private UsersViewModel userViewModel;
+    List<Location> listLocations = new ArrayList<>();
+    Context context;
+    UsersViewModel userViewModel;
 
     User user;
 

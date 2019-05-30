@@ -133,7 +133,7 @@ public class LocationFormActivity extends AppCompatActivity {
             }
 
             User user = (User) intent.getSerializableExtra(EXTRA_USER);
-            userPosition = user.getId();
+            userPosition = user.getIdUser();
 
             tvusers.post(new Runnable() {
                 @Override

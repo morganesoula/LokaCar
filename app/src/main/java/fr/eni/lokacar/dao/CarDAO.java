@@ -20,7 +20,7 @@ public interface CarDAO {
     @Query("SELECT * FROM Car WHERE isRestore = 0")
     LiveData<List<Car>> getAllCarsRented();
 
-    @Query("SELECT * FROM Car WHERE id = :id")
+    @Query("SELECT * FROM Car WHERE idCar = :id")
     Car getCar(int id);
 
     @Insert

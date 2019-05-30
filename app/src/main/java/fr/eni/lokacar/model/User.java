@@ -15,15 +15,15 @@ public class User implements Parcelable, Serializable {
 
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int idUser;
     private String name;
     private String firstname;
     private String phoneNumber;
     private String email;
 
     @Ignore
-    public User(int id, String name, String firstname, String phoneNumber, String email) {
-        this.id = id;
+    public User(int idUser, String name, String firstname, String phoneNumber, String email) {
+        this.idUser = idUser;
         this.name = name;
         this.firstname = firstname;
         this.phoneNumber = phoneNumber;
@@ -39,7 +39,7 @@ public class User implements Parcelable, Serializable {
 
     @Ignore
     protected User(Parcel in) {
-        id = in.readInt();
+        idUser = in.readInt();
         name = in.readString();
         firstname = in.readString();
         phoneNumber = in.readString();
@@ -58,12 +58,12 @@ public class User implements Parcelable, Serializable {
         }
     };
 
-    public int getId() {
-        return id;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
     public String getName() {
@@ -101,7 +101,7 @@ public class User implements Parcelable, Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "idUser=" + idUser +
                 ", name='" + name + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -116,7 +116,7 @@ public class User implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
+        parcel.writeInt(idUser);
         parcel.writeString(name);
         parcel.writeString(firstname);
         parcel.writeString(phoneNumber);

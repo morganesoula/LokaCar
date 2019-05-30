@@ -42,6 +42,8 @@ public class ListLocationsActivity extends AppCompatActivity {
     public int carId;
     public User user;
 
+    private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class ListLocationsActivity extends AppCompatActivity {
         emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
         adapter = new LocationRecyclerAdapter(this, null);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.locations_recycler);
+        recyclerView = (RecyclerView) findViewById(R.id.locations_recycler);
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -82,9 +84,13 @@ public class ListLocationsActivity extends AppCompatActivity {
                     {
                         emptyList.setVisibility(View.VISIBLE);
                         emptyList.setText(R.string.empty_location_list);
+
+                        recyclerView.setVisibility(View.GONE);
                     } else {
-                        emptyList.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                         adapter.setLocations(locations);
+
+                        emptyList.setVisibility(View.GONE);
                     }
                 }
             });
@@ -109,9 +115,11 @@ public class ListLocationsActivity extends AppCompatActivity {
 
         adapter.setOnItemClickListener(new LocationRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(final Location location) {
+            public void onItemClick(Location location) {
                 Intent intent1 = new Intent(ListLocationsActivity.this, LocationFormActivity.class);
-                intent1.putExtra(LocationFormActivity.EXTRA_ID_LOCATION, location.getId());
+                intent1.putExtra(LocationFormActivity.EXTRA_ID_LOCATION, location.getIdLocation());
+
+                int idLocation = location.getIdLocation();
 
                 if (idCarAvailable == 0)
                 {

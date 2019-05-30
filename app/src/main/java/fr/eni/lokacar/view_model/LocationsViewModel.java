@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -46,7 +45,6 @@ public class LocationsViewModel extends AndroidViewModel {
 
     public void update(Location location)
     {
-        Log.i("XXX", "Etape ViewModel");
         repository.update(location);
     }
 
@@ -55,8 +53,4 @@ public class LocationsViewModel extends AndroidViewModel {
         repository.delete(location);
     }
 
-    public void deleteById(int id)
-    {
-        repository.deleteById(id);
-    }
 }

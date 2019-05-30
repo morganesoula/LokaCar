@@ -61,11 +61,6 @@ public class LocationRepository {
         asyncDelete.execute(location);
     }
 
-    public void deleteById(int position)
-    {
-        locationDAO.deleteById(position);
-    }
-
 
     /**
      * Asynchrone tasks

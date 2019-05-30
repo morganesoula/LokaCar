@@ -17,10 +17,10 @@ public interface LocationDAO {
     @Query("SELECT * FROM location")
     LiveData<List<Location>> getAll();
 
-    @Query("SELECT * FROM location INNER JOIN car ON car.id = location.carId WHERE car.id = :id")
+    @Query("SELECT * FROM location INNER JOIN car ON car.idCar = location.carId WHERE car.idCar = :id ORDER BY dateStart")
     LiveData<List<Location>> getAllByCar(int id);
 
-    @Query("SELECT * FROM location WHERE id = :id")
+    @Query("SELECT * FROM location WHERE idLocation = :id")
     Location getOne(int id);
 
     @Insert
@@ -31,7 +31,4 @@ public interface LocationDAO {
 
     @Delete
     void delete(Location location);
-
-    @Query("DELETE FROM location WHERE id = :id")
-    void deleteById(int id);
 }
