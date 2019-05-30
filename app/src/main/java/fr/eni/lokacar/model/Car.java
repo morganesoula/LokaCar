@@ -13,7 +13,7 @@ import android.os.Parcelable;
 public class Car implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int idCar;
     private String immatriculation;
     private float price;
     private boolean isRestore;
@@ -27,8 +27,8 @@ public class Car implements Parcelable{
     public Car() {
     }
 
-    public Car(int id, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
-        this.id = id;
+    public Car(int idCar, String immatriculation, float price, boolean isRestore, String imagePath, String model, CarType carType) {
+        this.idCar = idCar;
         this.immatriculation = immatriculation;
         this.price = price;
         this.isRestore = isRestore;
@@ -37,8 +37,9 @@ public class Car implements Parcelable{
         this.carType = carType;
     }
 
+
     protected Car(Parcel in) {
-        id = in.readInt();
+        idCar = in.readInt();
         immatriculation = in.readString();
         price = in.readFloat();
         isRestore = in.readByte() != 0;
@@ -59,12 +60,12 @@ public class Car implements Parcelable{
         }
     };
 
-    public int getId() {
-        return id;
+    public int getIdCar() {
+        return idCar;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdCar(int idCar) {
+        this.idCar = idCar;
     }
 
     public String getImmatriculation() {
@@ -118,7 +119,7 @@ public class Car implements Parcelable{
     @Override
     public String toString() {
         return "Car{" +
-                "id=" + id +
+                "idCar=" + idCar +
                 ", immatriculation='" + immatriculation + '\'' +
                 ", price=" + price +
                 ", isRestore=" + isRestore +
@@ -138,7 +139,7 @@ public class Car implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i)
     {
-        parcel.writeInt(id);
+        parcel.writeInt(idCar);
         parcel.writeString(immatriculation);
         parcel.writeFloat(price);
 

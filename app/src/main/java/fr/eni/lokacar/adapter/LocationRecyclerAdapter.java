@@ -1,40 +1,31 @@
 package fr.eni.lokacar.adapter;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.ListLocationsActivity;
-import fr.eni.lokacar.LocationFormActivity;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.model.Location;
 import fr.eni.lokacar.model.User;
-import fr.eni.lokacar.repository.UserRepository;
 import fr.eni.lokacar.view_model.UsersViewModel;
 
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecyclerAdapter.ViewHolder>{
 
 
-    private List<Location> listLocations;
-    private Context context;
-    private UsersViewModel userViewModel;
+    List<Location> listLocations = new ArrayList<>();
+    Context context;
+    UsersViewModel userViewModel;
 
     User user;
 
@@ -53,7 +44,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     @Override
     public LocationRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View locationLine = LayoutInflater.from(parent.getContext()).inflate(R.layout.location_line, parent, false);
-
         return new ViewHolder(locationLine);
     }
 
@@ -104,7 +94,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         private TextView locationUserFullName;
 
 
-        public ViewHolder(View locationLine) {
+        public ViewHolder(final View locationLine) {
             super(locationLine);
 
             locationStart = (TextView) locationLine.findViewById(R.id.tv_date_start);
@@ -124,7 +114,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
             locationLine.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if (listener != null)
+                    if (listenerLongClick != null)
                     {
                         listenerLongClick.onItemLongClicked(getAdapterPosition());
                         return true;

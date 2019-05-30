@@ -36,7 +36,14 @@ public class ListLocationsActivity extends AppCompatActivity {
 
     private TextView emptyList;
 
+    public int idCarAvailable;
+    public int idCarRented;
+
+    public int carId;
     public User user;
+
+    private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +51,14 @@ public class ListLocationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_locations);
         setTitle(R.string.locations);
 
+        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
+        locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+
         // Locations' list is empty
         emptyList = (TextView) findViewById(R.id.empty_list_locations_txt_view);
         adapter = new LocationRecyclerAdapter(this, null);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.locations_recycler);
+        recyclerView = (RecyclerView) findViewById(R.id.locations_recycler);
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -58,35 +68,66 @@ public class ListLocationsActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         // Get id of the locations' car
-        final int idCar = intent.getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR,0);
-
-        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
-        locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
+        // Get id from the good Fragment
+        idCarAvailable = intent.getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR_AVAILABLE,0);
+        idCarRented = intent.getIntExtra(CarsRentedFragment.EXTRA_ID_CAR_RENTED, 0);
 
         // Observer on viewModel to update list of locations
         // Request to select locations of the car's id
-        locationsViewModel.getAllByCar(idCar).observe(this, new Observer<List<Location>>() {
-            @Override
-            public void onChanged(@Nullable List<Location> locations) {
+        if (idCarAvailable == 0) // Then, coming from the RentedFragment
+        {
+            locationsViewModel.getAllByCar(idCarRented).observe(this, new Observer<List<Location>>() {
+                @Override
+                public void onChanged(@Nullable List<Location> locations) {
 
-                if (locations.isEmpty())
-                {
-                    emptyList.setVisibility(View.VISIBLE);
-                    emptyList.setText(R.string.empty_location_list);
-                } else {
-                    emptyList.setVisibility(View.GONE);
-                    adapter.setLocations(locations);
+                    if (locations.isEmpty())
+                    {
+                        emptyList.setVisibility(View.VISIBLE);
+                        emptyList.setText(R.string.empty_location_list);
+
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        adapter.setLocations(locations);
+
+                        emptyList.setVisibility(View.GONE);
+                    }
                 }
+            });
+        } else {
+            // Then, coming from the AvailableFragment
+            locationsViewModel.getAllByCar(idCarAvailable).observe(this, new Observer<List<Location>>() {
+                @Override
+                public void onChanged(@Nullable List<Location> locations) {
 
-            }
-        });
+                    if (locations.isEmpty())
+                    {
+                        emptyList.setVisibility(View.VISIBLE);
+                        emptyList.setText(R.string.empty_location_list);
+                    } else {
+                        emptyList.setVisibility(View.GONE);
+                        adapter.setLocations(locations);
+                    }
+
+                }
+            });
+        }
 
         adapter.setOnItemClickListener(new LocationRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(final Location location) {
+            public void onItemClick(Location location) {
                 Intent intent1 = new Intent(ListLocationsActivity.this, LocationFormActivity.class);
-                intent1.putExtra(LocationFormActivity.EXTRA_ID_LOCATION, location.getId());
-                intent1.putExtra(LocationFormActivity.EXTRA_ID_CAR, idCar);
+                intent1.putExtra(LocationFormActivity.EXTRA_ID_LOCATION, location.getIdLocation());
+
+                int idLocation = location.getIdLocation();
+
+                if (idCarAvailable == 0)
+                {
+                    intent1.putExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, location.getCarId());
+                } else {
+                    intent1.putExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE, location.getCarId());
+                }
+
                 intent1.putExtra(LocationFormActivity.EXTRA_DATE_START, (Serializable) location.getDateStart());
                 intent1.putExtra(LocationFormActivity.EXTRA_DATE_END, (Serializable) location.getDateEnd());
 
@@ -107,13 +148,16 @@ public class ListLocationsActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                locationsViewModel.delete(adapter.getLocation(position));
+                                Location location = adapter.getLocation(position);
+                                locationsViewModel.delete(location);
                                 adapter.notifyDataSetChanged();
+                                Toast.makeText(ListLocationsActivity.this, "Location deleted", Toast.LENGTH_LONG).show();
                             }
                         }).show();
                 return true;
             }
         });
+
 
     }
 
@@ -139,15 +183,26 @@ public class ListLocationsActivity extends AppCompatActivity {
 
                 User user = (User) data.getSerializableExtra(LocationFormActivity.EXTRA_FULL_USER_NAME);
                 int userId = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID, 0);
-                int carId = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR, 0);
+
+                int idCarAvailableUpdated = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE, 0);
+                int idCarRentedUpdated = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, 0);
+
+                if (idCarAvailableUpdated == 0)
+                {
+                    carId = idCarRentedUpdated;
+                } else {
+                    carId = idCarAvailableUpdated;
+                }
 
                 Location location = new Location(idLocation, dateStart, dateEnd, userId, carId);
                 locationsViewModel.update(location);
-            } catch (java.text.ParseException e )
+            } catch (java.text.ParseException e)
             {
                 e.printStackTrace();
             }
         }
+        } else {
+            Toast.makeText(this, R.string.save_failure, Toast.LENGTH_LONG).show();
         }
     }
 }

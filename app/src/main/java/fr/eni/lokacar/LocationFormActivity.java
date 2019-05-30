@@ -44,7 +44,8 @@ public class LocationFormActivity extends AppCompatActivity {
     public static final String EXTRA_DATE_START = "EXTRA_DATE_START";
     public static final String EXTRA_DATE_END = "EXTRA_DATE_END";
     public static final String EXTRA_USER = "EXTRA_USER";
-    public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
+    public static final String EXTRA_ID_CAR_RENTED = "EXTRA_ID_CAR_RENTED";
+    public static final String EXTRA_ID_CAR_AVAILABLE = "EXTRA_ID_CAR_AVAILABLE";
     public static final String EXTRA_FULL_USER_NAME = "KEY_FULL_USER_NAME";
     public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
     public static final String EXTRA_ID_LOCATION = "EXTRA_ID_LOCATION";
@@ -108,10 +109,16 @@ public class LocationFormActivity extends AppCompatActivity {
         {
             setTitle(R.string.updateLoation);
 
-            if (intent.getIntExtra(EXTRA_ID_CAR, 0) != 0)
+            int idCarRentedUpdated = intent.getIntExtra(EXTRA_ID_CAR_RENTED, 0);
+            int idCarAvailableUpdated = intent.getIntExtra(EXTRA_ID_CAR_AVAILABLE, 0);
+
+            if (idCarAvailableUpdated == 0)
             {
-                idCar = intent.getIntExtra(EXTRA_ID_CAR, 0);
+                idCar = intent.getIntExtra(EXTRA_ID_CAR_RENTED, 0);
+            } else {
+                idCar = intent.getIntExtra(EXTRA_ID_CAR_AVAILABLE, 0);
             }
+
 
             if (idCar != 0)
             {
@@ -126,7 +133,7 @@ public class LocationFormActivity extends AppCompatActivity {
             }
 
             User user = (User) intent.getSerializableExtra(EXTRA_USER);
-            userPosition = user.getId();
+            userPosition = user.getIdUser();
 
             tvusers.post(new Runnable() {
                 @Override
@@ -260,7 +267,15 @@ public class LocationFormActivity extends AppCompatActivity {
         int userId = tvusers.getSelectedItemPosition() + 1;
         User user = usersViewModel.getUser(userId);
 
-        idCar = getIntent().getIntExtra(EXTRA_ID_CAR, 0);
+        int idCarAvailable = getIntent().getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR_AVAILABLE, 0);
+        int idCarRented = getIntent().getIntExtra(CarsRentedFragment.EXTRA_ID_CAR_RENTED, 0);
+
+        if (idCarAvailable == 0)
+        {
+            idCar = idCarRented;
+        } else {
+            idCar = idCarAvailable;
+        }
 
 
         if (tvusers.getSelectedItem() == null) {
@@ -275,7 +290,12 @@ public class LocationFormActivity extends AppCompatActivity {
 
             if (idCar != 0)
             {
-                intent.putExtra(EXTRA_ID_CAR, idCar);
+                if (idCarAvailable == 0)
+                {
+                    intent.putExtra(EXTRA_ID_CAR_RENTED, idCar);
+                } else {
+                    intent.putExtra(EXTRA_ID_CAR_AVAILABLE, idCar);
+                }
             } else {
                 Toast.makeText(this, "Problem with id's car", Toast.LENGTH_LONG).show();
             }

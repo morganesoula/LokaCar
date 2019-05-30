@@ -107,7 +107,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
             carLine.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if (listener != null)
+                    if (listenerLongClick != null)
                     {
                         listenerLongClick.onItemLongClicked(getAdapterPosition());
                         return true;

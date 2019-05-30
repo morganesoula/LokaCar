@@ -51,7 +51,7 @@ public class CarFormActivity extends AppCompatActivity {
     public static final String EXTRA_TYPE = "cle_car_type";
     public static final String EXTRA_ISRESTORE = "cle_is_restore";
     public static final String EXTRA_PHOTO = "cle_photo";
-    public static final String EXTRA_ID = "string_car_id";
+    public static final String EXTRA_ID_CAR = "string_car_id";
 
     static final int REQUEST_IMAGE_CAPTURE = 100;
     static final int REQUEST_CAR_TYPE_FORM = 200;
@@ -119,7 +119,7 @@ public class CarFormActivity extends AppCompatActivity {
         intent.getParcelableExtra("car");
 
         // If car has already been registered
-        if (intent.hasExtra(EXTRA_ID)) {
+        if (intent.hasExtra(EXTRA_ID_CAR)) {
             setTitle(R.string.update);
 
             btnAddPhoto.setText("Update photo");
@@ -286,10 +286,10 @@ public class CarFormActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_TYPE, (Serializable) carType);
             intent.putExtra(EXTRA_PHOTO, photoPath);
 
-            int id = getIntent().getIntExtra(EXTRA_ID, 0);
+            int id = getIntent().getIntExtra(EXTRA_ID_CAR, 0);
 
             if (id != 0) {
-                intent.putExtra(EXTRA_ID, id);
+                intent.putExtra(EXTRA_ID_CAR, id);
             }
 
             setResult(RESULT_OK, intent);

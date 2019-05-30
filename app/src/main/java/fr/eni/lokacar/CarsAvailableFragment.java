@@ -44,11 +44,11 @@ public class CarsAvailableFragment extends Fragment {
 
     private View view;
 
-    public static final int REQUEST_CODE_ADD = 1;
-    public static final int REQUEST_CODE_EDIT = 2;
+    public static final int REQUEST_ADD_CAR = 1;
+    public static final int REQUEST_EDIT_CAR = 2;
     public static final int REQUEST_ADD_LOCATION = 3;
 
-    public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
+    public static final String EXTRA_ID_CAR_AVAILABLE = "EXTRA_ID_CAR_AVAILABLE";
 
     private CarsViewModel carsViewModel;
     private LocationsViewModel locationsViewModel;
@@ -117,12 +117,12 @@ public class CarsAvailableFragment extends Fragment {
 
                 if (direction == ItemTouchHelper.LEFT){
                     Intent intent = new Intent(getActivity(), LocationFormActivity.class);
-                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
                     String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
-                    intent.putExtra(CarFormActivity.EXTRA_ID, id);
-                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR, id);
+                    intent.putExtra(CarFormActivity.EXTRA_ID_CAR, id);
+                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE, id);
                     intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
                     intent.putExtra(LocationFormActivity.EXTRA_CAR_MODEL, carmodel);
                     intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
@@ -133,8 +133,9 @@ public class CarsAvailableFragment extends Fragment {
 
                 if (direction == ItemTouchHelper.RIGHT){
                     Intent intent = new Intent(getActivity(), ListLocationsActivity.class);
-                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
-                    intent.putExtra(CarsAvailableFragment.EXTRA_ID_CAR, id);
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+
+                    intent.putExtra(EXTRA_ID_CAR_AVAILABLE, id); //2
 
                     startActivity(intent);
                 }
@@ -150,7 +151,7 @@ public class CarsAvailableFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), CarFormActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ADD);
+                startActivityForResult(intent, REQUEST_ADD_CAR);
             }
 
         });
@@ -165,8 +166,8 @@ public class CarsAvailableFragment extends Fragment {
         // If no cars registered
         emptyList = view.findViewById(R.id.empty_list_cars_available_txt_view);
 
-
         carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
+        locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
 
         // Observer on view model to update list cars
         // Method calls cars that are ONLY available (!= rented)
@@ -194,19 +195,21 @@ public class CarsAvailableFragment extends Fragment {
             @Override
             public void onItemClick(Car car) {
                 Intent intent = new Intent(getActivity(), CarFormActivity.class);
-                intent.putExtra(CarFormActivity.EXTRA_ID, car.getId());
+                intent.putExtra(CarFormActivity.EXTRA_ID_CAR, car.getIdCar());
                 intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
                 intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
                 intent.putExtra(CarFormActivity.EXTRA_TYPE, (Serializable) car.getCarType());
                 intent.putExtra(CarFormActivity.EXTRA_ISRESTORE, car.isRestore());
 
+                int idCar = car.getIdCar();
+
                 if (car.getImagePath() != null)
                 {
                     intent.putExtra(CarFormActivity.EXTRA_PHOTO, car.getImagePath());
                 }
 
-                startActivityForResult(intent, REQUEST_CODE_EDIT);
+                startActivityForResult(intent, REQUEST_EDIT_CAR);
             }
         });
 
@@ -237,7 +240,7 @@ public class CarsAvailableFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         // If new car
-        if (requestCode == REQUEST_CODE_ADD && resultCode == Activity.RESULT_OK)
+        if (requestCode == REQUEST_ADD_CAR && resultCode == Activity.RESULT_OK)
         {
             String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
             String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
@@ -255,10 +258,10 @@ public class CarsAvailableFragment extends Fragment {
             Car car = new Car(0, immatriculation, price, isRestore, photoPath, model, carType);
             carsViewModel.insert(car);
 
-        } else if (requestCode == REQUEST_CODE_EDIT && resultCode == Activity.RESULT_OK)
+        } else if (requestCode == REQUEST_EDIT_CAR && resultCode == Activity.RESULT_OK)
         {
             // If car already exists
-            int id = data.getIntExtra(CarFormActivity.EXTRA_ID, 0);
+            int id = data.getIntExtra(CarFormActivity.EXTRA_ID_CAR, 0);
 
             if (id == 0)
             {
@@ -286,13 +289,13 @@ public class CarsAvailableFragment extends Fragment {
             try {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
-                int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
+                int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE,0);
                 int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
                 Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
-
-                locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
                 locationsViewModel.insert(location);
+
+                Toast.makeText(getContext(), "Location saved", Toast.LENGTH_LONG).show();
 
             } catch (ParseException e) {
                 e.printStackTrace();

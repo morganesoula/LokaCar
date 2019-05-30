@@ -13,27 +13,29 @@ import java.util.Date;
         @ForeignKey(
                 onDelete = ForeignKey.CASCADE,
                 entity = User.class,
-                parentColumns = "id",
+                parentColumns = "idUser",
                 childColumns = "userId"),
         @ForeignKey(
                 onDelete = ForeignKey.CASCADE,
+                onUpdate = ForeignKey.CASCADE,
                 entity = Car.class,
-                parentColumns = "id",
+                parentColumns = "idCar",
                 childColumns = "carId")
 })
 
 public class Location implements Parcelable{
 
-    @PrimaryKey (autoGenerate = true)
-    private int id;
+    @PrimaryKey(autoGenerate = true)
+    private int idLocation;
+
     private Date dateStart;
     private Date dateEnd;
     private int userId;
     private int carId;
 
 
-    public Location(int id, Date dateStart, Date dateEnd, int userId, int carId) {
-        this.id = id;
+    public Location(int idLocation, Date dateStart, Date dateEnd, int userId, int carId) {
+        this.idLocation = idLocation;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.userId = userId;
@@ -42,7 +44,7 @@ public class Location implements Parcelable{
 
 
     protected Location(Parcel in) {
-        id = in.readInt();
+        idLocation = in.readInt();
         userId = in.readInt();
         carId = in.readInt();
 
@@ -60,12 +62,12 @@ public class Location implements Parcelable{
         }
     };
 
-    public int getId() {
-        return id;
+    public int getIdLocation() {
+        return idLocation;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdLocation(int id) {
+        this.idLocation = id;
     }
 
     public Date getDateStart() {
@@ -104,7 +106,7 @@ public class Location implements Parcelable{
     @Override
     public String toString() {
         return "Location{" +
-                "id=" + id +
+                "idLocation=" + idLocation +
                 ", dateStart=" + dateStart +
                 ", dateEnd=" + dateEnd +
                 ", userId=" + userId +

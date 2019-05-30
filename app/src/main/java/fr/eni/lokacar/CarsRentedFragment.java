@@ -46,11 +46,11 @@ public class CarsRentedFragment extends Fragment {
     private TextView emptyListCarsRented;
 
 
-    public static final int REQUEST_CODE_ADD = 1;
-    public static final int REQUEST_CODE_EDIT = 2;
+    public static final int REQUEST_ADD_CAR = 1;
+    public static final int REQUEST_EDIT_CAR = 2;
     public static final int REQUEST_ADD_LOCATION = 3;
 
-    public static final String EXTRA_ID_CAR = "EXTRA_ID_CAR";
+    public static final String EXTRA_ID_CAR_RENTED = "EXTRA_ID_CAR_RENTED";
 
     private CarsViewModel carsViewModel;
     private LocationsViewModel locationsViewModel;
@@ -58,6 +58,7 @@ public class CarsRentedFragment extends Fragment {
     private String photoPath;
 
     private CarRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
 
     public CarsRentedFragment() {
     }
@@ -75,7 +76,7 @@ public class CarsRentedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cars_rented, container, false);
 
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cars_rented_recycler);
+        recyclerView = (RecyclerView) view.findViewById(R.id.cars_rented_recycler);
         recyclerView.setHasFixedSize(true);
 
         adapter = new CarRecyclerAdapter();
@@ -116,12 +117,12 @@ public class CarsRentedFragment extends Fragment {
 
                 if (direction == ItemTouchHelper.LEFT){
                     Intent intent = new Intent(getActivity(), LocationFormActivity.class);
-                    int idRentedCar = adapter.getCar(viewHolder.getAdapterPosition()).getId();
+                    int idRentedCar = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
                     String carmodel = adapter.getCar(viewHolder.getAdapterPosition()).getModel();
                     String immat = adapter.getCar(viewHolder.getAdapterPosition()).getImmatriculation();
 
-                    intent.putExtra(CarFormActivity.EXTRA_ID, idRentedCar);
-                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR, idRentedCar);
+                    intent.putExtra(CarFormActivity.EXTRA_ID_CAR, idRentedCar);
+                    intent.putExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, idRentedCar);
                     intent.putExtra(CarFormActivity.EXTRA_MODEL, carmodel);
                     intent.putExtra(LocationFormActivity.EXTRA_CAR_MODEL, carmodel);
                     intent.putExtra(CarFormActivity.EXTRA_IMMAT, immat);
@@ -132,8 +133,9 @@ public class CarsRentedFragment extends Fragment {
 
                 if (direction == ItemTouchHelper.RIGHT){
                     Intent intent = new Intent(getActivity(), ListLocationsActivity.class);
-                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getId();
-                    intent.putExtra(CarsRentedFragment.EXTRA_ID_CAR, id);
+                    int id = adapter.getCar(viewHolder.getAdapterPosition()).getIdCar();
+
+                    intent.putExtra(EXTRA_ID_CAR_RENTED, id); // id 3
 
                     startActivity(intent);
                 }
@@ -154,6 +156,7 @@ public class CarsRentedFragment extends Fragment {
         emptyListCarsRented = view.findViewById(R.id.empty_list_cars_rented_txt_view);
 
         carsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
+        locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
 
         // Observer on view model to update list cars
         // Method calls cars that are ONLY rented
@@ -164,9 +167,12 @@ public class CarsRentedFragment extends Fragment {
                 {
                     emptyListCarsRented.setVisibility(View.VISIBLE);
                     emptyListCarsRented.setText(R.string.empty_cars_rented_list);
+
+                    recyclerView.setVisibility(View.GONE);
                 } else {
-                    emptyListCarsRented.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                     adapter.setCars(cars);
+                    emptyListCarsRented.setVisibility(View.GONE);
                 }
             }
         });
@@ -175,7 +181,7 @@ public class CarsRentedFragment extends Fragment {
             @Override
             public void onItemClick(Car car) {
                 Intent intent = new Intent(getActivity(), CarFormActivity.class);
-                intent.putExtra(CarFormActivity.EXTRA_ID, car.getId());
+                intent.putExtra(CarFormActivity.EXTRA_ID_CAR, car.getIdCar());
                 intent.putExtra(CarFormActivity.EXTRA_MODEL, car.getModel());
                 intent.putExtra(CarFormActivity.EXTRA_IMMAT, car.getImmatriculation());
                 intent.putExtra(CarFormActivity.EXTRA_PRICE, car.getPrice());
@@ -187,7 +193,7 @@ public class CarsRentedFragment extends Fragment {
                     intent.putExtra(CarFormActivity.EXTRA_PHOTO, car.getImagePath());
                 }
 
-                startActivityForResult(intent, REQUEST_CODE_EDIT);
+                startActivityForResult(intent, REQUEST_EDIT_CAR);
             }
         });
 
@@ -217,7 +223,7 @@ public class CarsRentedFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         // If new car
-        if (requestCode == REQUEST_CODE_ADD && resultCode == Activity.RESULT_OK)
+        if (requestCode == REQUEST_ADD_CAR && resultCode == Activity.RESULT_OK)
         {
             String model = data.getStringExtra(CarFormActivity.EXTRA_MODEL);
             String immatriculation = data.getStringExtra(CarFormActivity.EXTRA_IMMAT);
@@ -232,14 +238,13 @@ public class CarsRentedFragment extends Fragment {
                 photoPath = null;
             }
 
-
             Car car = new Car(0, immatriculation, price, isRestore, photoPath, model, carType);
             carsViewModel.insert(car);
 
-        } else if (requestCode == REQUEST_CODE_EDIT && resultCode == Activity.RESULT_OK)
+        } else if (requestCode == REQUEST_EDIT_CAR && resultCode == Activity.RESULT_OK)
         {
             // If car already exists
-            int id = data.getIntExtra(CarFormActivity.EXTRA_ID, 0);
+            int id = data.getIntExtra(CarFormActivity.EXTRA_ID_CAR, 0);
 
             if (id == 0)
             {
@@ -267,13 +272,13 @@ public class CarsRentedFragment extends Fragment {
             try {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
-                int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR,0);
+                int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED,0);
                 int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
 
                 Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
-
-                locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
                 locationsViewModel.insert(location);
+
+                Toast.makeText(getContext(), "Location saved", Toast.LENGTH_LONG).show();
 
             } catch (ParseException e) {
                 e.printStackTrace();
