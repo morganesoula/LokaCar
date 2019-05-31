@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RentersActivity"></activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="fr.eni.lokacar.provider"
@@ -24,9 +25,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths">
-            </meta-data>
+                android:resource="@xml/file_paths"></meta-data>
         </provider>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".CarFormActivity" />
         <activity android:name=".LocationFormActivity" />
@@ -41,9 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListLocationsActivity">
-
-        </activity>
+        <activity android:name=".ListLocationsActivity"></activity>
     </application>
 
 </manifest>

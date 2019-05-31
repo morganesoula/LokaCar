@@ -69,4 +69,8 @@
     <!-- Related to UserFormActivity -->
     <string name="add_renter">Add a renter</string>
 
+    <!-- Related to NavigationDrawer -->
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
+
 </resources>

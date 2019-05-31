@@ -129,8 +129,7 @@ public class CarFormActivity extends AppCompatActivity {
             String immatriculation = intent.getStringExtra(EXTRA_IMMAT);
             Boolean isrestore = intent.getBooleanExtra(EXTRA_ISRESTORE, true);
 
-            if (intent.getStringExtra(EXTRA_PHOTO) != null)
-            {
+            if (intent.getStringExtra(EXTRA_PHOTO) != null) {
                 photopath = intent.getStringExtra(EXTRA_PHOTO);
             } else {
                 photopath = null;
@@ -144,15 +143,14 @@ public class CarFormActivity extends AppCompatActivity {
             tvimmat.setText(immatriculation);
             tvprice.setText(price);
 
-            if (photopath != null)
-            {
-                imgFile = new  File(photopath);
+            if (photopath != null) {
+                imgFile = new File(photopath);
             } else {
                 imgFile = null;
             }
 
 
-            if(imgFile != null){
+            if (imgFile != null) {
 
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 tvphotocours.setImageBitmap(myBitmap);
@@ -265,8 +263,7 @@ public class CarFormActivity extends AppCompatActivity {
 
 
         // To avoid NullPointerException error
-        if (photoFile != null)
-        {
+        if (photoFile != null) {
             photoPath = photoFile.getAbsolutePath();
         } else {
             photoPath = null;

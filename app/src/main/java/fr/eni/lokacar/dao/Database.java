@@ -3,10 +3,8 @@ package fr.eni.lokacar.dao;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
 import fr.eni.lokacar.model.AgencyAuthentification;
@@ -18,7 +16,7 @@ import fr.eni.lokacar.model.User;
 import fr.eni.lokacar.model.type_converter.DateConverter;
 import fr.eni.lokacar.model.type_converter.ListConverter;
 
-@android.arch.persistence.room.Database(entities = {Car.class, CarType.class, User.class, AgencyAuthentification.class, Location.class, StatusReport.class}, version = 1, exportSchema = false)
+@android.arch.persistence.room.Database(entities = {Car.class, CarType.class, User.class, AgencyAuthentification.class, Location.class, StatusReport.class}, version = 3, exportSchema = false)
 @TypeConverters({DateConverter.class, ListConverter.class})
 public abstract class Database extends RoomDatabase {
 
