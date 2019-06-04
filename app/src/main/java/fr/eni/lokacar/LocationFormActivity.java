@@ -4,10 +4,15 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,32 +33,32 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.eni.lokacar.model.Car;
-import fr.eni.lokacar.model.User;
+import fr.eni.lokacar.model.Renter;
 import fr.eni.lokacar.view_model.CarsViewModel;
-import fr.eni.lokacar.view_model.UsersViewModel;
+import fr.eni.lokacar.view_model.RenterViewModel;
 
-public class LocationFormActivity extends AppCompatActivity {
+public class LocationFormActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MenuActivity {
 
     private TextView tvDateStart, tvDateEnd, tvCar;
-    private ImageButton btnAddUser;
+    private ImageButton btnAddRenter;
 
-    private Spinner tvusers;
+    private Spinner tvrenters;
 
-    static final int REQUEST_ADD_USER_FORM = 200;
+    static final int REQUEST_ADD_RENTER_FORM = 200;
 
     public static final String EXTRA_DATE_START = "EXTRA_DATE_START";
     public static final String EXTRA_DATE_END = "EXTRA_DATE_END";
-    public static final String EXTRA_USER = "EXTRA_USER";
+    public static final String EXTRA_RENTER = "EXTRA_RENTER";
     public static final String EXTRA_ID_CAR_RENTED = "EXTRA_ID_CAR_RENTED";
     public static final String EXTRA_ID_CAR_AVAILABLE = "EXTRA_ID_CAR_AVAILABLE";
     public static final String EXTRA_FULL_USER_NAME = "KEY_FULL_USER_NAME";
-    public static final String EXTRA_USER_ID = "EXTRA_USER_ID";
+    public static final String EXTRA_RENTER_ID = "EXTRA_RENTER_ID";
     public static final String EXTRA_ID_LOCATION = "EXTRA_ID_LOCATION";
     public static final String EXTRA_CAR_MODEL = "EXTRA_CAR_MODEL";
     public static final String EXTRA_CAR_IMMAT = "EXTRA_CAR_IMMAT";
 
     private CarsViewModel listCarsViewModel;
-    private UsersViewModel usersViewModel;
+    private RenterViewModel rentersViewModel;
 
     private Car car;
 
@@ -61,41 +66,48 @@ public class LocationFormActivity extends AppCompatActivity {
     Date dateStart;
     Date dateEnd;
 
-    private int userPosition;
+    private int renterPosition;
 
     ArrayAdapter ad;
 
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_form);
 
+        configureToolbar();
+        configureDrawerLayout();
+        configureNavigationView();
+
         tvCar = findViewById(R.id.car);
         tvDateStart = (TextView) findViewById(R.id.tv_date_debut);
         tvDateEnd = (TextView) findViewById(R.id.tv_date_fin);
-        btnAddUser = findViewById(R.id.add_user_button);
+        btnAddRenter = findViewById(R.id.add_renter_button);
         // Creation of spinner of potential renters
-        tvusers = findViewById(R.id.spinner_user);
+        tvrenters = findViewById(R.id.spinner_renter);
 
         listCarsViewModel = ViewModelProviders.of(this).get(CarsViewModel.class);
-        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
+        rentersViewModel = ViewModelProviders.of(this).get(RenterViewModel.class);
 
         // Observer on list of renters
         // Set new renters into array
-        usersViewModel.getAll().observe(this, new Observer<List<User>>() {
+        rentersViewModel.getAll().observe(this, new Observer<List<Renter>>() {
             @Override
-            public void onChanged(@Nullable List<User> users) {
+            public void onChanged(@Nullable List<Renter> renters) {
                 ArrayList labels = new ArrayList();
-                for (User user : users) {
+                for (Renter renter : renters) {
 
-                    labels.add(user.getName() + " " + user.getFirstname());
+                    labels.add(renter.getName() + " " + renter.getFirstname());
 
                 }
 
                 // Add array into spinner
-                ad = new ArrayAdapter<>(LocationFormActivity.this, R.layout.user_spinner, labels);
-                tvusers.setAdapter(ad);
+                ad = new ArrayAdapter<>(LocationFormActivity.this, R.layout.renter_spinner, labels);
+                tvrenters.setAdapter(ad);
             }
 
         });
@@ -107,7 +119,7 @@ public class LocationFormActivity extends AppCompatActivity {
         // If location has already been registered
         if (intent.hasExtra(EXTRA_ID_LOCATION))
         {
-            setTitle(R.string.updateLoation);
+            setTitle(R.string.update_location);
 
             int idCarRentedUpdated = intent.getIntExtra(EXTRA_ID_CAR_RENTED, 0);
             int idCarAvailableUpdated = intent.getIntExtra(EXTRA_ID_CAR_AVAILABLE, 0);
@@ -132,13 +144,13 @@ public class LocationFormActivity extends AppCompatActivity {
                 tvCar.setText(car.getModel() + " - " + car.getImmatriculation());
             }
 
-            User user = (User) intent.getSerializableExtra(EXTRA_USER);
-            userPosition = user.getIdUser();
+            Renter renter = (Renter) intent.getSerializableExtra(EXTRA_RENTER);
+            renterPosition = renter.getIdRenter();
 
-            tvusers.post(new Runnable() {
+            tvrenters.post(new Runnable() {
                 @Override
                 public void run() {
-                    tvusers.setSelection(userPosition - 1);
+                    tvrenters.setSelection(renterPosition - 1);
                 }
             });
 
@@ -211,11 +223,11 @@ public class LocationFormActivity extends AppCompatActivity {
             });
         }
 
-        btnAddUser.setOnClickListener(new View.OnClickListener() {
+        btnAddRenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LocationFormActivity.this, UserFormActivity.class);
-                startActivityForResult(intent, REQUEST_ADD_USER_FORM);
+                Intent intent = new Intent(LocationFormActivity.this, RenterFormActivity.class);
+                startActivityForResult(intent, REQUEST_ADD_RENTER_FORM);
             }
         });
     }
@@ -223,8 +235,7 @@ public class LocationFormActivity extends AppCompatActivity {
     // Creation of the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater mi = getMenuInflater();
-        mi.inflate(R.menu.menu_save, menu);
+        getMenuInflater().inflate(R.menu.menu_save, menu);
         return true;
     }
 
@@ -239,19 +250,19 @@ public class LocationFormActivity extends AppCompatActivity {
         return true;
     }
 
-    // Get data from UserFormActivity
+    // Get data from RenterFormActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_ADD_USER_FORM && resultCode == RESULT_OK) {
-            String name = data.getStringExtra(UserFormActivity.EXTRA_NAME);
-            String firstname = data.getStringExtra(UserFormActivity.EXTRA_FIRSTNAME);
-            String phone = data.getStringExtra(UserFormActivity.EXTRA_PHONE);
-            String email = data.getStringExtra(UserFormActivity.EXTRA_EMAIL);
+        if (requestCode == REQUEST_ADD_RENTER_FORM && resultCode == RESULT_OK) {
+            String name = data.getStringExtra(RenterFormActivity.EXTRA_NAME);
+            String firstname = data.getStringExtra(RenterFormActivity.EXTRA_FIRSTNAME);
+            String phone = data.getStringExtra(RenterFormActivity.EXTRA_PHONE);
+            String email = data.getStringExtra(RenterFormActivity.EXTRA_EMAIL);
 
-            User user = new User(name, firstname, phone, email);
-            usersViewModel.insert(user);
+            Renter renter = new Renter(name, firstname, phone, email);
+            rentersViewModel.insert(renter);
             Toast.makeText(this, R.string.renter_success, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, R.string.renter_failure, Toast.LENGTH_SHORT).show();
@@ -263,9 +274,9 @@ public class LocationFormActivity extends AppCompatActivity {
         String dateStartString = tvDateStart.getText().toString();
         String dateEndString = tvDateEnd.getText().toString();
 
-        // To get full user data from spinner's selected option
-        int userId = tvusers.getSelectedItemPosition() + 1;
-        User user = usersViewModel.getUser(userId);
+        // To get full renter data from spinner's selected option
+        int renterId = tvrenters.getSelectedItemPosition() + 1;
+        Renter renter = rentersViewModel.getRenter(renterId);
 
         int idCarAvailable = getIntent().getIntExtra(CarsAvailableFragment.EXTRA_ID_CAR_AVAILABLE, 0);
         int idCarRented = getIntent().getIntExtra(CarsRentedFragment.EXTRA_ID_CAR_RENTED, 0);
@@ -278,15 +289,15 @@ public class LocationFormActivity extends AppCompatActivity {
         }
 
 
-        if (tvusers.getSelectedItem() == null) {
+        if (tvrenters.getSelectedItem() == null) {
             Toast.makeText(this, R.string.field_missing, Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent();
 
             intent.putExtra(EXTRA_DATE_START, dateStartString);
             intent.putExtra(EXTRA_DATE_END, dateEndString);
-            intent.putExtra(EXTRA_USER_ID, userId);
-            intent.putExtra(EXTRA_FULL_USER_NAME, (Serializable) user);
+            intent.putExtra(EXTRA_RENTER_ID, renterId);
+            intent.putExtra(EXTRA_FULL_USER_NAME, (Serializable) renter);
 
             if (idCar != 0)
             {
@@ -311,6 +322,64 @@ public class LocationFormActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    /**
+     *
+     * Related to toolbar, menu and item menu
+     *
+     */
+
+    public void configureToolbar()
+    {
+        toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        toolbar.setElevation(0);
+        setSupportActionBar(toolbar);
+    }
+
+
+    public void configureDrawerLayout()
+    {
+        drawerLayout = (DrawerLayout) findViewById(R.id.layout_activity_location_nav_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    public void configureNavigationView() {
+        navigationView = (NavigationView) findViewById(R.id.activity_location_nav_drawer);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.activity_main_drawer_home:
+                Intent intentHome = new Intent(this, CarsAvailableFragment.class);
+                startActivity(intentHome);
+
+            case R.id.activity_main_drawer_renters :
+                Intent intentRenters = new Intent(this, RentersActivity.class);
+                startActivity(intentRenters);
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 
 }

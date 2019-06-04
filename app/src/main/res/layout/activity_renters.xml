@@ -4,6 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RentersActivity">
+    tools:context=".RentersActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/empty_list_renters_txt_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/EmptyListLocationMessageTheme" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/renters_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>

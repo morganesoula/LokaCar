@@ -11,11 +11,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +49,7 @@ import fr.eni.lokacar.model.CarType;
 import fr.eni.lokacar.view_model.CarTypesViewModel;
 
 
-public class CarFormActivity extends AppCompatActivity {
+public class CarFormActivity extends AppCompatActivity implements MenuActivity, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String EXTRA_MODEL = "cle_car_model";
     public static final String EXTRA_IMMAT = "cle_car_immat";
@@ -66,7 +72,8 @@ public class CarFormActivity extends AppCompatActivity {
 
     private String photopath;
     private File imgFile;
-
+    private String type;
+    private int typePosition;
 
     private Button btnAddPhoto;
     private ImageButton btnAddCarType;
@@ -77,16 +84,20 @@ public class CarFormActivity extends AppCompatActivity {
     private ImageView tvphotocours;
     private TextView tvphotopath;
 
-    private int typePosition;
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
-    String type;
-
-    ArrayAdapter ad;
+    private ArrayAdapter ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_form);
+
+        configureToolbar();
+        configureDrawerLayout();
+        configureNavigationView();
 
         tvmodel = findViewById(R.id.car_model);
         tvimmat = findViewById(R.id.car_immatriculation);
@@ -329,5 +340,65 @@ public class CarFormActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    /**
+     *
+     * Related to toolbar, menu and item menu
+     *
+     */
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.activity_main_drawer_home:
+                Intent intentHome = new Intent(this, CarsAvailableFragment.class);
+                startActivity(intentHome);
+
+            case R.id.activity_main_drawer_renters :
+                Intent intentRenters = new Intent(this, RentersActivity.class);
+                startActivity(intentRenters);
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    public void configureToolbar()
+    {
+        toolbar = (Toolbar) findViewById(R.id.activity_car_form_toolbar);
+        toolbar.setElevation(0);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void configureDrawerLayout() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.layout_activity_car_nav_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    public void configureNavigationView() {
+        navigationView = (NavigationView) findViewById(R.id.activity_car_nav_drawer);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
 
 }

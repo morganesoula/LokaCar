@@ -12,9 +12,9 @@ import java.util.Date;
 @Entity(tableName = "location", foreignKeys = {
         @ForeignKey(
                 onDelete = ForeignKey.CASCADE,
-                entity = User.class,
-                parentColumns = "idUser",
-                childColumns = "userId"),
+                entity = Renter.class,
+                parentColumns = "idRenter",
+                childColumns = "renterId"),
         @ForeignKey(
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE,
@@ -30,22 +30,22 @@ public class Location implements Parcelable{
 
     private Date dateStart;
     private Date dateEnd;
-    private int userId;
+    private int renterId;
     private int carId;
 
 
-    public Location(int idLocation, Date dateStart, Date dateEnd, int userId, int carId) {
+    public Location(int idLocation, Date dateStart, Date dateEnd, int renterId, int carId) {
         this.idLocation = idLocation;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
-        this.userId = userId;
+        this.renterId = renterId;
         this.carId = carId;
     }
 
 
     protected Location(Parcel in) {
         idLocation = in.readInt();
-        userId = in.readInt();
+        renterId = in.readInt();
         carId = in.readInt();
 
     }
@@ -86,12 +86,12 @@ public class Location implements Parcelable{
         this.dateEnd = dateEnd;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getRenterId() {
+        return renterId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setRenterId(int renterId) {
+        this.renterId = renterId;
     }
 
     public int getCarId() {
@@ -109,7 +109,7 @@ public class Location implements Parcelable{
                 "idLocation=" + idLocation +
                 ", dateStart=" + dateStart +
                 ", dateEnd=" + dateEnd +
-                ", userId=" + userId +
+                ", renterId=" + renterId +
                 ", carId=" + carId +
                 '}';
     }

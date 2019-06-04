@@ -17,7 +17,7 @@ import com.facebook.stetho.Stetho;
 
 import fr.eni.lokacar.adapter.ViewPagerAdapter;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MenuActivity {
 
     private TabLayout tabLayout;
 
@@ -52,10 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Remove shadow
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setElevation(0);
-
     }
 
     @Override
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void configureToolbar()
+    public void configureToolbar()
     {
         toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         toolbar.setElevation(0);
@@ -96,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void configureDrawerLayout()
+    public void configureDrawerLayout()
     {
         drawerLayout = (DrawerLayout) findViewById(R.id.layout_nav_drawer);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
@@ -105,13 +101,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
     }
 
-    private void configureNavigationView()
+    public void configureNavigationView()
     {
         navigationView = (NavigationView) findViewById(R.id.activity_main_nav_drawer);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
-
 
 
 

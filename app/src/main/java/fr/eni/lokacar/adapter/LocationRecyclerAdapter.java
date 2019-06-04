@@ -17,17 +17,17 @@ import java.util.List;
 import fr.eni.lokacar.ListLocationsActivity;
 import fr.eni.lokacar.R;
 import fr.eni.lokacar.model.Location;
-import fr.eni.lokacar.model.User;
-import fr.eni.lokacar.view_model.UsersViewModel;
+import fr.eni.lokacar.model.Renter;
+import fr.eni.lokacar.view_model.RenterViewModel;
 
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecyclerAdapter.ViewHolder>{
 
 
     List<Location> listLocations = new ArrayList<>();
     Context context;
-    UsersViewModel userViewModel;
+    RenterViewModel renterViewModel;
 
-    User user;
+    Renter renter;
 
     private OnItemClickListener listener;
     private OnItemLongClickListener listenerLongClick;
@@ -38,7 +38,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         this.context = context;
         this.listLocations = locations;
 
-        userViewModel = ViewModelProviders.of((FragmentActivity) context).get(UsersViewModel.class);
+        renterViewModel = ViewModelProviders.of((FragmentActivity) context).get(RenterViewModel.class);
     }
 
     @Override
@@ -52,14 +52,14 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Location location = listLocations.get(position);
-        user = userViewModel.getUser(location.getUserId());
+        renter = renterViewModel.getRenter(location.getRenterId());
 
         holder.locationStart.setText("Start date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateStart()));
         holder.locationEnd.setText("End date: " + new SimpleDateFormat("dd MMMM yyyy").format(location.getDateEnd()));
 
-        if (user != null)
+        if (renter != null)
         {
-            holder.locationUserFullName.setText("Renter: " + user.getName() + " " + user.getFirstname());
+            holder.locationUserFullName.setText("Renter: " + renter.getName() + " " + renter.getFirstname());
         }
 
     }

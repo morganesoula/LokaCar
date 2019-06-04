@@ -32,7 +32,7 @@
         <activity android:name=".CarFormActivity" />
         <activity android:name=".LocationFormActivity" />
         <activity android:name=".CarTypeFormActivity" />
-        <activity android:name=".UserFormActivity" />
+        <activity android:name=".RenterFormActivity" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">

@@ -5,11 +5,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,16 +29,16 @@ import java.util.Locale;
 
 import fr.eni.lokacar.adapter.LocationRecyclerAdapter;
 import fr.eni.lokacar.model.Location;
-import fr.eni.lokacar.model.User;
+import fr.eni.lokacar.model.Renter;
 import fr.eni.lokacar.view_model.LocationsViewModel;
-import fr.eni.lokacar.view_model.UsersViewModel;
+import fr.eni.lokacar.view_model.RenterViewModel;
 
-public class ListLocationsActivity extends AppCompatActivity {
+public class ListLocationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MenuActivity {
 
     public static final int REQUEST_EDIT_LOCATION = 2;
 
     private LocationsViewModel locationsViewModel;
-    private UsersViewModel usersViewModel;
+    private RenterViewModel rentersViewModel;
     private LocationRecyclerAdapter adapter;
 
     private TextView emptyList;
@@ -40,10 +47,13 @@ public class ListLocationsActivity extends AppCompatActivity {
     public int idCarRented;
 
     public int carId;
-    public User user;
+    public Renter renter;
 
     private RecyclerView recyclerView;
 
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +61,11 @@ public class ListLocationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_locations);
         setTitle(R.string.locations);
 
-        usersViewModel = ViewModelProviders.of(this).get(UsersViewModel.class);
+        configureToolbar();
+        configureDrawerLayout();
+        configureNavigationView();
+
+        rentersViewModel = ViewModelProviders.of(this).get(RenterViewModel.class);
         locationsViewModel = ViewModelProviders.of(this).get(LocationsViewModel.class);
 
         // Locations' list is empty
@@ -131,8 +145,8 @@ public class ListLocationsActivity extends AppCompatActivity {
                 intent1.putExtra(LocationFormActivity.EXTRA_DATE_START, (Serializable) location.getDateStart());
                 intent1.putExtra(LocationFormActivity.EXTRA_DATE_END, (Serializable) location.getDateEnd());
 
-                user = usersViewModel.getUser(location.getUserId());
-                intent1.putExtra(LocationFormActivity.EXTRA_USER, (Serializable) user);
+                renter = rentersViewModel.getRenter(location.getRenterId());
+                intent1.putExtra(LocationFormActivity.EXTRA_RENTER, (Serializable) renter);
 
                 startActivityForResult(intent1, REQUEST_EDIT_LOCATION);
             }
@@ -181,8 +195,8 @@ public class ListLocationsActivity extends AppCompatActivity {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
 
-                User user = (User) data.getSerializableExtra(LocationFormActivity.EXTRA_FULL_USER_NAME);
-                int userId = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID, 0);
+                Renter renter = (Renter) data.getSerializableExtra(LocationFormActivity.EXTRA_FULL_USER_NAME);
+                int renterId = data.getIntExtra(LocationFormActivity.EXTRA_RENTER_ID, 0);
 
                 int idCarAvailableUpdated = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_AVAILABLE, 0);
                 int idCarRentedUpdated = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED, 0);
@@ -194,7 +208,7 @@ public class ListLocationsActivity extends AppCompatActivity {
                     carId = idCarAvailableUpdated;
                 }
 
-                Location location = new Location(idLocation, dateStart, dateEnd, userId, carId);
+                Location location = new Location(idLocation, dateStart, dateEnd, renterId, carId);
                 locationsViewModel.update(location);
             } catch (java.text.ParseException e)
             {
@@ -203,6 +217,63 @@ public class ListLocationsActivity extends AppCompatActivity {
         }
         } else {
             Toast.makeText(this, R.string.save_failure, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     *
+     * Related to toolbar, menu and item menu
+     *
+     */
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.activity_main_drawer_home:
+                Intent intentHome = new Intent(this, CarsAvailableFragment.class);
+                startActivity(intentHome);
+
+            case R.id.activity_main_drawer_renters :
+                Intent intentRenters = new Intent(this, RentersActivity.class);
+                startActivity(intentRenters);
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    @Override
+    public void configureToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.activity_list_locations_toolbar);
+        toolbar.setElevation(0);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void configureDrawerLayout() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.layout_activity_list_locations_nav_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    public void configureNavigationView() {
+        navigationView = (NavigationView) findViewById(R.id.activity_list_locations_nav_drawer);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 }

@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_car_type_nav_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CarTypeFormActivity"
-    android:padding="20dp">
+    tools:context=".LocationFormActivity">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/layout_car_type"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:paddingLeft="2dp"
+        tools:context=".CarTypeFormActivity">
 
-        <EditText
-            android:id="@+id/car_type_edit_text"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/car_type_form_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ToolbarStyle" />
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_car_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Car's type"
-            android:inputType="text" />
-    </android.support.design.widget.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/car_type_form_toolbar"
+            android:paddingTop="3dp">
+
+            <EditText
+                android:id="@+id/car_type_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Car's type"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
 
 
+    </android.support.constraint.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/activity_car_type_nav_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/activity_main_nav_header"
+        app:menu="@menu/menu_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

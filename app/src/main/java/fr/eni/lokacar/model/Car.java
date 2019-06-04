@@ -143,7 +143,7 @@ public class Car implements Parcelable{
         parcel.writeString(immatriculation);
         parcel.writeFloat(price);
 
-        // Pour écrire un boolean
+        // To write a boolean
         parcel.writeValue(isRestore);
         parcel.writeString(imagePath);
         parcel.writeString(model);

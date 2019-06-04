@@ -45,7 +45,6 @@ public class CarsRentedFragment extends Fragment {
 
     private TextView emptyListCarsRented;
 
-
     public static final int REQUEST_ADD_CAR = 1;
     public static final int REQUEST_EDIT_CAR = 2;
     public static final int REQUEST_ADD_LOCATION = 3;
@@ -273,9 +272,9 @@ public class CarsRentedFragment extends Fragment {
                 Date dateStart = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_START));
                 Date dateEnd = new SimpleDateFormat("dd/MM/yyyy").parse(data.getStringExtra(LocationFormActivity.EXTRA_DATE_END));
                 int idCar = data.getIntExtra(LocationFormActivity.EXTRA_ID_CAR_RENTED,0);
-                int idUser = data.getIntExtra(LocationFormActivity.EXTRA_USER_ID,0);
+                int idRenter = data.getIntExtra(LocationFormActivity.EXTRA_RENTER_ID,0);
 
-                Location location = new Location(0, dateStart, dateEnd, idUser, idCar);
+                Location location = new Location(0, dateStart, dateEnd, idRenter, idCar);
                 locationsViewModel.insert(location);
 
                 Toast.makeText(getContext(), "Location saved", Toast.LENGTH_LONG).show();

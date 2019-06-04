@@ -10,27 +10,27 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 
-@Entity(tableName = "user")
-public class User implements Parcelable, Serializable {
+@Entity(tableName = "renter")
+public class Renter implements Parcelable, Serializable {
 
 
     @PrimaryKey(autoGenerate = true)
-    private int idUser;
+    private int idRenter;
     private String name;
     private String firstname;
     private String phoneNumber;
     private String email;
 
     @Ignore
-    public User(int idUser, String name, String firstname, String phoneNumber, String email) {
-        this.idUser = idUser;
+    public Renter(int idRenter, String name, String firstname, String phoneNumber, String email) {
+        this.idRenter = idRenter;
         this.name = name;
         this.firstname = firstname;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
-    public User(String name, String firstname, String phoneNumber, String email) {
+    public Renter(String name, String firstname, String phoneNumber, String email) {
         this.name = name;
         this.firstname = firstname;
         this.phoneNumber = phoneNumber;
@@ -38,32 +38,32 @@ public class User implements Parcelable, Serializable {
     }
 
     @Ignore
-    protected User(Parcel in) {
-        idUser = in.readInt();
+    protected Renter(Parcel in) {
+        idRenter = in.readInt();
         name = in.readString();
         firstname = in.readString();
         phoneNumber = in.readString();
         email = in.readString();
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<Renter> CREATOR = new Creator<Renter>() {
         @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
+        public Renter createFromParcel(Parcel in) {
+            return new Renter(in);
         }
 
         @Override
-        public User[] newArray(int size) {
-            return new User[size];
+        public Renter[] newArray(int size) {
+            return new Renter[size];
         }
     };
 
-    public int getIdUser() {
-        return idUser;
+    public int getIdRenter() {
+        return idRenter;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setIdRenter(int idRenter) {
+        this.idRenter = idRenter;
     }
 
     public String getName() {
@@ -100,8 +100,8 @@ public class User implements Parcelable, Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "idUser=" + idUser +
+        return "Renter{" +
+                "idRenter=" + idRenter +
                 ", name='" + name + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -116,7 +116,7 @@ public class User implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(idUser);
+        parcel.writeInt(idRenter);
         parcel.writeString(name);
         parcel.writeString(firstname);
         parcel.writeString(phoneNumber);

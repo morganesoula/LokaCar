@@ -9,13 +9,13 @@ import java.util.List;
 import fr.eni.lokacar.dao.CarDAO;
 import fr.eni.lokacar.dao.Database;
 import fr.eni.lokacar.dao.LocationDAO;
-import fr.eni.lokacar.dao.UserDAO;
+import fr.eni.lokacar.dao.RenterDAO;
 import fr.eni.lokacar.model.Location;
 
 public class LocationRepository {
     LocationDAO locationDAO;
     CarDAO carDAO;
-    UserDAO userDAO;
+    RenterDAO renterDAO;
     LiveData<List<Location>> listLocations;
 
 
@@ -25,7 +25,7 @@ public class LocationRepository {
         locationDAO = database.locationDAO();
 
         carDAO = database.carDAO();
-        userDAO = database.userDAO();
+        renterDAO = database.renterDAO();
 
         listLocations = locationDAO.getAll();
     }

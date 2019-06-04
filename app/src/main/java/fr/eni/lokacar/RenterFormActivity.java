@@ -14,12 +14,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-public class CarTypeFormActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MenuActivity {
+public class RenterFormActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MenuActivity {
 
-    public static final String EXTRA_ID = "string_car_type_id";
-    public static final String EXTRA_CAR_TYPE = "string_car_type_label";
+    public static final String EXTRA_NAME = "string_user_name";
+    public static final String EXTRA_FIRSTNAME = "string_user_firstname";
+    public static final String EXTRA_EMAIL = "string_user_email";
+    public static final String EXTRA_PHONE = "string_user_phone";
 
-    private EditText carTypeEditText;
+    private EditText tvname, tvfirstname, tvemail, tvphone;
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -28,28 +30,20 @@ public class CarTypeFormActivity extends AppCompatActivity implements Navigation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car_type_form);
+        setContentView(R.layout.activity_renter_form);
+        setTitle(R.string.add_renter);
 
         configureToolbar();
         configureDrawerLayout();
         configureNavigationView();
 
-        carTypeEditText = findViewById(R.id.car_type_edit_text);
+        tvname = findViewById(R.id.user_name);
+        tvfirstname = findViewById(R.id.user_firstname);
+        tvemail = findViewById(R.id.user_email);
+        tvphone = findViewById(R.id.user_phone);
 
         Intent intent = getIntent();
-        intent.getParcelableExtra("carType");
-
-        // If car already exists
-        if (intent.hasExtra(EXTRA_ID))
-        {
-            setTitle(R.string.update_type_value);
-
-            String type = intent.getStringExtra(EXTRA_CAR_TYPE);
-
-            carTypeEditText.setText(type);
-        } else {
-            setTitle(R.string.add_car_type);
-        }
+        intent.getParcelableExtra("renter");
     }
 
     // Creation of the menu
@@ -66,24 +60,30 @@ public class CarTypeFormActivity extends AppCompatActivity implements Navigation
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_save:
-                saveCarType();
+                saveUser();
                 break;
         }
         return true;
     }
 
-    // Method to save car's type
-    private void saveCarType()
+
+    // Method to save renter
+    private void saveUser()
     {
-        String type = carTypeEditText.getText().toString();
+        String name  = tvname.getText().toString();
+        String firstname  = tvfirstname.getText().toString();
+        String email  = tvemail.getText().toString();
+        String phone  = tvphone.getText().toString();
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_CAR_TYPE, type);
+        intent.putExtra(EXTRA_NAME, name);
+        intent.putExtra(EXTRA_FIRSTNAME, firstname);
+        intent.putExtra(EXTRA_EMAIL, email);
+        intent.putExtra(EXTRA_PHONE, phone);
 
         setResult(RESULT_OK, intent);
         finish();
     }
-
 
 
     /**
@@ -91,40 +91,6 @@ public class CarTypeFormActivity extends AppCompatActivity implements Navigation
      * Related to toolbar, menu and item menu
      *
      */
-
-    public void configureToolbar()
-    {
-        toolbar = (Toolbar) findViewById(R.id.car_type_form_toolbar);
-        toolbar.setElevation(0);
-        setSupportActionBar(toolbar);
-    }
-
-
-    public void configureDrawerLayout()
-    {
-        drawerLayout = (DrawerLayout) findViewById(R.id.layout_activity_car_type_nav_drawer);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
-
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-    }
-
-    @Override
-    public void configureNavigationView() {
-        navigationView = (NavigationView) findViewById(R.id.activity_car_type_nav_drawer);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START))
-        {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -142,5 +108,37 @@ public class CarTypeFormActivity extends AppCompatActivity implements Navigation
         drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    @Override
+    public void configureToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.activity_renter_toolbar);
+        toolbar.setElevation(0);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void configureDrawerLayout() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.layout_activity_renter_nav_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    public void configureNavigationView() {
+        navigationView = (NavigationView) findViewById(R.id.activity_renter_nav_drawer);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

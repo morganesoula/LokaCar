@@ -9,24 +9,24 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import fr.eni.lokacar.model.User;
+import fr.eni.lokacar.model.Renter;
 
 @Dao
-public interface UserDAO {
+public interface RenterDAO {
 
 
-    @Query("SELECT * FROM user")
-    LiveData<List<User>> getAll();
+    @Query("SELECT * FROM Renter")
+    LiveData<List<Renter>> getAll();
 
-    @Query("SELECT * FROM user WHERE idUser = :id")
-    User getUser(int id);
+    @Query("SELECT * FROM Renter WHERE idRenter = :id")
+    Renter getRenter(int id);
 
     @Insert
-    void insert(User user);
+    void insert(Renter renter);
 
     @Update
-    void update(User user);
+    void update(Renter renter);
 
     @Delete
-    void delete(User user);
+    void delete(Renter renter);
 }

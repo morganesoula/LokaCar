@@ -56,11 +56,12 @@ public class AgencyAuthentificationRepository {
         asyncDelete.execute(agencyAuthentification);
     }
 
+
+
+
     /**
      * Asynchrone tasks
      */
-
-
 
     public class AsyncInsert extends AsyncTask<AgencyAuthentification, Void, Void>
     {

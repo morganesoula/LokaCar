@@ -52,7 +52,6 @@
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 
-
     <!-- Style to empty list message -->
     <style name="EmptyListMessageTheme">
         <item name="android:textStyle">bold</item>
@@ -67,6 +66,15 @@
         <item name="android:paddingTop">200dp</item>
         <item name="android:paddingLeft">43dp</item>
         <item name="android:visibility">gone</item>
+    </style>
+
+    <!-- Style to renters activity's title -->
+    <style name="RentersTitleTheme">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:paddingLeft">130dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>
