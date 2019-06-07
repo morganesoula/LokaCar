@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.lokacar.R;
@@ -20,26 +22,27 @@ public class RenterRecyclerAdapter extends RecyclerView.Adapter<RenterRecyclerAd
     private OnItemClickListener listener;
 
     Context context;
-    List<Renter> listRenters;
+    List<Renter> listRenters = new ArrayList<>();
 
 
     @NonNull
     @Override
-    public RenterRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RenterRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View renterLine = LayoutInflater.from(parent.getContext()).inflate(R.layout.renter_line, parent, false);
         return new ViewHolder(renterLine);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RenterRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Renter renter = listRenters.get(position);
 
         holder.renterFullUsername.setText(renter.getFirstname()+ " " + renter.getName());
+        holder.renterImgView.setImageResource(R.drawable.contact);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listRenters.size();
     }
 
     public void setRenter(List<Renter> renters)
@@ -56,11 +59,13 @@ public class RenterRecyclerAdapter extends RecyclerView.Adapter<RenterRecyclerAd
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView renterFullUsername;
+        private ImageView renterImgView;
 
         public ViewHolder(View renterLine) {
             super(renterLine);
 
             renterFullUsername = (TextView) renterLine.findViewById(R.id.full_name_renters_txt_view);
+            renterImgView = (ImageView) renterLine.findViewById(R.id.renter_image_view);
 
 
             renterLine.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +90,7 @@ public class RenterRecyclerAdapter extends RecyclerView.Adapter<RenterRecyclerAd
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Renter user);
+        void onItemClick(Renter renter);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener)

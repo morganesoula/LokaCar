@@ -15,8 +15,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            >
+            android:padding="10dp" >
 
             <TextView
                 android:id="@+id/tv_location_user_full_name"
@@ -45,12 +44,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv_date_start"
                 />
-
-
-
-
-
-
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>

@@ -74,7 +74,7 @@
     <string name="nav_drawer_close">Close navigation drawer</string>
 
     <!-- Related to RentersActivity -->
-    <string name="renters">List of renters</string>
+    <string name="renters">Renters</string>
     <string name="empty_renters_list">No renters saved yet</string>
 
 </resources>
